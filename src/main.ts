@@ -11,6 +11,7 @@ import { AuthService } from './app/core/services/auth.service';
 import { FinancialDataService } from './app/core/services/financial-data.service';
 import { NotificationService } from './app/core/services/notification.service';
 import { BiometricAuthService } from './app/core/services/biometric-auth.service';
+import { ThemeService } from './app/core/services/theme.service';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -21,6 +22,7 @@ bootstrapApplication(AppComponent, {
     AuthService,
     FinancialDataService,
     NotificationService,
-    BiometricAuthService
+    BiometricAuthService,
+    ThemeService
   ]
 }).catch(err => console.error(err));

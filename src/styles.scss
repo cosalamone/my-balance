@@ -2,43 +2,151 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
+// Include the common styles for Angular Material
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$app-gastos-primary: mat.define-palette(mat.$indigo-palette);
-$app-gastos-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+// Define dark theme palette
+$dark-primary: mat.define-palette((
+  50: #f3f1ff,
+  100: #ede9fe,
+  200: #ddd6fe,
+  300: #c4b5fd,
+  400: #a78bfa,
+  500: #8b5cf6,
+  600: #7c3aed,
+  700: #6d28d9,
+  800: #5b21b6,
+  900: #4c1d95,
+  A100: #c4b5fd,
+  A200: #a78bfa,
+  A400: #8b5cf6,
+  A700: #7c3aed,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+));
 
-// The warn palette is optional (defaults to red).
-$app-gastos-warn: mat.define-palette(mat.$red-palette);
+$dark-accent: mat.define-palette((
+  50: #fdf2f8,
+  100: #fce7f3,
+  200: #fbcfe8,
+  300: #f9a8d4,
+  400: #f472b6,
+  500: #ec4899,
+  600: #db2777,
+  700: #be185d,
+  800: #9d174d,
+  900: #831843,
+  A100: #f9a8d4,
+  A200: #f472b6,
+  A400: #ec4899,
+  A700: #db2777,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+));
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$app-gastos-theme: mat.define-light-theme((
+$dark-warn: mat.define-palette(mat.$red-palette);
+
+// Define light theme palette (usando los colores originales)
+$light-primary: mat.define-palette(mat.$indigo-palette);
+$light-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$light-warn: mat.define-palette(mat.$red-palette);
+
+// Create the dark theme
+$dark-theme: mat.define-dark-theme((
   color: (
-    primary: $app-gastos-primary,
-    accent: $app-gastos-accent,
-    warn: $app-gastos-warn,
+    primary: $dark-primary,
+    accent: $dark-accent,
+    warn: $dark-warn,
   ),
   typography: mat.define-typography-config(),
   density: 0
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($app-gastos-theme);
+// Create the light theme
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $light-primary,
+    accent: $light-accent,
+    warn: $light-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0
+));
+
+// Apply the dark theme by default
+@include mat.all-component-themes($dark-theme);
+
+// Apply light theme when data-theme="light"
+[data-theme="light"] {
+  @include mat.all-component-colors($light-theme);
+}
 
 /* Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom CSS Variables for Theme System */
+:root {
+  /* Light theme variables */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --border-primary: #e2e8f0;
+  --border-secondary: #cbd5e1;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --input-bg: #ffffff;
+  --input-text: #1e293b;
+  --input-placeholder: #64748b;
+}
+
+[data-theme="dark"] {
+  /* Dark theme variables */
+  --bg-primary: #0f0f23;
+  --bg-secondary: #1a1a2e;
+  --bg-tertiary: #16213e;
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #94a3b8;
+  --border-primary: rgba(139, 92, 246, 0.3);
+  --border-secondary: rgba(139, 92, 246, 0.2);
+  --shadow-color: rgba(139, 92, 246, 0.2);
+  --input-bg: rgba(255, 255, 255, 0.1);
+  --input-text: #ffffff;
+  --input-placeholder: #94a3b8;
+}
 
 /* Global Styles */
 @layer base {
@@ -55,67 +163,224 @@ $app-gastos-theme: mat.define-light-theme((
 
   body {
     margin: 0;
-    @apply bg-gray-50;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Dark theme body background */
+  .dark-theme {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    min-height: 100vh;
+  }
+
+  /* Light theme body background */
+  .light-theme {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+    min-height: 100vh;
   }
 }
 
-/* Custom Components */
+/* Enhanced Components with Theme Support */
 @layer components {
   .financial-card {
-    @apply mb-6 rounded-xl shadow-md bg-white border-l-4;
+    @apply mb-2 rounded-xl border border-opacity-20 backdrop-blur-sm;
+    background: var(--bg-secondary);
+    border-color: var(--border-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+  }
+
+  .financial-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   }
 
   .income-card {
-    @apply border-l-income-500;
+    @apply border-l-4 border-l-income-500;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.03) 0%, rgba(5, 150, 105, 0.01) 100%);
   }
 
   .expense-card {
-    @apply border-l-expense-500;
+    @apply border-l-4 border-l-expense-500;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.03) 0%, rgba(220, 38, 38, 0.01) 100%);
   }
 
   .savings-card {
-    @apply border-l-savings-500;
+    @apply border-l-4 border-l-savings-500;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(37, 99, 235, 0.01) 100%);
   }
 
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200;
+    @apply bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
   }
 
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-medium transition-colors duration-200;
+    @apply px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-md;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-1px);
+    background: var(--bg-secondary);
   }
 
   .input-field {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--border-primary);
+    backdrop-filter: blur(10px);
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  }
+
+  .input-field::placeholder {
+    color: var(--input-placeholder);
+  }
+
+  /* Angular Material form field overrides */
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      background: var(--input-bg) !important;
+      border-radius: 12px !important;
+    }
+    
+    .mat-mdc-form-field-input-control {
+      color: var(--input-text) !important;
+    }
+    
+    .mdc-text-field--filled .mdc-line-ripple::before,
+    .mdc-text-field--filled .mdc-line-ripple::after {
+      border-bottom-color: rgba(139, 92, 246, 0.6) !important;
+    }
+    
+    .mat-mdc-form-field-label {
+      color: var(--text-secondary) !important;
+    }
+    
+    .mat-mdc-form-field-label.mdc-floating-label--float-above {
+      color: #8b5cf6 !important;
+    }
+  }
+
+  /* Material card overrides */
+  .mat-mdc-card {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-primary) !important;
+  }
+
+  .mat-mdc-card-title {
+    color: var(--text-primary) !important;
+  }
+
+  .mat-mdc-card-subtitle {
+    color: var(--text-secondary) !important;
   }
 
   .text-income {
-    @apply text-income-600;
+    @apply text-income-500;
   }
 
   .text-expense {
-    @apply text-expense-600;
+    @apply text-expense-500;
   }
 
   .text-savings {
-    @apply text-savings-600;
+    @apply text-savings-500;
   }
 
   .container-app {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
+
+  /* Glass effect for cards in dark mode */
+  [data-theme="dark"] .financial-card {
+    background: rgba(26, 26, 46, 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
+  }
+
+  [data-theme="dark"] .income-card {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.04) 100%);
+  }
+
+  [data-theme="dark"] .expense-card {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.04) 100%);
+  }
+
+  [data-theme="dark"] .savings-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.04) 100%);
+  }
+
+  /* Enhanced glass effect for light mode */
+  [data-theme="light"] .financial-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(79, 70, 229, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
 }
 
-/* Chart container */
+/* Chart container with theme support */
 .chart-container {
   position: relative;
   height: 300px;
   width: 100%;
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 4px 14px var(--shadow-color);
 }
 
+/* Navigation and header styling */
+.mat-toolbar {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+[data-theme="dark"] .mat-toolbar {
+  background: rgba(139, 92, 246, 0.1) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+/* Sidebar styling */
+.mat-sidenav {
+  background: var(--bg-secondary) !important;
+  border-right: 1px solid var(--border-primary);
+}
+
+[data-theme="dark"] .mat-sidenav {
+  background: rgba(15, 15, 35, 0.95) !important;
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+/* Responsive Design */
 @media (max-width: 767px) {
   .chart-container {
     height: 250px;
+    padding: 0.75rem;
   }
 }
 
@@ -131,6 +396,29 @@ $app-gastos-theme: mat.define-light-theme((
   
   .chart-container {
     height: 220px;
+    padding: 0.5rem;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-primary: #000000;
+    --border-secondary: #333333;
+  }
+  
+  [data-theme="dark"] {
+    --border-primary: #ffffff;
+    --border-secondary: #cccccc;
   }
 }
 
