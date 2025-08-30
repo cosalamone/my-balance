@@ -1,0 +1,50 @@
+/* Ingresos specific styles */
+.income-form-card {
+  @apply bg-gradient-to-br from-income-50 to-white;
+}
+
+.income-badge {
+  @apply bg-income-100 text-income-800 px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.income-table-row:hover {
+  @apply bg-income-50;
+}
+
+/* Mobile responsive table */
+@media (max-width: 767px) {
+  .mat-table {
+    font-size: 14px;
+  }
+  
+  .mat-column-description {
+    flex: 2;
+  }
+  
+  .mat-column-amount {
+    flex: 1.2;
+  }
+  
+  .mat-column-actions {
+    flex: 0.8;
+  }
+}
+
+/* Samsung S24 optimizations */
+@media (max-width: 411px) {
+  .income-form-card {
+    @apply p-4;
+  }
+  
+  .mat-form-field {
+    margin-bottom: 16px;
+  }
+  
+  .mat-table {
+    font-size: 12px;
+  }
+  
+  .mat-column-category {
+    display: none; /* Hide category on very small screens */
+  }
+}

@@ -1,0 +1,157 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-600 to-primary-800 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <!-- Logo and Header -->
+    <div class="text-center">
+      <div class="mx-auto h-20 w-20 bg-white rounded-full flex items-center justify-center mb-6">
+        <mat-icon class="text-4xl text-primary-600">account_balance_wallet</mat-icon>
+      </div>
+      <h2 class="text-3xl font-extrabold text-white mb-2">
+        App Gastos
+      </h2>
+      <p class="text-primary-200">
+        Control Financiero Personal
+      </p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="bg-white rounded-2xl shadow-2xl p-8">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <!-- Email Field -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Email</mat-label>
+          <input matInput 
+                 type="email" 
+                 formControlName="email"
+                 placeholder="Ingrese su email"
+                 class="text-lg">
+          <mat-icon matSuffix class="text-gray-400">email</mat-icon>
+          <mat-error>{{getFieldError('email')}}</mat-error>
+        </mat-form-field>
+
+        <!-- Password Field -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Contraseña</mat-label>
+          <input matInput 
+                 type="password" 
+                 formControlName="password"
+                 placeholder="Ingrese su contraseña"
+                 class="text-lg">
+          <mat-icon matSuffix class="text-gray-400">lock</mat-icon>
+          <mat-error>{{getFieldError('password')}}</mat-error>
+        </mat-form-field>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" 
+             class="bg-expense-50 border border-expense-200 rounded-lg p-4 flex items-center space-x-3">
+          <mat-icon class="text-expense-500">error_outline</mat-icon>
+          <span class="text-expense-700 text-sm">{{errorMessage}}</span>
+        </div>
+
+        <!-- Submit Button -->
+        <button mat-raised-button 
+                color="primary" 
+                type="submit" 
+                class="w-full h-12 text-lg font-semibold rounded-lg"
+                [disabled]="!loginForm.valid || isLoading">
+          <div *ngIf="isLoading" class="flex items-center justify-center space-x-2">
+            <mat-spinner diameter="20"></mat-spinner>
+            <span>Cargando...</span>
+          </div>
+          <span *ngIf="!isLoading" class="flex items-center justify-center space-x-2">
+            <mat-icon>login</mat-icon>
+            <span>Iniciar Sesión</span>
+          </span>
+        </button>
+      </form>
+
+      <!-- Biometric Authentication Section -->
+      <div *ngIf="biometricSupported" class="mt-6">
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">o</span>
+          </div>
+        </div>
+
+        <!-- Biometric Login Button -->
+        <button mat-raised-button 
+                color="accent" 
+                class="w-full h-12 mt-4 text-lg font-semibold rounded-lg"
+                [disabled]="biometricLoading"
+                (click)="onBiometricLogin()">
+          <div *ngIf="biometricLoading" class="flex items-center justify-center space-x-2">
+            <mat-spinner diameter="20"></mat-spinner>
+            <span>Autenticando...</span>
+          </div>
+          <span *ngIf="!biometricLoading" class="flex items-center justify-center space-x-2">
+            <mat-icon>fingerprint</mat-icon>
+            <span>Usar Huella Digital</span>
+          </span>
+        </button>
+
+        <!-- Register Biometric Button -->
+        <button *ngIf="showRegisterBiometric" 
+                mat-stroked-button 
+                color="primary" 
+                class="w-full h-10 mt-3 text-sm font-medium rounded-lg"
+                [disabled]="biometricLoading || !loginForm.valid"
+                (click)="onRegisterBiometric()">
+          <span class="flex items-center justify-center space-x-2">
+            <mat-icon>add</mat-icon>
+            <span>Registrar Huella Digital</span>
+          </span>
+        </button>
+
+        <!-- Clear Biometric Credentials -->
+        <button *ngIf="!showRegisterBiometric" 
+                mat-button 
+                color="warn" 
+                class="w-full h-8 mt-2 text-xs"
+                (click)="onClearBiometricCredentials()">
+          <span class="flex items-center justify-center space-x-1">
+            <mat-icon class="text-sm">delete</mat-icon>
+            <span>Eliminar Credenciales Biométricas</span>
+          </span>
+        </button>
+      </div>
+
+      <!-- Biometric Not Supported Message -->
+      <div *ngIf="!biometricSupported" class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div class="flex items-center space-x-3">
+          <mat-icon class="text-yellow-600">info</mat-icon>
+          <div class="text-sm text-yellow-800">
+            <p class="font-medium">Autenticación biométrica no disponible</p>
+            <p class="mt-1">Tu dispositivo no soporta autenticación por huella digital o no está configurada.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo Info -->
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <div class="bg-gray-50 rounded-xl p-4">
+          <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+            <mat-icon class="text-sm mr-2 text-blue-600">info</mat-icon>
+            Datos de demostración
+          </h3>
+          <div class="space-y-2 text-sm text-gray-600">
+            <div class="flex justify-between">
+              <span class="font-medium">Email:</span>
+              <span class="font-mono">demo&#64;example.com</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-medium">Contraseña:</span>
+              <span class="font-mono">demo123</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center text-primary-200 text-sm">
+      <p>&copy; 2025 App Gastos. Control financiero inteligente.</p>
+    </div>
+  </div>
+</div>

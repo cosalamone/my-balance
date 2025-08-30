@@ -1,0 +1,60 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.main-content {
+  padding: 20px;
+  min-height: calc(100vh - 64px);
+  background-color: #f5f5f5;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.login-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .main-content {
+    padding: 10px;
+  }
+  
+  .sidenav {
+    width: 200px;
+  }
+  
+  .mat-toolbar {
+    height: 56px;
+  }
+  
+  .main-content {
+    min-height: calc(100vh - 56px);
+  }
+}
+
+/* Samsung S24 optimizations */
+@media (max-width: 411px) {
+  .main-content {
+    padding: 8px;
+  }
+  
+  .mat-toolbar .mat-button {
+    min-width: 40px;
+    padding: 0 8px;
+  }
+}

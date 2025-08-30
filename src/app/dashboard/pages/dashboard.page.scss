@@ -1,0 +1,40 @@
+/* Dashboard specific styles */
+.dashboard-card {
+  @apply bg-white rounded-xl shadow-md p-6 border border-gray-200;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.dashboard-card:hover {
+  @apply shadow-lg;
+  transform: translateY(-2px);
+}
+
+.stat-card {
+  @apply bg-gradient-to-br from-white to-gray-50;
+}
+
+.quick-action-btn {
+  @apply transition-all duration-200 hover:scale-105;
+}
+
+/* Mobile optimizations */
+@media (max-width: 767px) {
+  .dashboard-card {
+    @apply p-4;
+  }
+  
+  .quick-action-btn {
+    @apply h-14;
+  }
+}
+
+/* Samsung S24 optimizations */
+@media (max-width: 411px) {
+  .dashboard-card {
+    @apply p-3;
+  }
+  
+  .quick-action-btn {
+    @apply h-12 text-xs;
+  }
+}

@@ -1,0 +1,167 @@
+<div class="container-app py-6">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard Financiero</h1>
+    <p class="text-gray-600">Resumen de tu actividad financiera actual</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!isLoading" class="space-y-6">
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Total Income -->
+      <div class="financial-card income-card p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Ingresos del Mes</p>
+            <p class="text-2xl font-bold text-income-600">
+              ${{ currentSummary.totalIncome | number:'1.0-0' }}
+            </p>
+          </div>
+          <div class="p-3 bg-income-100 rounded-full">
+            <mat-icon class="text-income-600">trending_up</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Expenses -->
+      <div class="financial-card expense-card p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Gastos del Mes</p>
+            <p class="text-2xl font-bold text-expense-600">
+              ${{ currentSummary?.totalExpenses | number:'1.0-0' }}
+            </p>
+          </div>
+          <div class="p-3 bg-expense-100 rounded-full">
+            <mat-icon class="text-expense-600">trending_down</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Savings -->
+      <div class="financial-card savings-card p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Ahorros del Mes</p>
+            <p class="text-2xl font-bold text-savings-600">
+              ${{ currentSummary?.totalSavings | number:'1.0-0' }}
+            </p>
+          </div>
+          <div class="p-3 bg-savings-100 rounded-full">
+            <mat-icon class="text-savings-600">savings</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Net Balance -->
+      <div class="financial-card p-6 border-l-gray-400">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Balance Neto</p>
+            <p class="text-2xl font-bold" [ngClass]="balanceColor">
+              ${{ currentSummary?.balance | number:'1.0-0' }}
+            </p>
+          </div>
+          <div class="p-3 bg-gray-100 rounded-full">
+            <mat-icon [ngClass]="balanceColor">{{ balanceIcon }}</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="financial-card p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Acciones Rápidas</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          routerLink="/ingresos"
+          class="w-full h-16 flex flex-col items-center justify-center space-y-1">
+          <mat-icon>add_circle</mat-icon>
+          <span class="text-sm">Agregar Ingreso</span>
+        </button>
+        
+        <button 
+          mat-raised-button 
+          color="warn" 
+          routerLink="/gastos"
+          class="w-full h-16 flex flex-col items-center justify-center space-y-1">
+          <mat-icon>remove_circle</mat-icon>
+          <span class="text-sm">Agregar Gasto</span>
+        </button>
+        
+        <button 
+          mat-raised-button 
+          color="accent" 
+          routerLink="/ahorros"
+          class="w-full h-16 flex flex-col items-center justify-center space-y-1">
+          <mat-icon>savings</mat-icon>
+          <span class="text-sm">Agregar Ahorro</span>
+        </button>
+        
+        <button 
+          mat-raised-button 
+          routerLink="/reportes"
+          class="w-full h-16 flex flex-col items-center justify-center space-y-1">
+          <mat-icon>analytics</mat-icon>
+          <span class="text-sm">Ver Reportes</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent Activity Summary -->
+    <div class="financial-card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-gray-900">Resumen Mensual</h2>
+        <button mat-icon-button (click)="refreshData()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+      
+      <div class="space-y-4">
+        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div class="flex items-center space-x-3">
+            <div class="p-2 bg-income-100 rounded-full">
+              <mat-icon class="text-income-600 text-sm">trending_up</mat-icon>
+            </div>
+            <span class="font-medium text-gray-900">Total de Ingresos</span>
+          </div>
+          <span class="font-semibold text-income-600">
+            ${{ currentSummary?.totalIncome | number:'1.0-0' }}
+          </span>
+        </div>
+
+        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div class="flex items-center space-x-3">
+            <div class="p-2 bg-expense-100 rounded-full">
+              <mat-icon class="text-expense-600 text-sm">trending_down</mat-icon>
+            </div>
+            <span class="font-medium text-gray-900">Total de Gastos</span>
+          </div>
+          <span class="font-semibold text-expense-600">
+            ${{ currentSummary?.totalExpenses | number:'1.0-0' }}
+          </span>
+        </div>
+
+        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div class="flex items-center space-x-3">
+            <div class="p-2 bg-savings-100 rounded-full">
+              <mat-icon class="text-savings-600 text-sm">savings</mat-icon>
+            </div>
+            <span class="font-medium text-gray-900">Total de Ahorros</span>
+          </div>
+          <span class="font-semibold text-savings-600">
+            ${{ currentSummary?.totalSavings | number:'1.0-0' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

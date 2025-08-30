@@ -1,0 +1,100 @@
+.login-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.login-card mat-card-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-card mat-card-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #333;
+}
+
+.login-card mat-card-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-top: 8px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-button {
+  height: 48px;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  color: #f44336;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.error-message mat-icon {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.demo-info {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+}
+
+.demo-info p {
+  margin: 4px 0;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .login-card-container {
+    padding: 10px;
+  }
+  
+  .login-card {
+    padding: 16px;
+  }
+  
+  .login-card mat-card-title {
+    font-size: 20px;
+  }
+  
+  .login-button {
+    height: 44px;
+    font-size: 14px;
+  }
+}
+
+/* Samsung S24 optimizations */
+@media (max-width: 411px) {
+  .login-card-container {
+    padding: 8px;
+  }
+  
+  .login-card {
+    padding: 12px;
+    max-width: 95%;
+  }
+}

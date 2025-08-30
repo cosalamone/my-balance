@@ -1,0 +1,56 @@
+/* Login page specific styles */
+.login-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.login-card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.logo-container {
+  @apply bg-white shadow-lg;
+}
+
+.form-field-custom {
+  @apply rounded-lg;
+}
+
+.submit-btn {
+  @apply transition-all duration-300 hover:shadow-lg;
+}
+
+.demo-info {
+  @apply bg-gradient-to-r from-blue-50 to-indigo-50;
+}
+
+/* Mobile optimizations */
+@media (max-width: 767px) {
+  .login-card {
+    @apply mx-4 p-6;
+  }
+  
+  .logo-container {
+    @apply h-16 w-16;
+  }
+  
+  .submit-btn {
+    @apply h-11 text-base;
+  }
+}
+
+/* Samsung S24 optimizations */
+@media (max-width: 411px) {
+  .login-card {
+    @apply mx-2 p-4;
+  }
+  
+  .form-field-custom {
+    margin-bottom: 20px;
+  }
+  
+  .demo-info {
+    @apply p-3 text-xs;
+  }
+}
