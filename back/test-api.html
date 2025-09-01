@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test MyBalance API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .response {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .success {
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            border-left: 4px solid #dc3545;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test MyBalance API</h1>
+    
+    <div class="container">
+        <h2>📝 Registro de Usuario</h2>
+        <div class="test-section">
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="regEmail" value="test@example.com">
+            </div>
+            <div class="form-group">
+                <label>Nombre:</label>
+                <input type="text" id="regFirstName" value="Juan">
+            </div>
+            <div class="form-group">
+                <label>Apellido:</label>
+                <input type="text" id="regLastName" value="Pérez">
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="regPassword" value="Test123456!">
+            </div>
+            <button onclick="testRegister()">Registrar Usuario</button>
+            <div id="registerResponse" class="response" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🔐 Login de Usuario</h2>
+        <div class="test-section">
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="loginEmail" value="test@example.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="loginPassword" value="Test123456!">
+            </div>
+            <button onclick="testLogin()">Iniciar Sesión</button>
+            <div id="loginResponse" class="response" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>📊 Dashboard (requiere token)</h2>
+        <div class="test-section">
+            <div class="form-group">
+                <label>Token JWT:</label>
+                <input type="text" id="dashboardToken" placeholder="Pega aquí el token del login">
+            </div>
+            <button onclick="testDashboard()">Obtener Resumen</button>
+            <div id="dashboardResponse" class="response" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5019/api';
+
+        function showResponse(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = 'response ' + (isError ? 'error' : 'success');
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function testRegister() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById('regEmail').value,
+                        firstName: document.getElementById('regFirstName').value,
+                        lastName: document.getElementById('regLastName').value,
+                        password: document.getElementById('regPassword').value
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResponse('registerResponse', {
+                        status: response.status,
+                        message: 'Usuario registrado exitosamente!',
+                        data: data
+                    });
+                } else {
+                    showResponse('registerResponse', {
+                        status: response.status,
+                        error: data
+                    }, true);
+                }
+            } catch (error) {
+                showResponse('registerResponse', {
+                    error: 'Error de conexión: ' + error.message
+                }, true);
+            }
+        }
+
+        async function testLogin() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById('loginEmail').value,
+                        password: document.getElementById('loginPassword').value
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Automáticamente llenar el token en el campo de dashboard
+                    if (data.token) {
+                        document.getElementById('dashboardToken').value = data.token;
+                    }
+                    
+                    showResponse('loginResponse', {
+                        status: response.status,
+                        message: 'Login exitoso!',
+                        data: data
+                    });
+                } else {
+                    showResponse('loginResponse', {
+                        status: response.status,
+                        error: data
+                    }, true);
+                }
+            } catch (error) {
+                showResponse('loginResponse', {
+                    error: 'Error de conexión: ' + error.message
+                }, true);
+            }
+        }
+
+        async function testDashboard() {
+            try {
+                const token = document.getElementById('dashboardToken').value;
+                
+                if (!token) {
+                    showResponse('dashboardResponse', {
+                        error: 'Se requiere un token JWT. Haz login primero.'
+                    }, true);
+                    return;
+                }
+
+                const response = await fetch(`${API_BASE}/dashboard/summary`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResponse('dashboardResponse', {
+                        status: response.status,
+                        message: 'Resumen obtenido exitosamente!',
+                        data: data
+                    });
+                } else {
+                    showResponse('dashboardResponse', {
+                        status: response.status,
+                        error: data
+                    }, true);
+                }
+            } catch (error) {
+                showResponse('dashboardResponse', {
+                    error: 'Error de conexión: ' + error.message
+                }, true);
+            }
+        }
+    </script>
+</body>
+</html>
