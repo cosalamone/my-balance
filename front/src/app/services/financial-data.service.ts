@@ -7,7 +7,8 @@ import {
   FinancialSummary,
   IncomeCategory,
   ExpenseCategory,
-  SavingsCategory
+  SavingsCategory,
+  ExpenseType
 } from '../core/models/financial.models';
 
 @Injectable({
@@ -147,17 +148,9 @@ export class FinancialDataService {
       totalIncome,
       totalExpenses,
       totalSavings,
-      balance: totalIncome - totalExpenses - totalSavings,
-      currentMonth: {
-        income: totalIncome,
-        expenses: totalExpenses,
-        savings: totalSavings
-      },
-      previousMonth: {
-        income: 0,
-        expenses: 0,
-        savings: 0
-      }
+      netBalance: totalIncome - totalExpenses - totalSavings,
+      month,
+      year
     };
   }
 
@@ -217,8 +210,8 @@ export class FinancialDataService {
         id: '1',
         amount: 45000,
         description: 'Alquiler',
-        category: ExpenseCategory.HOUSING,
-        isFixed: true,
+        category: ExpenseCategory.RENT,
+        type: ExpenseType.FIXED,
         date: new Date(),
         isRecurring: true
       },
@@ -227,7 +220,7 @@ export class FinancialDataService {
         amount: 15000,
         description: 'Supermercado',
         category: ExpenseCategory.FOOD,
-        isFixed: false,
+        type: ExpenseType.VARIABLE,
         date: new Date(),
         isRecurring: false
       }
@@ -240,15 +233,15 @@ export class FinancialDataService {
         description: 'Fondo de Emergencia',
         category: SavingsCategory.EMERGENCY_FUND,
         date: new Date(),
-        goalAmount: 300000
+        targetAmount: 300000
       },
       {
         id: '2',
         amount: 100,
         description: 'Ahorro en USD',
-        category: SavingsCategory.INVESTMENT,
+        category: SavingsCategory.USD_SAVINGS,
         date: new Date(),
-        goalAmount: 5000
+        targetAmount: 5000
       }
     ];
 

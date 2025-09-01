@@ -58,9 +58,8 @@ export class IncomeComponent implements OnInit {
   incomeCategories = [
     { value: IncomeCategory.SALARY, label: 'Haberes' },
     { value: IncomeCategory.BONUS, label: 'Bonos' },
-    { value: IncomeCategory.FREELANCE, label: 'Freelance' },
-    { value: IncomeCategory.INVESTMENT, label: 'Inversiones' },
     { value: IncomeCategory.GIFT, label: 'Regalos' },
+    { value: IncomeCategory.AGUINALDO, label: 'Aguinaldo' },
     { value: IncomeCategory.OTHER, label: 'Otros' }
   ];
 

@@ -1,4 +1,4 @@
-import { IncomeCategory } from '../../core/models/financial.models';
+import { IncomeCategory } from '../../models/financial.models';
 
 export class IncomeUtils {
   
@@ -6,9 +6,8 @@ export class IncomeUtils {
     const iconMap: Record<IncomeCategory, string> = {
       [IncomeCategory.SALARY]: 'work',
       [IncomeCategory.BONUS]: 'star',
-      [IncomeCategory.FREELANCE]: 'computer',
-      [IncomeCategory.INVESTMENT]: 'trending_up',
       [IncomeCategory.GIFT]: 'card_giftcard',
+      [IncomeCategory.AGUINALDO]: 'payments',
       [IncomeCategory.OTHER]: 'more_horiz'
     };
 
@@ -19,9 +18,8 @@ export class IncomeUtils {
     const colorMap: Record<IncomeCategory, string> = {
       [IncomeCategory.SALARY]: 'text-green-600',
       [IncomeCategory.BONUS]: 'text-yellow-600',
-      [IncomeCategory.FREELANCE]: 'text-purple-600',
-      [IncomeCategory.INVESTMENT]: 'text-blue-600',
       [IncomeCategory.GIFT]: 'text-pink-600',
+      [IncomeCategory.AGUINALDO]: 'text-blue-600',
       [IncomeCategory.OTHER]: 'text-gray-600'
     };
 
@@ -32,9 +30,8 @@ export class IncomeUtils {
     const badgeMap: Record<IncomeCategory, string> = {
       [IncomeCategory.SALARY]: 'bg-green-100 text-green-800',
       [IncomeCategory.BONUS]: 'bg-yellow-100 text-yellow-800',
-      [IncomeCategory.FREELANCE]: 'bg-purple-100 text-purple-800',
-      [IncomeCategory.INVESTMENT]: 'bg-blue-100 text-blue-800',
       [IncomeCategory.GIFT]: 'bg-pink-100 text-pink-800',
+      [IncomeCategory.AGUINALDO]: 'bg-blue-100 text-blue-800',
       [IncomeCategory.OTHER]: 'bg-gray-100 text-gray-800'
     };
 
