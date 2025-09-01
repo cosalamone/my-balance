@@ -8,9 +8,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FinancialDataService } from '../../core/services/financial-data.service';
 import { FinancialSummary } from '../../core/models/financial.models';
+import { SummaryCardModel } from '../../core/models/summary-card.model';
+import { 
+  SummaryCardsComponent,
+  QuickActionsCardComponent,
+  ActivitySummaryCardComponent
+} from '../../core/components/cards';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'mb-dashboard',
+  templateUrl: './dashboard.page.html',
+  styleUrls: ['./dashboard.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -19,10 +27,11 @@ import { FinancialSummary } from '../../core/models/financial.models';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatGridListModule
+    MatGridListModule,
+    SummaryCardsComponent,
+    QuickActionsCardComponent,
+    ActivitySummaryCardComponent
   ],
-  templateUrl: './dashboard.page.html',
-  styleUrls: ['./dashboard.page.scss']
 })
 export class DashboardComponent implements OnInit {
   currentSummary: FinancialSummary = {
@@ -42,6 +51,15 @@ export class DashboardComponent implements OnInit {
     }
   };
   isLoading = true;
+
+  get summaryCardModel(): SummaryCardModel {
+    return {
+      summary: this.currentSummary,
+      order: ['income', 'expenses', 'savings', 'balance'],
+      showIcons: true,
+      config: { title: 'Resumen Financiero' }
+    };
+  }
 
   constructor(
     private financialService: FinancialDataService
@@ -65,14 +83,6 @@ export class DashboardComponent implements OnInit {
 
     this.currentSummary = this.financialService.getCurrentMonthSummary();
     this.isLoading = false;
-  }
-
-  get balanceColor(): string {
-    return this.currentSummary.balance >= 0 ? 'text-income-600' : 'text-expense-600';
-  }
-
-  get balanceIcon(): string {
-    return this.currentSummary.balance >= 0 ? 'trending_up' : 'trending_down';
   }
 
   refreshData(): void {

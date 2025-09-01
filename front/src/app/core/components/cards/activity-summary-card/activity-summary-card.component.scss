@@ -1,0 +1,43 @@
+// Estilos específicos para la tarjeta de actividad
+.activity-items {
+  .activity-item {
+    transition: background-color 0.2s ease-in-out;
+    
+    &:hover {
+      background-color: rgb(243 244 246);
+    }
+  }
+  
+  .balance-item {
+    border-left-width: 3px;
+    
+    &.positive-balance {
+      border-left-color: var(--income-color, #10b981);
+    }
+    
+    &.negative-balance {
+      border-left-color: var(--expense-color, #ef4444);
+    }
+  }
+}
+
+// Scrollbar styling
+.overflow-y-auto {
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgb(243 244 246);
+    border-radius: 2px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgb(156 163 175);
+    border-radius: 2px;
+    
+    &:hover {
+      background: rgb(107 114 128);
+    }
+  }
+}

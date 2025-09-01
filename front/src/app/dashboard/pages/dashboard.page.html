@@ -1,4 +1,4 @@
-<div class="container-app h-screen flex flex-col overflow-hidden p-0">
+<div class="container-app h-screen flex flex-col p-0">
   <!-- Header -->
   <div class="flex-shrink-0 pt-2 pb-1 px-2">
     <h1 class="text-lg font-bold dashboard-title">Dashboard Financiero</h1>
@@ -11,171 +11,23 @@
   </div>
 
   <!-- Dashboard Content -->
-  <div *ngIf="!isLoading" class="flex-1 flex flex-col min-h-0 overflow-hidden">
+  <div *ngIf="!isLoading" class="flex-1 flex flex-col space-y-3 px-2 pb-2">
     <!-- Summary Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-1 flex-shrink-0 px-2">
-      <!-- Total Income -->
-      <div class="financial-card income-card p-2 dashboard-card">
-        <div class="flex flex-col">
-          <div class="flex items-center justify-between mb-1">
-            <div class="p-1 bg-income-100 rounded-lg">
-              <mat-icon class="text-income-600 text-sm">trending_up</mat-icon>
-            </div>
-          </div>
-          <p class="text-xs font-medium text-gray-600 mb-0.5">Ingresos del Mes</p>
-          <p class="text-sm font-bold text-income-600">
-            ${{ currentSummary?.totalIncome | number:'1.0-0' }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Total Expenses -->
-      <div class="financial-card expense-card p-2 dashboard-card">
-        <div class="flex flex-col">
-          <div class="flex items-center justify-between mb-1">
-            <div class="p-1 bg-expense-100 rounded-lg">
-              <mat-icon class="text-expense-600 text-sm">trending_down</mat-icon>
-            </div>
-          </div>
-          <p class="text-xs font-medium text-gray-600 mb-0.5">Gastos del Mes</p>
-          <p class="text-sm font-bold text-expense-600">
-            ${{ currentSummary?.totalExpenses | number:'1.0-0' }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Total Savings -->
-      <div class="financial-card savings-card p-2 dashboard-card">
-        <div class="flex flex-col">
-          <div class="flex items-center justify-between mb-1">
-            <div class="p-1 bg-savings-100 rounded-lg">
-              <mat-icon class="text-savings-600 text-sm">savings</mat-icon>
-            </div>
-          </div>
-          <p class="text-xs font-medium text-gray-600 mb-0.5">Ahorros del Mes</p>
-          <p class="text-sm font-bold text-savings-600">
-            ${{ currentSummary?.totalSavings | number:'1.0-0' }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Net Balance -->
-      <div class="financial-card p-2 dashboard-card">
-        <div class="flex flex-col">
-          <div class="flex items-center justify-between mb-1">
-            <div class="p-1 bg-gray-100 rounded-lg">
-              <mat-icon [ngClass]="balanceColor" class="text-sm">{{ balanceIcon }}</mat-icon>
-            </div>
-          </div>
-          <p class="text-xs font-medium text-gray-600 mb-0.5">Balance Neto</p>
-          <p class="text-sm font-bold" [ngClass]="balanceColor">
-            ${{ currentSummary?.balance | number:'1.0-0' }}
-          </p>
-        </div>
-      </div>
+    <div class="flex-shrink-0">
+      <mb-summary-cards [model]="summaryCardModel"></mb-summary-cards>
     </div>
 
     <!-- Quick Actions -->
-    <div class="financial-card p-2 dashboard-card flex-shrink-0 mx-2">
-      <h2 class="text-sm font-semibold dashboard-title mb-1">Acciones Rápidas</h2>
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-1">
-        <button 
-          mat-raised-button 
-          color="primary" 
-          routerLink="/ingresos"
-          class="w-full h-8 flex flex-col items-center justify-center space-y-0 text-xs">
-          <mat-icon class="text-xs">add_circle</mat-icon>
-          <span class="text-xs">Ingreso</span>
-        </button>
-        
-        <button 
-          mat-raised-button 
-          color="warn" 
-          routerLink="/gastos"
-          class="w-full h-8 flex flex-col items-center justify-center space-y-0 text-xs">
-          <mat-icon class="text-xs">remove_circle</mat-icon>
-          <span class="text-xs">Gasto</span>
-        </button>
-        
-        <button 
-          mat-raised-button 
-          color="accent" 
-          routerLink="/ahorros"
-          class="w-full h-8 flex flex-col items-center justify-center space-y-0 text-xs">
-          <mat-icon class="text-xs">savings</mat-icon>
-          <span class="text-xs">Ahorro</span>
-        </button>
-        
-        <button 
-          mat-raised-button 
-          routerLink="/reportes"
-          class="w-full h-8 flex flex-col items-center justify-center space-y-0 text-xs">
-          <mat-icon class="text-xs">analytics</mat-icon>
-          <span class="text-xs">Reportes</span>
-        </button>
-      </div>
+    <div class="flex-shrink-0">
+      <mb-quick-actions-card></mb-quick-actions-card>
     </div>
 
-    <!-- Activity Summary (Ultra Compact Version) -->
-    <div class="financial-card p-2 dashboard-card flex-1 min-h-0 mx-2 flex flex-col">
-      <div class="flex items-center justify-between mb-1">
-          <h2 class="text-sm font-semibold dashboard-title">Actividad Reciente</h2>
-        <button mat-icon-button (click)="refreshData()" class="text-xs p-1">
-          <mat-icon class="text-xs">refresh</mat-icon>
-        </button>
-      </div>
-        <div class="overflow-y-auto max-h-[210px]">
-        <div class="space-y-1 pb-2">
-          <div class="flex items-center justify-between p-1.5 bg-gray-50 rounded-md">
-            <div class="flex items-center space-x-1.5">
-              <div class="p-0.5 bg-income-100 rounded-full">
-                <mat-icon class="text-income-600 text-xs">trending_up</mat-icon>
-              </div>
-              <span class="font-medium text-gray-900 text-xs">Total Ingresos</span>
-            </div>
-            <span class="font-semibold text-income-600 text-xs">
-              ${{ currentSummary?.totalIncome | number:'1.0-0' }}
-            </span>
-          </div>
-
-          <div class="flex items-center justify-between p-1.5 bg-gray-50 rounded-md">
-            <div class="flex items-center space-x-1.5">
-              <div class="p-0.5 bg-expense-100 rounded-full">
-                <mat-icon class="text-expense-600 text-xs">trending_down</mat-icon>
-              </div>
-              <span class="font-medium text-gray-900 text-xs">Total Gastos</span>
-            </div>
-            <span class="font-semibold text-expense-600 text-xs">
-              ${{ currentSummary?.totalExpenses | number:'1.0-0' }}
-            </span>
-          </div>
-
-          <div class="flex items-center justify-between p-1.5 bg-gray-50 rounded-md">
-            <div class="flex items-center space-x-1.5">
-              <div class="p-0.5 bg-savings-100 rounded-full">
-                <mat-icon class="text-savings-600 text-xs">savings</mat-icon>
-              </div>
-              <span class="font-medium text-gray-900 text-xs">Total Ahorros</span>
-            </div>
-            <span class="font-semibold text-savings-600 text-xs">
-              ${{ currentSummary?.totalSavings | number:'1.0-0' }}
-            </span>
-          </div>
-          
-          <!-- Balance neto dentro de la actividad reciente -->
-          <div class="flex items-center justify-between p-1.5 bg-gray-50 rounded-md border-l-2" [ngClass]="{'border-l-income-500': (currentSummary?.balance ?? 0) >= 0, 'border-l-expense-500': (currentSummary?.balance ?? 0) < 0}">
-            <div class="flex items-center space-x-1.5">
-              <div class="p-0.5 bg-gray-100 rounded-full">
-                <mat-icon [ngClass]="balanceColor" class="text-xs">{{ balanceIcon }}</mat-icon>
-              </div>
-              <span class="font-medium text-gray-900 text-xs">Balance Final</span>
-            </div>
-            <span class="font-bold text-xs" [ngClass]="balanceColor">
-              ${{ currentSummary?.balance | number:'1.0-0' }}
-            </span>
-          </div>
-        </div>
-      </div>
+    <!-- Activity Summary -->
+    <div class="flex-shrink-0">
+      <mb-activity-summary-card 
+        [summary]="currentSummary"
+        (refreshClicked)="refreshData()">
+      </mb-activity-summary-card>
     </div>
   </div>
 </div>

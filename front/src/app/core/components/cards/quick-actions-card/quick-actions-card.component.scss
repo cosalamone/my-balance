@@ -1,0 +1,27 @@
+// Estilos específicos para las acciones rápidas
+.actions-grid {
+  button {
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    mat-icon {
+      margin-bottom: 0.125rem;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  button {
+    height: 2.5rem;
+    font-size: 0.625rem;
+  }
+}

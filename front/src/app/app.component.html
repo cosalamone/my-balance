@@ -45,7 +45,7 @@
         </button>
         <span>{{title}}</span>
         <span class="spacer"></span>
-        <app-theme-toggle></app-theme-toggle>
+        <mb-theme-toggle></mb-theme-toggle>
         <button mat-icon-button (click)="logout()">
           <mat-icon>logout</mat-icon>
         </button>
@@ -60,7 +60,7 @@
   <!-- Login view when not authenticated -->
   <div *ngIf="!isAuthenticated" class="login-container">
     <div class="theme-toggle-login">
-      <app-theme-toggle></app-theme-toggle>
+      <mb-theme-toggle></mb-theme-toggle>
     </div>
     <router-outlet></router-outlet>
   </div>

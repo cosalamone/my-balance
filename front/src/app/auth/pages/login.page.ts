@@ -15,8 +15,10 @@ import { AuthService } from '../../core/services/auth.service';
 import { BiometricAuthService } from '../../core/services/biometric-auth.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'mb-login',
   standalone: true,
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -30,8 +32,7 @@ import { BiometricAuthService } from '../../core/services/biometric-auth.service
     MatDividerModule,
     MatSnackBarModule
   ],
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss']
+
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;

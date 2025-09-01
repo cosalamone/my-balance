@@ -22,7 +22,7 @@ import { Income, IncomeCategory } from '../../core/models/financial.models';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-ingresos',
+  selector: 'mb-ingresos',
   standalone: true,
   imports: [
     CommonModule,

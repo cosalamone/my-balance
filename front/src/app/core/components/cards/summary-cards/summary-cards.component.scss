@@ -1,0 +1,23 @@
+// Estilos específicos para las tarjetas de resumen
+.income-card {
+  border-left: 3px solid var(--income-color, #10b981);
+}
+
+.expense-card {
+  border-left: 3px solid var(--expense-color, #ef4444);
+}
+
+.savings-card {
+  border-left: 3px solid var(--savings-color, #8b5cf6);
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .grid {
+    gap: 0.25rem;
+  }
+  
+  .dashboard-card {
+    padding: 0.375rem;
+  }
+}
