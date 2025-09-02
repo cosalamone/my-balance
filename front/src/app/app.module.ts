@@ -49,7 +49,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     AppComponent,
     DashboardComponent,
     IncomeComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +60,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     AppRoutingModule,
     NgChartsModule,
     CoreModule,
-    
+
     // Angular Material
     MatToolbarModule,
     MatSidenavModule,
@@ -83,11 +83,9 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     MatChipsModule,
     MatGridListModule,
     MatCheckboxModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
-  providers: [
-    provideAnimationsAsync()
-  ],
-  bootstrap: [AppComponent]
+  providers: [provideAnimationsAsync()],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

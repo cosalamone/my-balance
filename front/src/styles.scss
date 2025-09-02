@@ -6,71 +6,75 @@
 @include mat.core();
 
 // Define dark theme palette
-$dark-primary: mat.define-palette((
-  50: #f3f1ff,
-  100: #ede9fe,
-  200: #ddd6fe,
-  300: #c4b5fd,
-  400: #a78bfa,
-  500: #8b5cf6,
-  600: #7c3aed,
-  700: #6d28d9,
-  800: #5b21b6,
-  900: #4c1d95,
-  A100: #c4b5fd,
-  A200: #a78bfa,
-  A400: #8b5cf6,
-  A700: #7c3aed,
-  contrast: (
-    50: rgba(black, 0.87),
-    100: rgba(black, 0.87),
-    200: rgba(black, 0.87),
-    300: rgba(black, 0.87),
-    400: white,
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-    A100: rgba(black, 0.87),
-    A200: white,
-    A400: white,
-    A700: white,
+$dark-primary: mat.define-palette(
+  (
+    50: #f3f1ff,
+    100: #ede9fe,
+    200: #ddd6fe,
+    300: #c4b5fd,
+    400: #a78bfa,
+    500: #8b5cf6,
+    600: #7c3aed,
+    700: #6d28d9,
+    800: #5b21b6,
+    900: #4c1d95,
+    A100: #c4b5fd,
+    A200: #a78bfa,
+    A400: #8b5cf6,
+    A700: #7c3aed,
+    contrast: (
+      50: rgba(black, 0.87),
+      100: rgba(black, 0.87),
+      200: rgba(black, 0.87),
+      300: rgba(black, 0.87),
+      400: white,
+      500: white,
+      600: white,
+      700: white,
+      800: white,
+      900: white,
+      A100: rgba(black, 0.87),
+      A200: white,
+      A400: white,
+      A700: white,
+    ),
   )
-));
+);
 
-$dark-accent: mat.define-palette((
-  50: #fdf2f8,
-  100: #fce7f3,
-  200: #fbcfe8,
-  300: #f9a8d4,
-  400: #f472b6,
-  500: #ec4899,
-  600: #db2777,
-  700: #be185d,
-  800: #9d174d,
-  900: #831843,
-  A100: #f9a8d4,
-  A200: #f472b6,
-  A400: #ec4899,
-  A700: #db2777,
-  contrast: (
-    50: rgba(black, 0.87),
-    100: rgba(black, 0.87),
-    200: rgba(black, 0.87),
-    300: rgba(black, 0.87),
-    400: white,
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-    A100: rgba(black, 0.87),
-    A200: white,
-    A400: white,
-    A700: white,
+$dark-accent: mat.define-palette(
+  (
+    50: #fdf2f8,
+    100: #fce7f3,
+    200: #fbcfe8,
+    300: #f9a8d4,
+    400: #f472b6,
+    500: #ec4899,
+    600: #db2777,
+    700: #be185d,
+    800: #9d174d,
+    900: #831843,
+    A100: #f9a8d4,
+    A200: #f472b6,
+    A400: #ec4899,
+    A700: #db2777,
+    contrast: (
+      50: rgba(black, 0.87),
+      100: rgba(black, 0.87),
+      200: rgba(black, 0.87),
+      300: rgba(black, 0.87),
+      400: white,
+      500: white,
+      600: white,
+      700: white,
+      800: white,
+      900: white,
+      A100: rgba(black, 0.87),
+      A200: white,
+      A400: white,
+      A700: white,
+    ),
   )
-));
+);
 
 $dark-warn: mat.define-palette(mat.$red-palette);
 
@@ -80,32 +84,36 @@ $light-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 $light-warn: mat.define-palette(mat.$red-palette);
 
 // Create the dark theme
-$dark-theme: mat.define-dark-theme((
-  color: (
-    primary: $dark-primary,
-    accent: $dark-accent,
-    warn: $dark-warn,
-  ),
-  typography: mat.define-typography-config(),
-  density: 0
-));
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+      warn: $dark-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
 
 // Create the light theme
-$light-theme: mat.define-light-theme((
-  color: (
-    primary: $light-primary,
-    accent: $light-accent,
-    warn: $light-warn,
-  ),
-  typography: mat.define-typography-config(),
-  density: 0
-));
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+      warn: $light-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
 
 // Apply the dark theme by default
 @include mat.all-component-themes($dark-theme);
 
 // Apply light theme when data-theme="light"
-[data-theme="light"] {
+[data-theme='light'] {
   @include mat.all-component-colors($light-theme);
 }
 
@@ -122,27 +130,30 @@ $light-theme: mat.define-light-theme((
   --bg-tertiary: #f0f4f8;
   --bg-elevated: #ffffff;
   --bg-surface: #fcfcfd;
-  
+
   /* Text colors with better hierarchy */
   --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-tertiary: #64748b;
   --text-muted: #94a3b8;
   --text-inverse: #ffffff;
-  
+
   /* Border colors with subtle variations */
   --border-primary: #e1e7ef;
   --border-secondary: #d1d9e0;
   --border-accent: rgba(79, 70, 229, 0.12);
   --border-hover: rgba(79, 70, 229, 0.24);
-  
+
   /* Shadow system */
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
   /* Scrollbar Variables */
   --scrollbar-track-bg: #f3f4f6;
   --scrollbar-thumb-bg: #9ca3af;
@@ -154,7 +165,7 @@ $light-theme: mat.define-light-theme((
   --danger-bg: rgba(239, 68, 68, 0.05);
   --danger-hover-bg: rgba(239, 68, 68, 0.1);
   --hover-bg-light: #f9fafb;
-  
+
   /* Input system */
   --input-bg: #ffffff;
   --input-bg-focus: #ffffff;
@@ -162,12 +173,12 @@ $light-theme: mat.define-light-theme((
   --input-placeholder: #64748b;
   --input-border: #d1d5db;
   --input-border-focus: #4f46e5;
-  
+
   /* Interactive states */
   --hover-overlay: rgba(79, 70, 229, 0.05);
   --active-overlay: rgba(79, 70, 229, 0.1);
   --focus-ring: rgba(79, 70, 229, 0.25);
-  
+
   /* Semantic colors enhanced */
   --success-bg: #f0fdf4;
   --success-border: #bbf7d0;
@@ -183,34 +194,39 @@ $light-theme: mat.define-light-theme((
   --info-text: #1d4ed8;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   /* Dark theme variables - Enhanced for better visual hierarchy */
   --bg-primary: #0a0a0f;
   --bg-secondary: #141420;
   --bg-tertiary: #1a1a2e;
   --bg-elevated: #1e1e32;
   --bg-surface: #232340;
-  
+
   /* Text colors optimized for dark backgrounds */
   --text-primary: #f8fafc;
   --text-secondary: #e2e8f0;
   --text-tertiary: #94a3b8;
   --text-muted: #64748b;
   --text-inverse: #0f172a;
-  
+
   /* Border colors with purple accent */
   --border-primary: rgba(139, 92, 246, 0.15);
   --border-secondary: rgba(139, 92, 246, 0.1);
   --border-accent: rgba(139, 92, 246, 0.3);
   --border-hover: rgba(139, 92, 246, 0.4);
-  
+
   /* Shadow system with purple glow */
   --shadow-xs: 0 1px 2px 0 rgba(139, 92, 246, 0.1);
-  --shadow-sm: 0 1px 3px 0 rgba(139, 92, 246, 0.15), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(139, 92, 246, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 10px 15px -3px rgba(139, 92, 246, 0.25), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(139, 92, 246, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-  
+  --shadow-sm:
+    0 1px 3px 0 rgba(139, 92, 246, 0.15), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md:
+    0 4px 6px -1px rgba(139, 92, 246, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+  --shadow-lg:
+    0 10px 15px -3px rgba(139, 92, 246, 0.25), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgba(139, 92, 246, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.1);
+
   /* Input system for dark mode */
   --input-bg: rgba(248, 250, 252, 0.05);
   --input-bg-focus: rgba(248, 250, 252, 0.08);
@@ -218,7 +234,7 @@ $light-theme: mat.define-light-theme((
   --input-placeholder: #94a3b8;
   --input-border: rgba(139, 92, 246, 0.2);
   --input-border-focus: rgba(139, 92, 246, 0.6);
-  
+
   /* Scrollbar Variables - Dark */
   --scrollbar-track-bg: #1e1e32;
   --scrollbar-thumb-bg: #64748b;
@@ -231,12 +247,12 @@ $light-theme: mat.define-light-theme((
   --danger-hover-bg: rgba(239, 68, 68, 0.12);
   --hover-bg-dark: rgba(139, 92, 246, 0.08);
   --surface-dark: #1e1e32;
-  
+
   /* Interactive states for dark mode */
   --hover-overlay: rgba(139, 92, 246, 0.08);
   --active-overlay: rgba(139, 92, 246, 0.15);
   --focus-ring: rgba(139, 92, 246, 0.4);
-  
+
   /* Semantic colors for dark mode */
   --success-bg: rgba(16, 185, 129, 0.1);
   --success-border: rgba(16, 185, 129, 0.3);
@@ -265,9 +281,16 @@ $light-theme: mat.define-light-theme((
     scroll-behavior: smooth;
   }
 
-  html, body {
+  html,
+  body {
     height: 100%;
-    font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family:
+      'Inter',
+      'Roboto',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      sans-serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -277,25 +300,49 @@ $light-theme: mat.define-light-theme((
     margin: 0;
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-x: hidden;
   }
 
   /* Enhanced typography hierarchy */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: 600;
     line-height: 1.2;
     letter-spacing: -0.025em;
     color: var(--text-primary);
   }
 
-  h1 { font-size: 2.5rem; font-weight: 700; }
-  h2 { font-size: 2rem; font-weight: 600; }
-  h3 { font-size: 1.5rem; font-weight: 600; }
-  h4 { font-size: 1.25rem; font-weight: 600; }
-  h5 { font-size: 1.125rem; font-weight: 500; }
-  h6 { font-size: 1rem; font-weight: 500; }
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  h5 {
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+  h6 {
+    font-size: 1rem;
+    font-weight: 500;
+  }
 
   p {
     line-height: 1.6;
@@ -319,15 +366,37 @@ $light-theme: mat.define-light-theme((
 
   /* Dark theme body background - Enhanced gradient */
   .dark-theme {
-    background: radial-gradient(ellipse at top, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-                linear-gradient(135deg, #0a0a0f 0%, #141420 35%, #1a1a2e 65%, #232340 100%);
+    background:
+      radial-gradient(
+        ellipse at top,
+        rgba(139, 92, 246, 0.08) 0%,
+        transparent 50%
+      ),
+      linear-gradient(
+        135deg,
+        #0a0a0f 0%,
+        #141420 35%,
+        #1a1a2e 65%,
+        #232340 100%
+      );
     min-height: 100vh;
   }
 
   /* Light theme body background - Subtle gradient */
   .light-theme {
-    background: radial-gradient(ellipse at top, rgba(79, 70, 229, 0.04) 0%, transparent 50%),
-                linear-gradient(135deg, #ffffff 0%, #f8fafb 35%, #f0f4f8 65%, #e1e7ef 100%);
+    background:
+      radial-gradient(
+        ellipse at top,
+        rgba(79, 70, 229, 0.04) 0%,
+        transparent 50%
+      ),
+      linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #f8fafb 35%,
+        #f0f4f8 65%,
+        #e1e7ef 100%
+      );
     min-height: 100vh;
   }
 }
@@ -483,32 +552,33 @@ $light-theme: mat.define-light-theme((
       border: 1.5px solid var(--input-border) !important;
       transition: all 0.3s ease !important;
     }
-    
+
     .mat-mdc-text-field-wrapper:hover {
       border-color: var(--border-hover) !important;
     }
-    
+
     .mat-mdc-form-field-input-control {
       color: var(--input-text) !important;
       font-weight: 400 !important;
     }
-    
+
     .mdc-text-field--filled .mdc-line-ripple::before,
     .mdc-text-field--filled .mdc-line-ripple::after {
       border-bottom-color: var(--input-border-focus) !important;
     }
-    
+
     .mat-mdc-form-field-label {
       color: var(--text-secondary) !important;
       font-weight: 500 !important;
     }
-    
+
     .mat-mdc-form-field-label.mdc-floating-label--float-above {
       color: var(--input-border-focus) !important;
     }
   }
 
-  .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper:focus-within {
+  .mat-mdc-form-field:not(.mat-form-field-disabled)
+    .mat-mdc-text-field-wrapper:focus-within {
     box-shadow: 0 0 0 3px var(--focus-ring) !important;
     border-color: var(--input-border-focus) !important;
   }
@@ -539,14 +609,28 @@ $light-theme: mat.define-light-theme((
   }
 
   /* Semantic Color Classes */
-  .text-income { color: #10b981; }
-  .text-expense { color: #ef4444; }
-  .text-savings { color: #3b82f6; }
-  .text-primary-accent { color: #6366f1; }
+  .text-income {
+    color: #10b981;
+  }
+  .text-expense {
+    color: #ef4444;
+  }
+  .text-savings {
+    color: #3b82f6;
+  }
+  .text-primary-accent {
+    color: #6366f1;
+  }
 
-  .bg-income { background-color: var(--success-bg); }
-  .bg-expense { background-color: var(--error-bg); }
-  .bg-savings { background-color: var(--info-bg); }
+  .bg-income {
+    background-color: var(--success-bg);
+  }
+  .bg-expense {
+    background-color: var(--error-bg);
+  }
+  .bg-savings {
+    background-color: var(--info-bg);
+  }
 
   /* Container System */
   .container-app {
@@ -568,30 +652,30 @@ $light-theme: mat.define-light-theme((
   }
 
   /* Enhanced Glass Effect for Dark Mode */
-  [data-theme="dark"] .financial-card {
+  [data-theme='dark'] .financial-card {
     background: rgba(30, 30, 50, 0.6);
     backdrop-filter: blur(20px);
     border: 1px solid var(--border-primary);
     box-shadow: var(--shadow-md);
   }
 
-  [data-theme="dark"] .income-card {
+  [data-theme='dark'] .income-card {
     background: linear-gradient(135deg, var(--success-bg) 0%, transparent 100%);
     border-left-color: #34d399;
   }
 
-  [data-theme="dark"] .expense-card {
+  [data-theme='dark'] .expense-card {
     background: linear-gradient(135deg, var(--error-bg) 0%, transparent 100%);
     border-left-color: #f87171;
   }
 
-  [data-theme="dark"] .savings-card {
+  [data-theme='dark'] .savings-card {
     background: linear-gradient(135deg, var(--info-bg) 0%, transparent 100%);
     border-left-color: #60a5fa;
   }
 
   /* Enhanced Light Mode Cards */
-  [data-theme="light"] .financial-card {
+  [data-theme='light'] .financial-card {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
     border: 1px solid var(--border-primary);
@@ -605,14 +689,23 @@ $light-theme: mat.define-light-theme((
   }
 
   .skeleton {
-    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background: linear-gradient(
+      90deg,
+      var(--bg-secondary) 25%,
+      var(--bg-tertiary) 50%,
+      var(--bg-secondary) 75%
+    );
     background-size: 200% 100%;
     animation: loading 1.5s infinite;
   }
 
   @keyframes loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
   }
 }
 
@@ -666,7 +759,7 @@ $light-theme: mat.define-light-theme((
   box-shadow: var(--shadow-md);
 }
 
-[data-theme="dark"] .mat-toolbar {
+[data-theme='dark'] .mat-toolbar {
   background: rgba(139, 92, 246, 0.08) !important;
   backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--border-primary);
@@ -680,7 +773,7 @@ $light-theme: mat.define-light-theme((
   backdrop-filter: blur(16px);
 }
 
-[data-theme="dark"] .mat-sidenav {
+[data-theme='dark'] .mat-sidenav {
   background: rgba(15, 15, 35, 0.95) !important;
   backdrop-filter: blur(24px);
   border-right: 1px solid var(--border-primary);
@@ -769,18 +862,25 @@ $light-theme: mat.define-light-theme((
   stroke: #6366f1 !important;
 }
 
-[data-theme="dark"] .mat-mdc-progress-spinner circle {
+[data-theme='dark'] .mat-mdc-progress-spinner circle {
   stroke: #8b5cf6 !important;
 }
 
 /* Enhanced Material Checkbox and Radio */
-.mat-mdc-checkbox .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background,
-.mat-mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate ~ .mdc-checkbox__background {
+.mat-mdc-checkbox
+  .mdc-checkbox__native-control:enabled:checked
+  ~ .mdc-checkbox__background,
+.mat-mdc-checkbox
+  .mdc-checkbox__native-control:enabled:indeterminate
+  ~ .mdc-checkbox__background {
   background-color: #6366f1 !important;
   border-color: #6366f1 !important;
 }
 
-.mat-mdc-radio-button .mdc-radio__native-control:enabled:checked + .mdc-radio__background .mdc-radio__inner-circle {
+.mat-mdc-radio-button
+  .mdc-radio__native-control:enabled:checked
+  + .mdc-radio__background
+  .mdc-radio__inner-circle {
   background-color: #6366f1 !important;
 }
 
@@ -840,18 +940,34 @@ $light-theme: mat.define-light-theme((
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes scaleIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Enhanced Focus Management */
@@ -877,7 +993,7 @@ $light-theme: mat.define-light-theme((
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="dark"] .text-shadow {
+[data-theme='dark'] .text-shadow {
   text-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 }
 
@@ -942,7 +1058,8 @@ $light-theme: mat.define-light-theme((
     margin-bottom: 1rem;
   }
 
-  .btn-primary, .btn-secondary {
+  .btn-primary,
+  .btn-secondary {
     padding: 0.75rem 1.25rem;
     font-size: 0.875rem;
   }
@@ -960,18 +1077,19 @@ $light-theme: mat.define-light-theme((
   .container-app {
     padding: 0 0.5rem;
   }
-  
+
   .financial-card {
     margin-bottom: 0.875rem;
     padding: 1rem;
   }
-  
+
   .chart-container {
     height: 240px;
     padding: 0.75rem;
   }
 
-  .btn-primary, .btn-secondary {
+  .btn-primary,
+  .btn-secondary {
     padding: 0.625rem 1rem;
     font-size: 0.813rem;
   }
@@ -1027,8 +1145,8 @@ $light-theme: mat.define-light-theme((
     --text-primary: #000000;
     --text-secondary: #333333;
   }
-  
-  [data-theme="dark"] {
+
+  [data-theme='dark'] {
     --border-primary: #ffffff;
     --border-secondary: #cccccc;
     --text-primary: #ffffff;
@@ -1060,7 +1178,8 @@ $light-theme: mat.define-light-theme((
     margin-bottom: 0.75rem;
   }
 
-  .btn-primary, .btn-secondary {
+  .btn-primary,
+  .btn-secondary {
     padding: 0.625rem 1.25rem;
     font-size: 0.813rem;
   }
@@ -1071,18 +1190,19 @@ $light-theme: mat.define-light-theme((
   .container-app {
     padding: 0 0.5rem;
   }
-  
+
   .financial-card {
     margin-bottom: 1rem;
     padding: 0.75rem;
   }
-  
+
   .chart-container {
     height: 220px;
     padding: 0.5rem;
   }
 
-  .btn-primary, .btn-secondary {
+  .btn-primary,
+  .btn-secondary {
     padding: 0.5rem 1rem;
     font-size: 0.75rem;
   }
@@ -1103,12 +1223,18 @@ $light-theme: mat.define-light-theme((
     --border-primary: #000000;
     --border-secondary: #333333;
   }
-  
-  [data-theme="dark"] {
+
+  [data-theme='dark'] {
     --border-primary: #ffffff;
     --border-secondary: #cccccc;
   }
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}

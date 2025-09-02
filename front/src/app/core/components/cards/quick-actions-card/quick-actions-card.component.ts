@@ -18,7 +18,7 @@ import { QuickActionsCardModel } from '../../../models/quick-actions-card.model'
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    CardBaseComponent
+    CardBaseComponent,
   ],
 })
 export class QuickActionsCardComponent {

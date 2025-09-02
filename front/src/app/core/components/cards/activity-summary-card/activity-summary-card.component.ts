@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,7 +24,7 @@ import { FinancialSummary } from '../../../models/financial.models';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    CardBaseComponent
+    CardBaseComponent,
   ],
 })
 export class ActivitySummaryCardComponent implements OnChanges {
@@ -37,7 +44,8 @@ export class ActivitySummaryCardComponent implements OnChanges {
       config: {
         title: 'Actividad Reciente',
         showRefreshButton: true,
-        containerClasses: 'p-2 dashboard-card flex-1 min-h-0 mx-2 flex flex-col',
+        containerClasses:
+          'p-2 dashboard-card flex-1 min-h-0 mx-2 flex flex-col',
         contentClasses: 'overflow-y-auto max-h-[210px] pt-1',
       },
       summary: summary ?? {
@@ -60,7 +68,8 @@ export class ActivitySummaryCardComponent implements OnChanges {
               icon: 'trending_up',
               iconClasses: 'text-income-600 text-xs',
               valueClasses: 'font-semibold text-income-600 text-xs',
-              containerClasses: 'flex items-center justify-between p-1.5 bg-gray-50 rounded-md',
+              containerClasses:
+                'flex items-center justify-between p-1.5 bg-gray-50 rounded-md',
               formatType: 'currency',
             },
             {
@@ -70,7 +79,8 @@ export class ActivitySummaryCardComponent implements OnChanges {
               icon: 'trending_down',
               iconClasses: 'text-expense-600 text-xs',
               valueClasses: 'font-semibold text-expense-600 text-xs',
-              containerClasses: 'flex items-center justify-between p-1.5 bg-gray-50 rounded-md',
+              containerClasses:
+                'flex items-center justify-between p-1.5 bg-gray-50 rounded-md',
               formatType: 'currency',
             },
             {
@@ -80,19 +90,30 @@ export class ActivitySummaryCardComponent implements OnChanges {
               icon: 'savings',
               iconClasses: 'text-savings-600 text-xs',
               valueClasses: 'font-semibold text-savings-600 text-xs',
-              containerClasses: 'flex items-center justify-between p-1.5 bg-gray-50 rounded-md',
+              containerClasses:
+                'flex items-center justify-between p-1.5 bg-gray-50 rounded-md',
               formatType: 'currency',
             },
             {
               type: 'number',
               label: 'Balance Final',
               value: summary?.balance ?? 0,
-              icon: (summary?.balance ?? 0) >= 0 ? 'trending_up' : 'trending_down',
-              iconClasses: (summary?.balance ?? 0) >= 0 ? 'text-income-600 text-xs' : 'text-expense-600 text-xs',
-              valueClasses: 'font-bold text-xs ' + ((summary?.balance ?? 0) >= 0 ? 'text-income-600' : 'text-expense-600'),
+              icon:
+                (summary?.balance ?? 0) >= 0 ? 'trending_up' : 'trending_down',
+              iconClasses:
+                (summary?.balance ?? 0) >= 0
+                  ? 'text-income-600 text-xs'
+                  : 'text-expense-600 text-xs',
+              valueClasses:
+                'font-bold text-xs ' +
+                ((summary?.balance ?? 0) >= 0
+                  ? 'text-income-600'
+                  : 'text-expense-600'),
               containerClasses:
                 'flex items-center justify-between p-1.5 bg-gray-50 rounded-md border-l-2 ' +
-                ((summary?.balance ?? 0) >= 0 ? 'border-l-income-500' : 'border-l-expense-500'),
+                ((summary?.balance ?? 0) >= 0
+                  ? 'border-l-income-500'
+                  : 'border-l-expense-500'),
               formatType: 'currency',
             },
           ],

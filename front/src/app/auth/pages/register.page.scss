@@ -5,7 +5,9 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease-in-out;
 }
 
@@ -32,7 +34,7 @@
 .nav-link {
   color: #8b5cf6;
   transition: color 0.2s ease-in-out;
-  
+
   &:hover {
     color: #7c3aed;
   }
@@ -43,7 +45,9 @@
   .login-card {
     background: rgba(31, 41, 55, 0.95);
     border: 1px solid rgba(75, 85, 99, 0.3);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.3),
+      0 10px 10px -5px rgba(0, 0, 0, 0.2);
   }
 
   .login-title {
@@ -60,7 +64,7 @@
 
   .nav-link {
     color: #a78bfa;
-    
+
     &:hover {
       color: #8b5cf6;
     }
@@ -90,7 +94,7 @@
     background-color: rgba(255, 255, 255, 0.9);
     transition: background-color 0.3s ease-in-out;
   }
-  
+
   .mat-mdc-form-field-focus-overlay {
     background-color: transparent;
   }
@@ -120,7 +124,7 @@
   &.mat-primary {
     background-color: #8b5cf6;
     color: #ffffff;
-    
+
     &:hover {
       background-color: #7c3aed;
     }
@@ -128,7 +132,7 @@
 
   &.mat-mdc-button-base {
     color: #a78bfa;
-    
+
     &:hover {
       background-color: rgba(139, 92, 246, 0.1);
     }
@@ -140,7 +144,7 @@
   .grid-cols-2 {
     grid-template-columns: 1fr;
   }
-  
+
   .login-card {
     margin: 1rem;
     padding: 1.5rem;

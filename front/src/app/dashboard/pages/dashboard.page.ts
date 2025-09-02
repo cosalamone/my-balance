@@ -12,10 +12,10 @@ import { FinancialDataService } from '../../core/services/financial-data.service
 import { AuthService } from '../../core/services/auth.service';
 import { FinancialSummary } from '../../core/models/financial.models';
 import { SummaryCardModel } from '../../core/models/summary-card.model';
-import { 
+import {
   SummaryCardsComponent,
   QuickActionsCardComponent,
-  ActivitySummaryCardComponent
+  ActivitySummaryCardComponent,
 } from '../../core/components/cards';
 
 @Component({
@@ -34,12 +34,12 @@ import {
     MatSnackBarModule,
     SummaryCardsComponent,
     QuickActionsCardComponent,
-    ActivitySummaryCardComponent
+    ActivitySummaryCardComponent,
   ],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  
+
   currentSummary: FinancialSummary = {
     totalIncome: 0,
     totalExpenses: 0,
@@ -48,13 +48,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     currentMonth: {
       income: 0,
       expenses: 0,
-      savings: 0
+      savings: 0,
     },
     previousMonth: {
       income: 0,
       expenses: 0,
-      savings: 0
-    }
+      savings: 0,
+    },
   };
   isLoading = true;
   currentUser: any = null;
@@ -62,13 +62,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Daily tips array
   private dailyTips = [
-    "💡 Consejo: Revisa tus gastos semanalmente para mantener el control de tu presupuesto.",
-    "💰 Tip: Ahorra al menos el 20% de tus ingresos mensuales.",
-    "📊 Sugerencia: Categoriza tus gastos para identificar áreas de mejora.",
-    "🎯 Meta: Establece objetivos financieros específicos y alcanzables.",
-    "📈 Estrategia: Invierte en tu educación financiera para mejores decisiones.",
-    "💳 Consejo: Evita las compras impulsivas, espera 24 horas antes de decidir.",
-    "🏦 Tip: Mantén un fondo de emergencia equivalente a 3-6 meses de gastos."
+    '💡 Consejo: Revisa tus gastos semanalmente para mantener el control de tu presupuesto.',
+    '💰 Tip: Ahorra al menos el 20% de tus ingresos mensuales.',
+    '📊 Sugerencia: Categoriza tus gastos para identificar áreas de mejora.',
+    '🎯 Meta: Establece objetivos financieros específicos y alcanzables.',
+    '📈 Estrategia: Invierte en tu educación financiera para mejores decisiones.',
+    '💳 Consejo: Evita las compras impulsivas, espera 24 horas antes de decidir.',
+    '🏦 Tip: Mantén un fondo de emergencia equivalente a 3-6 meses de gastos.',
   ];
 
   get summaryCardModel(): SummaryCardModel {
@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       summary: this.currentSummary,
       order: ['income', 'expenses', 'savings', 'balance'],
       showIcons: true,
-      config: { title: 'Resumen Financiero' }
+      config: { title: 'Resumen Financiero' },
     };
   }
 
@@ -104,29 +104,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private loadDashboardData(): void {
     this.isLoading = true;
-    
+
     // Load dashboard summary from API
-    this.financialService.getDashboardSummary()
+    this.financialService
+      .getDashboardSummary()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (summary) => {
+        next: summary => {
           this.currentSummary = {
             totalIncome: summary.totalIncome,
             totalExpenses: summary.totalExpenses,
             totalSavings: summary.totalSavings,
             balance: summary.balance,
             currentMonth: summary.currentMonth,
-            previousMonth: summary.previousMonth
+            previousMonth: summary.previousMonth,
           };
           this.isLoading = false;
         },
-        error: (error) => {
+        error: error => {
           console.error('Error loading dashboard data:', error);
-          this.snackBar.open('Error al cargar los datos del dashboard', 'Cerrar', {
-            duration: 3000
-          });
+          this.snackBar.open(
+            'Error al cargar los datos del dashboard',
+            'Cerrar',
+            {
+              duration: 3000,
+            }
+          );
           this.isLoading = false;
-        }
+        },
       });
 
     // Also load user data for detailed views

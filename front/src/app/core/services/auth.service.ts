@@ -25,11 +25,11 @@ export interface AuthResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly API_URL = 'http://localhost:5019/api';
-  
+
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
@@ -40,7 +40,7 @@ export class AuthService {
     // Check if user is logged in from localStorage
     const token = localStorage.getItem('authToken');
     const user = localStorage.getItem('currentUser');
-    
+
     if (token && user) {
       this.isAuthenticatedSubject.next(true);
       this.currentUserSubject.next(JSON.parse(user));
@@ -49,32 +49,36 @@ export class AuthService {
 
   login(email: string, password: string): Observable<AuthResponse> {
     const loginData: LoginRequest = { email, password };
-    
-    return this.http.post<AuthResponse>(`${this.API_URL}/auth/login`, loginData).pipe(
-      tap((response: AuthResponse) => {
-        // Store token and user data
-        localStorage.setItem('authToken', response.token);
-        localStorage.setItem('currentUser', JSON.stringify(response.user));
-        
-        // Update subjects
-        this.isAuthenticatedSubject.next(true);
-        this.currentUserSubject.next(response.user);
-      })
-    );
+
+    return this.http
+      .post<AuthResponse>(`${this.API_URL}/auth/login`, loginData)
+      .pipe(
+        tap((response: AuthResponse) => {
+          // Store token and user data
+          localStorage.setItem('authToken', response.token);
+          localStorage.setItem('currentUser', JSON.stringify(response.user));
+
+          // Update subjects
+          this.isAuthenticatedSubject.next(true);
+          this.currentUserSubject.next(response.user);
+        })
+      );
   }
 
   register(registerData: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/auth/register`, registerData).pipe(
-      tap((response: AuthResponse) => {
-        // Store token and user data
-        localStorage.setItem('authToken', response.token);
-        localStorage.setItem('currentUser', JSON.stringify(response.user));
-        
-        // Update subjects
-        this.isAuthenticatedSubject.next(true);
-        this.currentUserSubject.next(response.user);
-      })
-    );
+    return this.http
+      .post<AuthResponse>(`${this.API_URL}/auth/register`, registerData)
+      .pipe(
+        tap((response: AuthResponse) => {
+          // Store token and user data
+          localStorage.setItem('authToken', response.token);
+          localStorage.setItem('currentUser', JSON.stringify(response.user));
+
+          // Update subjects
+          this.isAuthenticatedSubject.next(true);
+          this.currentUserSubject.next(response.user);
+        })
+      );
   }
 
   logout(): void {

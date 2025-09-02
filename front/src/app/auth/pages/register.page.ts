@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,7 +32,7 @@ import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle
     MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    ThemeToggleComponent
+    ThemeToggleComponent,
   ],
 })
 export class RegisterComponent implements OnInit {
@@ -46,7 +51,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    
+
     // Redirect if already logged in
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/dashboard']);
@@ -54,33 +59,54 @@ export class RegisterComponent implements OnInit {
   }
 
   initForm(): void {
-    this.registerForm = this.formBuilder.group({
-      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
-    }, { 
-      validators: this.passwordMatchValidator 
-    });
+    this.registerForm = this.formBuilder.group(
+      {
+        firstName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(50),
+          ],
+        ],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(50),
+          ],
+        ],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      {
+        validators: this.passwordMatchValidator,
+      }
+    );
   }
 
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
-    
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
+
+    if (
+      password &&
+      confirmPassword &&
+      password.value !== confirmPassword.value
+    ) {
       confirmPassword.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
     }
-    
+
     if (confirmPassword?.hasError('passwordMismatch')) {
       delete confirmPassword.errors!['passwordMismatch'];
       if (Object.keys(confirmPassword.errors!).length === 0) {
         confirmPassword.setErrors(null);
       }
     }
-    
+
     return null;
   }
 
@@ -90,30 +116,32 @@ export class RegisterComponent implements OnInit {
       this.errorMessage = '';
 
       const { firstName, lastName, email, password } = this.registerForm.value;
-      
+
       const registerData: RegisterRequest = {
         firstName,
         lastName,
         email,
-        password
+        password,
       };
 
       try {
         this.authService.register(registerData).subscribe({
-          next: (response) => {
+          next: response => {
             this.snackBar.open(
-              `¡Bienvenido, ${response.user.firstName}! Tu cuenta ha sido creada exitosamente.`, 
-              'Cerrar', 
+              `¡Bienvenido, ${response.user.firstName}! Tu cuenta ha sido creada exitosamente.`,
+              'Cerrar',
               { duration: 4000 }
             );
             this.router.navigate(['/dashboard']);
             this.isLoading = false;
           },
-          error: (error) => {
+          error: error => {
             console.error('Error en registro:', error);
-            this.errorMessage = error.error?.message || 'Error al crear la cuenta. Intente nuevamente.';
+            this.errorMessage =
+              error.error?.message ||
+              'Error al crear la cuenta. Intente nuevamente.';
             this.isLoading = false;
-          }
+          },
         });
       } catch (error) {
         this.errorMessage = 'Error al crear la cuenta. Intente nuevamente.';
@@ -152,7 +180,7 @@ export class RegisterComponent implements OnInit {
       lastName: 'Apellido',
       email: 'Email',
       password: 'Contraseña',
-      confirmPassword: 'Confirmar contraseña'
+      confirmPassword: 'Confirmar contraseña',
     };
     return displayNames[fieldName] || fieldName;
   }

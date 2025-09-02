@@ -198,19 +198,19 @@
 }
 
 /* Dark Mode Enhancements */
-[data-theme="dark"] .sidenav {
+[data-theme='dark'] .sidenav {
   background: rgba(20, 20, 32, 0.95);
   backdrop-filter: blur(20px);
   border-right: 1px solid var(--border-primary);
 }
 
-[data-theme="dark"] .mat-toolbar {
+[data-theme='dark'] .mat-toolbar {
   background: rgba(30, 30, 50, 0.9) !important;
   backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--border-primary);
 }
 
-[data-theme="dark"] .mat-sidenav .mat-toolbar {
+[data-theme='dark'] .mat-sidenav .mat-toolbar {
   background: rgba(35, 35, 64, 0.8) !important;
 }
 
@@ -219,24 +219,24 @@
   .main-content {
     padding: 1rem;
   }
-  
+
   .sidenav {
     width: 240px;
   }
-  
+
   .mat-toolbar {
     height: 56px;
     padding: 0 0.75rem;
   }
-  
+
   .mat-toolbar span:not(.spacer) {
     font-size: 1rem;
   }
-  
+
   .main-content {
     min-height: calc(100vh - 56px);
   }
-  
+
   .theme-toggle-login {
     top: 1rem;
     right: 1rem;
@@ -248,21 +248,21 @@
   .main-content {
     padding: 0.75rem;
   }
-  
+
   .sidenav {
     width: 220px;
   }
-  
+
   .mat-toolbar .mat-icon-button {
     width: 40px;
     height: 40px;
     padding: 8px;
   }
-  
+
   .mat-toolbar {
     padding: 0 0.5rem;
   }
-  
+
   .theme-toggle-login {
     top: 0.75rem;
     right: 0.75rem;

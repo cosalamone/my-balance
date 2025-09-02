@@ -8,7 +8,7 @@ import { Observable, map } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './theme-toggle.component.html',
-  styleUrls: ['./theme-toggle.component.scss']
+  styleUrls: ['./theme-toggle.component.scss'],
 })
 export class ThemeToggleComponent implements OnInit {
   isDarkMode$: Observable<boolean>;
@@ -25,7 +25,7 @@ export class ThemeToggleComponent implements OnInit {
   toggleTheme(): void {
     this.isTransitioning = true;
     this.themeService.toggleTheme();
-    
+
     // Reset animation state after animation completes
     setTimeout(() => {
       this.isTransitioning = false;

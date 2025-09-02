@@ -3,14 +3,21 @@
   <header class="flex-shrink-0 py-4 px-2">
     <div class="dashboard-section">
       <h1 class="dashboard-title">💰 Dashboard Financiero</h1>
-      <p class="dashboard-subtitle">Resumen completo de tu actividad financiera actual</p>
+      <p class="dashboard-subtitle">
+        Resumen completo de tu actividad financiera actual
+      </p>
     </div>
   </header>
 
   <!-- Loading State with better UX -->
-  <div *ngIf="isLoading" class="flex-1 flex flex-col justify-center items-center space-y-4">
+  <div
+    *ngIf="isLoading"
+    class="flex-1 flex flex-col justify-center items-center space-y-4"
+  >
     <mat-spinner diameter="60" strokeWidth="4"></mat-spinner>
-    <p class="text-sm text-gray-500 animate-pulse">Cargando tu información financiera...</p>
+    <p class="text-sm text-gray-500 animate-pulse">
+      Cargando tu información financiera...
+    </p>
   </div>
 
   <!-- Enhanced Dashboard Content -->
@@ -24,17 +31,22 @@
     <!-- Quick Actions Section -->
     <section class="flex-shrink-0 dashboard-section">
       <h2 class="section-title">⚡ Acciones Rápidas</h2>
-      <p class="section-subtitle">Gestiona tus finanzas de forma rápida y eficiente</p>
+      <p class="section-subtitle">
+        Gestiona tus finanzas de forma rápida y eficiente
+      </p>
       <mb-quick-actions-card></mb-quick-actions-card>
     </section>
 
     <!-- Activity Summary Section -->
     <section class="flex-shrink-0 dashboard-section">
       <h2 class="section-title">📈 Actividad Reciente</h2>
-      <p class="section-subtitle">Tu actividad financiera de los últimos días</p>
-      <mb-activity-summary-card 
+      <p class="section-subtitle">
+        Tu actividad financiera de los últimos días
+      </p>
+      <mb-activity-summary-card
         [summary]="currentSummary"
-        (refreshClicked)="refreshData()">
+        (refreshClicked)="refreshData()"
+      >
       </mb-activity-summary-card>
     </section>
 
@@ -56,7 +68,7 @@
   <footer class="flex-shrink-0 py-3 px-2" *ngIf="!isLoading">
     <div class="text-center">
       <p class="text-xs text-gray-500">
-        Última actualización: {{ lastUpdated | date:'medium':'es' }}
+        Última actualización: {{ lastUpdated | date: 'medium' : 'es' }}
       </p>
     </div>
   </footer>

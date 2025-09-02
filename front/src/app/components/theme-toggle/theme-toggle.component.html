@@ -1,15 +1,18 @@
-<button 
+<button
   class="theme-toggle-btn"
   [class.switching]="isTransitioning"
   (click)="toggleTheme()"
-  [attr.aria-label]="(isDarkMode$ | async) ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
-  [title]="(isDarkMode$ | async) ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
+  [attr.aria-label]="
+    (isDarkMode$ | async) ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
+  "
+  [title]="
+    (isDarkMode$ | async) ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
+  "
+>
   <span class="theme-icon">
-    <ng-container *ngIf="(isDarkMode$ | async); else lightIcon">
+    <ng-container *ngIf="isDarkMode$ | async; else lightIcon">
       ☀️
     </ng-container>
-    <ng-template #lightIcon>
-      🌙
-    </ng-template>
+    <ng-template #lightIcon> 🌙 </ng-template>
   </span>
 </button>

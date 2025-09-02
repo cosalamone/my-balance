@@ -24,10 +24,10 @@ import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle.com
     MatIconModule,
     MatListModule,
     MatDividerModule,
-    ThemeToggleComponent
+    ThemeToggleComponent,
   ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = 'App Gastos - Control Financiero Personal';
@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.authService.isAuthenticated$.subscribe(
-      (isAuth: boolean) => this.isAuthenticated = isAuth
+      (isAuth: boolean) => (this.isAuthenticated = isAuth)
     );
   }
 

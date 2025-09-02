@@ -2,7 +2,8 @@
 
 /* Background Animations */
 @keyframes gradient-xy {
-  0%, 100% {
+  0%,
+  100% {
     background-size: 400% 400%;
     background-position: left center;
   }
@@ -13,15 +14,29 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-10px) rotate(2deg); }
-  66% { transform: translateY(5px) rotate(-2deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(-2deg);
+  }
 }
 
 @keyframes float-delayed {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(8px) rotate(-1deg); }
-  66% { transform: translateY(-5px) rotate(1deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(8px) rotate(-1deg);
+  }
+  66% {
+    transform: translateY(-5px) rotate(1deg);
+  }
 }
 
 @keyframes fadeInUp {
@@ -47,8 +62,13 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.6); }
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.6);
+  }
 }
 
 /* Enhanced Background */
@@ -70,7 +90,7 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 
+  box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -86,12 +106,17 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.4), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(99, 102, 241, 0.4),
+    transparent
+  );
 }
 
 .login-card:hover {
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     0 32px 64px -12px rgba(0, 0, 0, 0.2),
     0 0 0 1px rgba(255, 255, 255, 0.15);
 }
@@ -201,26 +226,31 @@
 }
 
 /* Dark Theme Enhancements */
-[data-theme="dark"] .login-card {
+[data-theme='dark'] .login-card {
   background: rgba(15, 15, 35, 0.95);
   border: 1px solid rgba(139, 92, 246, 0.2);
-  box-shadow: 
+  box-shadow:
     0 25px 50px -12px rgba(139, 92, 246, 0.25),
     0 0 0 1px rgba(139, 92, 246, 0.1);
   backdrop-filter: blur(24px);
 }
 
-[data-theme="dark"] .login-card::before {
-  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.6), transparent);
+[data-theme='dark'] .login-card::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.6),
+    transparent
+  );
 }
 
-[data-theme="dark"] .login-card:hover {
-  box-shadow: 
+[data-theme='dark'] .login-card:hover {
+  box-shadow:
     0 32px 64px -12px rgba(139, 92, 246, 0.3),
     0 0 0 1px rgba(139, 92, 246, 0.2);
 }
 
-[data-theme="dark"] .enhanced-form-field {
+[data-theme='dark'] .enhanced-form-field {
   .mat-mdc-text-field-wrapper {
     background: rgba(30, 30, 50, 0.8) !important;
     border-color: rgba(139, 92, 246, 0.15) !important;
@@ -251,15 +281,15 @@
   }
 }
 
-[data-theme="dark"] .enhanced-button {
+[data-theme='dark'] .enhanced-button {
   background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%) !important;
 }
 
-[data-theme="dark"] .enhanced-button::before {
+[data-theme='dark'] .enhanced-button::before {
   background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
 }
 
-[data-theme="dark"] .biometric-button {
+[data-theme='dark'] .biometric-button {
   background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%) !important;
 }
 
@@ -291,12 +321,12 @@
   transform: translateY(-1px);
 }
 
-[data-theme="dark"] ::ng-deep .mat-mdc-outlined-button {
+[data-theme='dark'] ::ng-deep .mat-mdc-outlined-button {
   border-color: rgba(139, 92, 246, 0.3) !important;
   color: #a78bfa !important;
 }
 
-[data-theme="dark"] ::ng-deep .mat-mdc-outlined-button:hover {
+[data-theme='dark'] ::ng-deep .mat-mdc-outlined-button:hover {
   background: rgba(139, 92, 246, 0.1) !important;
   border-color: #8b5cf6 !important;
 }
@@ -311,7 +341,7 @@
   transform: scale(1.05);
 }
 
-[data-theme="dark"] ::ng-deep .mat-mdc-icon-button:hover {
+[data-theme='dark'] ::ng-deep .mat-mdc-icon-button:hover {
   background: rgba(139, 92, 246, 0.15) !important;
 }
 
@@ -332,7 +362,7 @@
   stroke-width: 3 !important;
 }
 
-[data-theme="dark"] ::ng-deep .mat-mdc-progress-spinner circle {
+[data-theme='dark'] ::ng-deep .mat-mdc-progress-spinner circle {
   stroke: #8b5cf6 !important;
 }
 
@@ -400,7 +430,7 @@
     border: 2px solid #000;
   }
 
-  [data-theme="dark"] .login-card {
+  [data-theme='dark'] .login-card {
     border: 2px solid #fff;
   }
 
