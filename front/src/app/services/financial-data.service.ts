@@ -1,23 +1,29 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { 
-  Income, 
-  Expense, 
-  Savings, 
-  FinancialSummary,
-  IncomeCategory,
+import { BehaviorSubject } from 'rxjs';
+import {
+  Expense,
   ExpenseCategory,
+  ExpenseType,
+  FinancialSummary,
+  Income,
+  IncomeCategory,
+  Savings,
   SavingsCategory,
-  ExpenseType
 } from '../core/models/financial.models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FinancialDataService {
-  private incomesSubject = new BehaviorSubject<Income[]>([]);
-  private expensesSubject = new BehaviorSubject<Expense[]>([]);
-  private savingsSubject = new BehaviorSubject<Savings[]>([]);
+  private incomesSubject = new BehaviorSubject<Income[]>(
+    []
+  );
+  private expensesSubject = new BehaviorSubject<Expense[]>(
+    []
+  );
+  private savingsSubject = new BehaviorSubject<Savings[]>(
+    []
+  );
 
   public incomes$ = this.incomesSubject.asObservable();
   public expenses$ = this.expensesSubject.asObservable();
@@ -31,30 +37,32 @@ export class FinancialDataService {
   addIncome(income: Omit<Income, 'id'>): void {
     const newIncome: Income = {
       ...income,
-      id: this.generateId()
+      id: this.generateId(),
     };
-    
+
     const currentIncomes = this.incomesSubject.value;
     const updatedIncomes = [...currentIncomes, newIncome];
-    
+
     this.incomesSubject.next(updatedIncomes);
     this.saveToStorage('incomes', updatedIncomes);
   }
 
   updateIncome(id: string, updates: Partial<Income>): void {
     const currentIncomes = this.incomesSubject.value;
-    const updatedIncomes = currentIncomes.map(income => 
+    const updatedIncomes = currentIncomes.map(income =>
       income.id === id ? { ...income, ...updates } : income
     );
-    
+
     this.incomesSubject.next(updatedIncomes);
     this.saveToStorage('incomes', updatedIncomes);
   }
 
   deleteIncome(id: string): void {
     const currentIncomes = this.incomesSubject.value;
-    const updatedIncomes = currentIncomes.filter(income => income.id !== id);
-    
+    const updatedIncomes = currentIncomes.filter(
+      income => income.id !== id
+    );
+
     this.incomesSubject.next(updatedIncomes);
     this.saveToStorage('incomes', updatedIncomes);
   }
@@ -63,30 +71,40 @@ export class FinancialDataService {
   addExpense(expense: Omit<Expense, 'id'>): void {
     const newExpense: Expense = {
       ...expense,
-      id: this.generateId()
+      id: this.generateId(),
     };
-    
+
     const currentExpenses = this.expensesSubject.value;
-    const updatedExpenses = [...currentExpenses, newExpense];
-    
+    const updatedExpenses = [
+      ...currentExpenses,
+      newExpense,
+    ];
+
     this.expensesSubject.next(updatedExpenses);
     this.saveToStorage('expenses', updatedExpenses);
   }
 
-  updateExpense(id: string, updates: Partial<Expense>): void {
+  updateExpense(
+    id: string,
+    updates: Partial<Expense>
+  ): void {
     const currentExpenses = this.expensesSubject.value;
-    const updatedExpenses = currentExpenses.map(expense => 
-      expense.id === id ? { ...expense, ...updates } : expense
+    const updatedExpenses = currentExpenses.map(expense =>
+      expense.id === id
+        ? { ...expense, ...updates }
+        : expense
     );
-    
+
     this.expensesSubject.next(updatedExpenses);
     this.saveToStorage('expenses', updatedExpenses);
   }
 
   deleteExpense(id: string): void {
     const currentExpenses = this.expensesSubject.value;
-    const updatedExpenses = currentExpenses.filter(expense => expense.id !== id);
-    
+    const updatedExpenses = currentExpenses.filter(
+      expense => expense.id !== id
+    );
+
     this.expensesSubject.next(updatedExpenses);
     this.saveToStorage('expenses', updatedExpenses);
   }
@@ -95,68 +113,111 @@ export class FinancialDataService {
   addSaving(saving: Omit<Savings, 'id'>): void {
     const newSaving: Savings = {
       ...saving,
-      id: this.generateId()
+      id: this.generateId(),
     };
-    
+
     const currentSavings = this.savingsSubject.value;
     const updatedSavings = [...currentSavings, newSaving];
-    
+
     this.savingsSubject.next(updatedSavings);
     this.saveToStorage('savings', updatedSavings);
   }
 
-  updateSaving(id: string, updates: Partial<Savings>): void {
+  updateSaving(
+    id: string,
+    updates: Partial<Savings>
+  ): void {
     const currentSavings = this.savingsSubject.value;
-    const updatedSavings = currentSavings.map(saving => 
+    const updatedSavings = currentSavings.map(saving =>
       saving.id === id ? { ...saving, ...updates } : saving
     );
-    
+
     this.savingsSubject.next(updatedSavings);
     this.saveToStorage('savings', updatedSavings);
   }
 
   deleteSaving(id: string): void {
     const currentSavings = this.savingsSubject.value;
-    const updatedSavings = currentSavings.filter(saving => saving.id !== id);
-    
+    const updatedSavings = currentSavings.filter(
+      saving => saving.id !== id
+    );
+
     this.savingsSubject.next(updatedSavings);
     this.saveToStorage('savings', updatedSavings);
   }
 
   // Summary methods
-  getMonthlyData(month: number, year: number): FinancialSummary {
-    const incomes = this.incomesSubject.value.filter(income => {
-      const date = new Date(income.date);
-      return date.getMonth() === month && date.getFullYear() === year;
-    });
+  getMonthlyData(
+    month: number,
+    year: number
+  ): FinancialSummary {
+    const incomes = this.incomesSubject.value.filter(
+      income => {
+        const date = new Date(income.date);
+        return (
+          date.getMonth() === month &&
+          date.getFullYear() === year
+        );
+      }
+    );
 
-    const expenses = this.expensesSubject.value.filter(expense => {
-      const date = new Date(expense.date);
-      return date.getMonth() === month && date.getFullYear() === year;
-    });
+    const expenses = this.expensesSubject.value.filter(
+      expense => {
+        const date = new Date(expense.date);
+        return (
+          date.getMonth() === month &&
+          date.getFullYear() === year
+        );
+      }
+    );
 
-    const savings = this.savingsSubject.value.filter(saving => {
-      const date = new Date(saving.date);
-      return date.getMonth() === month && date.getFullYear() === year;
-    });
+    const savings = this.savingsSubject.value.filter(
+      saving => {
+        const date = new Date(saving.date);
+        return (
+          date.getMonth() === month &&
+          date.getFullYear() === year
+        );
+      }
+    );
 
-    const totalIncome = incomes.reduce((sum, income) => sum + income.amount, 0);
-    const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-    const totalSavings = savings.reduce((sum, saving) => sum + saving.amount, 0);
+    const totalIncome = incomes.reduce(
+      (sum, income) => sum + income.amount,
+      0
+    );
+    const totalExpenses = expenses.reduce(
+      (sum, expense) => sum + expense.amount,
+      0
+    );
+    const totalSavings = savings.reduce(
+      (sum, saving) => sum + saving.amount,
+      0
+    );
 
     return {
       totalIncome,
       totalExpenses,
       totalSavings,
-      netBalance: totalIncome - totalExpenses - totalSavings,
-      month,
-      year
+      balance: totalIncome - totalExpenses - totalSavings,
+      currentMonth: {
+        income: totalIncome,
+        expenses: totalExpenses,
+        savings: totalSavings,
+      },
+      previousMonth: {
+        income: 0,
+        expenses: 0,
+        savings: 0,
+      },
     };
   }
 
   getCurrentMonthSummary(): FinancialSummary {
     const now = new Date();
-    return this.getMonthlyData(now.getMonth(), now.getFullYear());
+    return this.getMonthlyData(
+      now.getMonth(),
+      now.getFullYear()
+    );
   }
 
   // Utility methods
@@ -193,7 +254,7 @@ export class FinancialDataService {
         description: 'Salario Mensual',
         category: IncomeCategory.SALARY,
         date: new Date(),
-        isRecurring: true
+        isRecurring: true,
       },
       {
         id: '2',
@@ -201,8 +262,8 @@ export class FinancialDataService {
         description: 'Bonus Trimestral',
         category: IncomeCategory.BONUS,
         date: new Date(),
-        isRecurring: false
-      }
+        isRecurring: false,
+      },
     ];
 
     const sampleExpenses: Expense[] = [
@@ -213,7 +274,8 @@ export class FinancialDataService {
         category: ExpenseCategory.RENT,
         type: ExpenseType.FIXED,
         date: new Date(),
-        isRecurring: true
+        isFixed: true,
+        isRecurring: true,
       },
       {
         id: '2',
@@ -222,8 +284,9 @@ export class FinancialDataService {
         category: ExpenseCategory.FOOD,
         type: ExpenseType.VARIABLE,
         date: new Date(),
-        isRecurring: false
-      }
+        isFixed: false,
+        isRecurring: false,
+      },
     ];
 
     const sampleSavings: Savings[] = [
@@ -233,7 +296,7 @@ export class FinancialDataService {
         description: 'Fondo de Emergencia',
         category: SavingsCategory.EMERGENCY_FUND,
         date: new Date(),
-        targetAmount: 300000
+        targetAmount: 300000,
       },
       {
         id: '2',
@@ -241,8 +304,8 @@ export class FinancialDataService {
         description: 'Ahorro en USD',
         category: SavingsCategory.USD_SAVINGS,
         date: new Date(),
-        targetAmount: 5000
-      }
+        targetAmount: 5000,
+      },
     ];
 
     this.incomesSubject.next(sampleIncomes);

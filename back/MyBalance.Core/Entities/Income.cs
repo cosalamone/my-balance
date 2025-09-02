@@ -4,12 +4,12 @@ namespace MyBalance.Core.Entities;
 
 public enum IncomeCategory
 {
-    Salary,
-    Bonus,
-    Freelance,
-    Investment,
-    Gift,
-    Other
+    Salary = 0,
+    Bonus = 1,
+    Freelance = 2,
+    Investment = 3,
+    Gift = 4,
+    Other = 5
 }
 
 public class Income

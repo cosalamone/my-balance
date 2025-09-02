@@ -4,10 +4,9 @@ import { Income, IncomeCategory } from '../../core/models/financial.models';
 import { FinancialDataService } from '../../core/services/financial-data.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IncomeHandlerService {
-  
   constructor(private financialDataService: FinancialDataService) {}
 
   // Get all incomes
@@ -25,10 +24,12 @@ export class IncomeHandlerService {
   // Get incomes by date range
   getIncomesByDateRange(startDate: Date, endDate: Date): Observable<Income[]> {
     return this.financialDataService.incomes$.pipe(
-      map(incomes => incomes.filter(income => {
-        const incomeDate = new Date(income.date);
-        return incomeDate >= startDate && incomeDate <= endDate;
-      }))
+      map(incomes =>
+        incomes.filter(income => {
+          const incomeDate = new Date(income.date);
+          return incomeDate >= startDate && incomeDate <= endDate;
+        })
+      )
     );
   }
 
@@ -47,7 +48,10 @@ export class IncomeHandlerService {
           const date = new Date(income.date);
           return date.getMonth() === month && date.getFullYear() === year;
         });
-        return monthlyIncomes.reduce((total, income) => total + income.amount, 0);
+        return monthlyIncomes.reduce(
+          (total, income) => total + income.amount,
+          0
+        );
       })
     );
   }
@@ -67,7 +71,8 @@ export class IncomeHandlerService {
         // Group by category
         const byCategory: { [key: string]: number } = {};
         incomes.forEach(income => {
-          byCategory[income.category] = (byCategory[income.category] || 0) + income.amount;
+          byCategory[income.category] =
+            (byCategory[income.category] || 0) + income.amount;
         });
 
         // Group by month for trend
@@ -83,14 +88,14 @@ export class IncomeHandlerService {
           .slice(-12) // Last 12 months
           .map(key => ({
             month: key,
-            amount: monthlyData[key]
+            amount: monthlyData[key],
           }));
 
         return {
           total,
           average,
           byCategory,
-          monthlyTrend
+          monthlyTrend,
         };
       })
     );
@@ -121,7 +126,10 @@ export class IncomeHandlerService {
   }
 
   // Validation helpers
-  validateIncomeData(income: Partial<Income>): { isValid: boolean; errors: string[] } {
+  validateIncomeData(income: Partial<Income>): {
+    isValid: boolean;
+    errors: string[];
+  } {
     const errors: string[] = [];
 
     if (!income.amount || income.amount <= 0) {
@@ -142,7 +150,7 @@ export class IncomeHandlerService {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -150,16 +158,24 @@ export class IncomeHandlerService {
   exportToCSV(): Observable<string> {
     return this.financialDataService.incomes$.pipe(
       map(incomes => {
-        const headers = ['Fecha', 'Descripción', 'Categoría', 'Monto', 'Recurrente'];
+        const headers = [
+          'Fecha',
+          'Descripción',
+          'Categoría',
+          'Monto',
+          'Recurrente',
+        ];
         const csvContent = [
           headers.join(','),
-          ...incomes.map(income => [
-            new Date(income.date).toLocaleDateString(),
-            `"${income.description}"`,
-            income.category,
-            income.amount,
-            income.isRecurring ? 'Sí' : 'No'
-          ].join(','))
+          ...incomes.map(income =>
+            [
+              new Date(income.date).toLocaleDateString(),
+              `"${income.description}"`,
+              income.category,
+              income.amount,
+              income.isRecurring ? 'Sí' : 'No',
+            ].join(',')
+          ),
         ].join('\n');
 
         return csvContent;
