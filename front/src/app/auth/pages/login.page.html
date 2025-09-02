@@ -1,19 +1,14 @@
-<div
-  class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
->
+<div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
   <!-- Enhanced Background with Animated Gradient -->
   <div
-    class="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 animate-gradient-xy"
-  ></div>
+    class="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 animate-gradient-xy"></div>
   <div class="absolute inset-0 bg-black bg-opacity-20"></div>
 
   <!-- Floating Elements for Visual Interest -->
   <div
-    class="absolute top-1/4 left-1/4 w-32 h-32 bg-white bg-opacity-5 rounded-full blur-xl animate-float"
-  ></div>
+    class="absolute top-1/4 left-1/4 w-32 h-32 bg-white bg-opacity-5 rounded-full blur-xl animate-float"></div>
   <div
-    class="absolute top-3/4 right-1/4 w-24 h-24 bg-primary-300 bg-opacity-10 rounded-full blur-xl animate-float-delayed"
-  ></div>
+    class="absolute top-3/4 right-1/4 w-24 h-24 bg-primary-300 bg-opacity-10 rounded-full blur-xl animate-float-delayed"></div>
 
   <!-- Theme Toggle Button -->
   <div class="absolute top-6 right-6 z-50">
@@ -28,33 +23,20 @@
         <!-- Improved Logo -->
         <div class="relative mb-6">
           <div
-            class="absolute inset-0 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full blur-lg opacity-75 animate-pulse"
-          ></div>
+            class="absolute inset-0 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full blur-lg opacity-75 animate-pulse"></div>
           <div class="relative bg-white rounded-full p-4 shadow-2xl">
             <svg
               width="56"
               height="56"
               viewBox="0 0 64 64"
               fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+              xmlns="http://www.w3.org/2000/svg">
               <circle cx="32" cy="32" r="28" fill="url(#paint0_linear)" />
               <path
                 d="M18 38V26C18 23.2386 20.2386 21 23 21H41C43.7614 21 46 23.2386 46 26V38C46 40.7614 43.7614 43 41 43H23C20.2386 43 18 40.7614 18 38Z"
-                fill="white"
-              />
-              <path
-                d="M32 26V38"
-                stroke="#6366f1"
-                stroke-width="3"
-                stroke-linecap="round"
-              />
-              <path
-                d="M26 32H38"
-                stroke="#6366f1"
-                stroke-width="3"
-                stroke-linecap="round"
-              />
+                fill="white" />
+              <path d="M32 26V38" stroke="#6366f1" stroke-width="3" stroke-linecap="round" />
+              <path d="M26 32H38" stroke="#6366f1" stroke-width="3" stroke-linecap="round" />
               <circle cx="32" cy="32" r="3" fill="#6366f1" />
               <defs>
                 <linearGradient
@@ -63,8 +45,7 @@
                   y1="4"
                   x2="60"
                   y2="60"
-                  gradientUnits="userSpaceOnUse"
-                >
+                  gradientUnits="userSpaceOnUse">
                   <stop stop-color="#6366f1" />
                   <stop offset="1" stop-color="#8b5cf6" />
                 </linearGradient>
@@ -73,44 +54,30 @@
           </div>
         </div>
 
-        <h1 class="text-3xl font-bold text-white mb-2 text-shadow-lg">
-          💰 MyBalance
-        </h1>
-        <p class="text-primary-100 text-lg font-medium">
-          Control financiero inteligente
-        </p>
+        <h1 class="text-3xl font-bold text-white mb-2 text-shadow-lg">💰 MyBalance</h1>
+        <p class="text-primary-100 text-lg font-medium">Control financiero inteligente</p>
       </div>
     </div>
 
     <!-- Enhanced Login Card -->
     <div
-      class="login-card bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20"
-    >
+      class="login-card bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
       <div class="mb-6">
-        <h2 class="text-2xl font-bold text-gray-900 text-center mb-2">
-          Bienvenido de vuelta
-        </h2>
-        <p class="text-gray-600 text-center">
-          Ingresa tus credenciales para continuar
-        </p>
+        <h2 class="text-2xl font-bold text-gray-900 text-center mb-2">Bienvenido de vuelta</h2>
+        <p class="text-gray-600 text-center">Ingresa tus credenciales para continuar</p>
       </div>
 
       <!-- Login Form -->
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
         <!-- Enhanced Email Field -->
         <div class="space-y-2">
-          <mat-form-field
-            appearance="outline"
-            class="w-full enhanced-form-field"
-          >
-            <mat-label>Correo electrónico</mat-label>
+          <mat-form-field appearance="outline" class="w-full enhanced-form-field">
             <input
               matInput
               type="email"
               formControlName="email"
-              placeholder="ejemplo@correo.com"
-              class="text-base"
-            />
+              placeholder="Correo electrónico"
+              class="text-base" />
             <mat-icon matSuffix class="text-primary-400">email</mat-icon>
             <mat-error>{{ getFieldError('email') }}</mat-error>
           </mat-form-field>
@@ -118,29 +85,23 @@
 
         <!-- Enhanced Password Field -->
         <div class="space-y-2">
-          <mat-form-field
-            appearance="outline"
-            class="w-full enhanced-form-field"
-          >
-            <mat-label>Contraseña</mat-label>
+          <mat-form-field appearance="outline" class="w-full enhanced-form-field">
             <input
               matInput
               [type]="hidePassword ? 'password' : 'text'"
               formControlName="password"
-              placeholder="Ingresa tu contraseña"
-              class="text-base"
-            />
+              placeholder="Contraseña"
+              class="text-base" />
             <button
               mat-icon-button
               matSuffix
               (click)="hidePassword = !hidePassword"
               [attr.aria-label]="'Hide password'"
               [attr.aria-pressed]="hidePassword"
-              type="button"
-            >
-              <mat-icon class="text-primary-400">{{
-                hidePassword ? 'visibility_off' : 'visibility'
-              }}</mat-icon>
+              type="button">
+              <mat-icon class="text-primary-400">
+                {{ hidePassword ? 'visibility_off' : 'visibility' }}
+              </mat-icon>
             </button>
             <mat-error>{{ getFieldError('password') }}</mat-error>
           </mat-form-field>
@@ -149,13 +110,10 @@
         <!-- Enhanced Error Message -->
         <div
           *ngIf="errorMessage"
-          class="bg-error-50 border-l-4 border-error-500 rounded-r-lg p-4 flex items-center space-x-3 animate-slide-in-up"
-        >
+          class="bg-error-50 border-l-4 border-error-500 rounded-r-lg p-4 flex items-center space-x-3 animate-slide-in-up">
           <mat-icon class="text-error-500">error_outline</mat-icon>
           <div>
-            <p class="text-error-800 font-medium text-sm">
-              Error de autenticación
-            </p>
+            <p class="text-error-800 font-medium text-sm">Error de autenticación</p>
             <p class="text-error-700 text-sm">{{ errorMessage }}</p>
           </div>
         </div>
@@ -166,19 +124,12 @@
           color="primary"
           type="submit"
           class="w-full h-14 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 enhanced-button"
-          [disabled]="!loginForm.valid || isLoading"
-        >
-          <div
-            *ngIf="isLoading"
-            class="flex items-center justify-center space-x-3"
-          >
+          [disabled]="!loginForm.valid || isLoading">
+          <div *ngIf="isLoading" class="flex items-center justify-center space-x-3">
             <mat-spinner diameter="24" strokeWidth="3"></mat-spinner>
             <span>Iniciando sesión...</span>
           </div>
-          <span
-            *ngIf="!isLoading"
-            class="flex items-center justify-center space-x-2"
-          >
+          <span *ngIf="!isLoading" class="flex items-center justify-center space-x-2">
             <mat-icon>login</mat-icon>
             <span>Iniciar Sesión</span>
           </span>
@@ -192,9 +143,7 @@
             <div class="w-full border-t border-gray-200"></div>
           </div>
           <div class="relative flex justify-center text-sm">
-            <span class="px-4 bg-white text-gray-500 font-medium"
-              >o continúa con</span
-            >
+            <span class="px-4 bg-white text-gray-500 font-medium">o continúa con</span>
           </div>
         </div>
 
@@ -204,19 +153,12 @@
           color="accent"
           class="w-full h-14 mt-6 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 biometric-button"
           [disabled]="biometricLoading"
-          (click)="onBiometricLogin()"
-        >
-          <div
-            *ngIf="biometricLoading"
-            class="flex items-center justify-center space-x-3"
-          >
+          (click)="onBiometricLogin()">
+          <div *ngIf="biometricLoading" class="flex items-center justify-center space-x-3">
             <mat-spinner diameter="24" strokeWidth="3"></mat-spinner>
             <span>Autenticando...</span>
           </div>
-          <span
-            *ngIf="!biometricLoading"
-            class="flex items-center justify-center space-x-2"
-          >
+          <span *ngIf="!biometricLoading" class="flex items-center justify-center space-x-2">
             <mat-icon class="text-2xl">fingerprint</mat-icon>
             <span>Autenticación Biométrica</span>
           </span>
@@ -229,8 +171,7 @@
           color="primary"
           class="w-full h-12 mt-4 text-sm font-medium rounded-xl transition-all duration-300"
           [disabled]="biometricLoading || !loginForm.valid"
-          (click)="onRegisterBiometric()"
-        >
+          (click)="onRegisterBiometric()">
           <span class="flex items-center justify-center space-x-2">
             <mat-icon>add_circle_outline</mat-icon>
             <span>Configurar Huella Digital</span>
@@ -243,8 +184,7 @@
           mat-button
           color="warn"
           class="w-full h-10 mt-3 text-xs hover:bg-error-50 rounded-lg transition-all duration-300"
-          (click)="onClearBiometricCredentials()"
-        >
+          (click)="onClearBiometricCredentials()">
           <span class="flex items-center justify-center space-x-1">
             <mat-icon class="text-base">delete_outline</mat-icon>
             <span>Eliminar Credenciales Biométricas</span>
@@ -255,17 +195,14 @@
       <!-- Enhanced Biometric Not Supported Message -->
       <div
         *ngIf="!biometricSupported"
-        class="mt-8 bg-warning-50 border border-warning-200 rounded-xl p-4"
-      >
+        class="mt-8 bg-warning-50 border border-warning-200 rounded-xl p-4">
         <div class="flex items-start space-x-3">
           <mat-icon class="text-warning-600 mt-0.5">info_outline</mat-icon>
           <div class="text-sm text-warning-800">
-            <p class="font-semibold mb-1">
-              Autenticación biométrica no disponible
-            </p>
+            <p class="font-semibold mb-1">Autenticación biométrica no disponible</p>
             <p class="leading-relaxed">
-              Tu dispositivo no soporta autenticación por huella digital o no
-              está configurada correctamente.
+              Tu dispositivo no soporta autenticación por huella digital o no está configurada
+              correctamente.
             </p>
           </div>
         </div>
@@ -279,8 +216,7 @@
             ¿No tienes una cuenta?
             <a
               routerLink="/register"
-              class="text-primary-600 hover:text-primary-700 font-semibold ml-1 transition-colors duration-200"
-            >
+              class="text-primary-600 hover:text-primary-700 font-semibold ml-1 transition-colors duration-200">
               Crear cuenta nueva
             </a>
           </p>
@@ -288,30 +224,23 @@
 
         <!-- Enhanced Demo Info -->
         <div
-          class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl p-4 border border-primary-100"
-        >
+          class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl p-4 border border-primary-100">
           <h3 class="text-sm font-bold text-gray-900 mb-3 flex items-center">
             <mat-icon class="text-base mr-2 text-primary-600">info</mat-icon>
             Datos de demostración
           </h3>
           <div class="grid grid-cols-1 gap-2 text-sm">
-            <div
-              class="flex items-center justify-between bg-white/50 rounded-lg p-2"
-            >
+            <div class="flex items-center justify-between bg-white/50 rounded-lg p-2">
               <span class="font-medium text-gray-700">Email:</span>
-              <span
-                class="font-mono text-primary-700 bg-primary-100 px-2 py-1 rounded text-xs"
-                >demo&#64;example.com</span
-              >
+              <span class="font-mono text-primary-700 bg-primary-100 px-2 py-1 rounded text-xs">
+                demo&#64;example.com
+              </span>
             </div>
-            <div
-              class="flex items-center justify-between bg-white/50 rounded-lg p-2"
-            >
+            <div class="flex items-center justify-between bg-white/50 rounded-lg p-2">
               <span class="font-medium text-gray-700">Contraseña:</span>
-              <span
-                class="font-mono text-primary-700 bg-primary-100 px-2 py-1 rounded text-xs"
-                >demo123</span
-              >
+              <span class="font-mono text-primary-700 bg-primary-100 px-2 py-1 rounded text-xs">
+                demo123
+              </span>
             </div>
           </div>
         </div>

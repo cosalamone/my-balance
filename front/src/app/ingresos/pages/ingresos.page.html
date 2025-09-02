@@ -9,25 +9,13 @@
             height="48"
             viewBox="0 0 64 64"
             fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+            xmlns="http://www.w3.org/2000/svg">
             <circle cx="32" cy="32" r="32" fill="url(#paint0_linear)" />
             <path
               d="M20 40V24C20 21.7909 21.7909 20 24 20H40C42.2091 20 44 21.7909 44 24V40C44 42.2091 42.2091 44 40 44H24C21.7909 44 20 42.2091 20 40Z"
-              fill="white"
-            />
-            <path
-              d="M32 28V36"
-              stroke="#10B981"
-              stroke-width="2.5"
-              stroke-linecap="round"
-            />
-            <path
-              d="M28 32H36"
-              stroke="#10B981"
-              stroke-width="2.5"
-              stroke-linecap="round"
-            />
+              fill="white" />
+            <path d="M32 28V36" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M28 32H36" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" />
             <defs>
               <linearGradient
                 id="paint0_linear"
@@ -35,20 +23,15 @@
                 y1="0"
                 x2="64"
                 y2="64"
-                gradientUnits="userSpaceOnUse"
-              >
+                gradientUnits="userSpaceOnUse">
                 <stop stop-color="#10B981" />
                 <stop offset="1" stop-color="#065F46" />
               </linearGradient>
             </defs>
           </svg>
         </div>
-        <h2 class="text-2xl font-extrabold page-title mb-1">
-          Gestión de Ingresos
-        </h2>
-        <p class="text-primary-200 text-sm">
-          Registra y administra tus fuentes de ingresos
-        </p>
+        <h2 class="text-2xl font-extrabold page-title mb-1">Gestión de Ingresos</h2>
+        <p class="text-primary-200 text-sm">Registra y administra tus fuentes de ingresos</p>
       </div>
     </div>
   </div>
@@ -59,12 +42,8 @@
       <!-- Form Section -->
       <div class="content-card rounded-2xl shadow-2xl p-6">
         <div class="flex items-center justify-between mb-6">
-          <h3
-            class="text-xl font-semibold text-gray-900 flex items-center space-x-2"
-          >
-            <mat-icon class="text-income-500">{{
-              editingId ? 'edit' : 'add_circle'
-            }}</mat-icon>
+          <h3 class="text-xl font-semibold text-gray-900 flex items-center space-x-2">
+            <mat-icon class="text-income-500">{{ editingId ? 'edit' : 'add_circle' }}</mat-icon>
             <span>{{ editingId ? 'Editar Ingreso' : 'Nuevo Ingreso' }}</span>
           </h3>
           <button
@@ -72,8 +51,7 @@
             mat-icon-button
             color="warn"
             (click)="cancelEdit()"
-            matTooltip="Cancelar edición"
-          >
+            matTooltip="Cancelar edición">
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -83,65 +61,49 @@
           *ngIf="message"
           class="mb-4 p-4 rounded-lg flex items-center space-x-3"
           [ngClass]="{
-            'bg-income-50 border border-income-200':
-              message.includes('exitosamente'),
-            'bg-expense-50 border border-expense-200':
-              !message.includes('exitosamente'),
-          }"
-        >
+            'bg-income-50 border border-income-200': message.includes('exitosamente'),
+            'bg-expense-50 border border-expense-200': !message.includes('exitosamente'),
+          }">
           <mat-icon
             [ngClass]="{
               'text-income-500': message.includes('exitosamente'),
               'text-expense-500': !message.includes('exitosamente'),
-            }"
-          >
-            {{
-              message.includes('exitosamente')
-                ? 'check_circle'
-                : 'error_outline'
-            }}
+            }">
+            {{ message.includes('exitosamente') ? 'check_circle' : 'error_outline' }}
           </mat-icon>
           <span
             [ngClass]="{
               'text-income-700': message.includes('exitosamente'),
               'text-expense-700': !message.includes('exitosamente'),
             }"
-            class="text-sm"
-            >{{ message }}</span
-          >
+            class="text-sm">
+            {{ message }}
+          </span>
         </div>
 
         <!-- Form -->
-        <form
-          [formGroup]="incomeForm"
-          (ngSubmit)="onSubmit()"
-          class="space-y-4"
-        >
+        <form [formGroup]="incomeForm" (ngSubmit)="onSubmit()" class="space-y-4">
           <!-- Amount Field -->
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Cantidad</mat-label>
             <input
               matInput
               type="number"
               formControlName="amount"
-              placeholder="0.00"
-              class="text-lg"
-            />
-            <span matTextPrefix>$&nbsp;</span>
+              placeholder="Cantidad*"
+              class="text-lg" />
+
             <mat-icon matSuffix class="text-gray-400">payments</mat-icon>
             <mat-error>{{ getFieldError('amount') }}</mat-error>
           </mat-form-field>
 
           <!-- Description Field -->
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Descripción</mat-label>
-            <textarea
+            <input
               matInput
               formControlName="description"
               placeholder="Describe tu ingreso..."
               rows="3"
-              class="text-lg"
-            ></textarea>
+              class="text-lg" />
             <mat-icon matSuffix class="text-gray-400">description</mat-icon>
             <mat-error>{{ getFieldError('description') }}</mat-error>
           </mat-form-field>
@@ -150,34 +112,24 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Date Field -->
             <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Fecha</mat-label>
               <input
                 matInput
                 [matDatepicker]="picker"
+                placeholder="Fecha*"
                 formControlName="date"
-                class="text-lg"
-              />
+                class="text-lg" />
               <mat-hint>Selecciona la fecha del ingreso</mat-hint>
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker"
-              ></mat-datepicker-toggle>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
               <mat-error>{{ getFieldError('date') }}</mat-error>
             </mat-form-field>
 
             <!-- Category Field -->
             <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Categoría</mat-label>
               <mat-select formControlName="category" class="text-lg">
-                <mat-option
-                  *ngFor="let category of incomeCategories"
-                  [value]="category.value"
-                >
+                <mat-option *ngFor="let category of incomeCategories" [value]="category.value">
                   <div class="flex items-center space-x-2">
-                    <mat-icon class="text-income-500">{{
-                      category.icon
-                    }}</mat-icon>
+                    <mat-icon class="text-income-500">{{ category.icon }}</mat-icon>
                     <span>{{ category.label }}</span>
                   </div>
                 </mat-option>
@@ -187,47 +139,20 @@
             </mat-form-field>
           </div>
 
-          <!-- Source Field -->
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Fuente</mat-label>
-            <mat-select formControlName="source" class="text-lg">
-              <mat-option
-                *ngFor="let source of incomeSources"
-                [value]="source.value"
-              >
-                <div class="flex items-center space-x-2">
-                  <mat-icon class="text-income-500">{{ source.icon }}</mat-icon>
-                  <span>{{ source.label }}</span>
-                </div>
-              </mat-option>
-            </mat-select>
-            <mat-icon matSuffix class="text-gray-400">source</mat-icon>
-            <mat-error>{{ getFieldError('source') }}</mat-error>
-          </mat-form-field>
-
           <!-- Submit Button -->
           <button
             mat-raised-button
             color="primary"
             type="submit"
             class="w-full h-12 text-lg font-semibold rounded-lg"
-            [disabled]="!incomeForm.valid || isLoading"
-          >
-            <div
-              *ngIf="isLoading"
-              class="flex items-center justify-center space-x-2"
-            >
+            [disabled]="!incomeForm.valid || isLoading">
+            <div *ngIf="isLoading" class="flex items-center justify-center space-x-2">
               <mat-spinner diameter="20"></mat-spinner>
               <span>{{ editingId ? 'Actualizando...' : 'Guardando...' }}</span>
             </div>
-            <span
-              *ngIf="!isLoading"
-              class="flex items-center justify-center space-x-2"
-            >
+            <span *ngIf="!isLoading" class="flex items-center justify-center space-x-2">
               <mat-icon>{{ editingId ? 'save' : 'add' }}</mat-icon>
-              <span>{{
-                editingId ? 'Actualizar Ingreso' : 'Agregar Ingreso'
-              }}</span>
+              <span>{{ editingId ? 'Actualizar Ingreso' : 'Agregar Ingreso' }}</span>
             </span>
           </button>
         </form>
@@ -236,13 +161,9 @@
         <div class="mt-6">
           <div class="form-tips rounded-xl p-3">
             <div class="flex items-start space-x-2">
-              <mat-icon class="text-sm text-income-600 mt-0.5"
-                >lightbulb</mat-icon
-              >
+              <mat-icon class="text-sm text-income-600 mt-0.5">lightbulb</mat-icon>
               <div class="text-xs text-gray-600">
-                <p class="font-medium text-gray-900 mb-1">
-                  Consejos para registrar ingresos:
-                </p>
+                <p class="font-medium text-gray-900 mb-1">Consejos para registrar ingresos:</p>
                 <ul class="space-y-0.5">
                   <li>• Registra todos tus ingresos para un mejor control</li>
                   <li>• Usa descripciones claras y específicas</li>
@@ -257,22 +178,18 @@
       <!-- Data Table Section -->
       <div class="content-card rounded-2xl shadow-2xl p-6">
         <div class="flex items-center justify-between mb-6">
-          <h3
-            class="text-xl font-semibold text-gray-900 flex items-center space-x-2"
-          >
+          <h3 class="text-xl font-semibold text-gray-900 flex items-center space-x-2">
             <mat-icon class="text-income-500">list</mat-icon>
             <span>Historial de Ingresos</span>
           </h3>
 
           <!-- Filter -->
           <mat-form-field appearance="outline" class="w-64">
-            <mat-label>Buscar</mat-label>
             <input
               matInput
               (keyup)="applyFilter($event)"
-              placeholder="Filtrar por descripción..."
-              #input
-            />
+              placeholder="Buscar por descripción..."
+              #input />
             <mat-icon matSuffix class="text-gray-400">search</mat-icon>
           </mat-form-field>
         </div>
@@ -282,9 +199,7 @@
           <table mat-table [dataSource]="dataSource" class="w-full">
             <!-- Amount Column -->
             <ng-container matColumnDef="amount">
-              <th mat-header-cell *matHeaderCellDef class="font-semibold">
-                Cantidad
-              </th>
+              <th mat-header-cell *matHeaderCellDef class="font-semibold">Cantidad</th>
               <td mat-cell *matCellDef="let element" class="font-medium">
                 <span class="text-income-600 font-semibold">
                   {{ element.amount | currency: 'USD' : 'symbol' : '1.2-2' }}
@@ -294,9 +209,7 @@
 
             <!-- Description Column -->
             <ng-container matColumnDef="description">
-              <th mat-header-cell *matHeaderCellDef class="font-semibold">
-                Descripción
-              </th>
+              <th mat-header-cell *matHeaderCellDef class="font-semibold">Descripción</th>
               <td mat-cell *matCellDef="let element" class="max-w-xs">
                 <div class="truncate" [title]="element.description">
                   {{ element.description }}
@@ -306,26 +219,20 @@
 
             <!-- Category Column -->
             <ng-container matColumnDef="category">
-              <th mat-header-cell *matHeaderCellDef class="font-semibold">
-                Categoría
-              </th>
+              <th mat-header-cell *matHeaderCellDef class="font-semibold">Categoría</th>
               <td mat-cell *matCellDef="let element">
                 <div class="flex items-center space-x-2">
-                  <mat-icon class="text-income-500 text-sm">{{
-                    getCategoryIcon(element.category)
-                  }}</mat-icon>
-                  <span class="category-badge">{{
-                    getCategoryLabel(element.category)
-                  }}</span>
+                  <mat-icon class="text-income-500 text-sm">
+                    {{ getCategoryIcon(element.category) }}
+                  </mat-icon>
+                  <span class="category-badge">{{ getCategoryLabel(element.category) }}</span>
                 </div>
               </td>
             </ng-container>
 
             <!-- Date Column -->
             <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef class="font-semibold">
-                Fecha
-              </th>
+              <th mat-header-cell *matHeaderCellDef class="font-semibold">Fecha</th>
               <td mat-cell *matCellDef="let element">
                 {{ element.date | date: 'short' }}
               </td>
@@ -333,29 +240,21 @@
 
             <!-- Actions Column -->
             <ng-container matColumnDef="actions">
-              <th
-                mat-header-cell
-                *matHeaderCellDef
-                class="font-semibold text-center"
-              >
-                Acciones
-              </th>
+              <th mat-header-cell *matHeaderCellDef class="font-semibold text-center">Acciones</th>
               <td mat-cell *matCellDef="let element" class="text-center">
                 <div class="flex items-center justify-center space-x-1">
                   <button
                     mat-icon-button
                     color="primary"
                     (click)="editIncome(element)"
-                    matTooltip="Editar"
-                  >
+                    matTooltip="Editar">
                     <mat-icon class="text-lg">edit</mat-icon>
                   </button>
                   <button
                     mat-icon-button
                     color="warn"
                     (click)="deleteIncome(element.id)"
-                    matTooltip="Eliminar"
-                  >
+                    matTooltip="Eliminar">
                     <mat-icon class="text-lg">delete</mat-icon>
                   </button>
                 </div>
@@ -366,23 +265,17 @@
             <tr
               mat-row
               *matRowDef="let row; columns: displayedColumns"
-              class="hover:bg-gray-50 transition-colors duration-200"
-            ></tr>
+              class="hover:bg-gray-50 transition-colors duration-200"></tr>
           </table>
 
           <!-- No Data State -->
-          <div
-            *ngIf="dataSource.data.length === 0"
-            class="no-data-container text-center py-12"
-          >
+          <div *ngIf="dataSource.data.length === 0" class="no-data-container text-center py-12">
             <div class="flex flex-col items-center space-y-4">
               <div class="no-data-icon">
                 <mat-icon class="text-6xl text-gray-300">trending_up</mat-icon>
               </div>
               <div>
-                <h3 class="text-lg font-medium text-gray-900 mb-2">
-                  Sin ingresos registrados
-                </h3>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Sin ingresos registrados</h3>
                 <p class="text-gray-500 text-sm">
                   Comienza agregando tu primer ingreso usando el formulario.
                 </p>

@@ -549,12 +549,12 @@ $light-theme: mat.define-light-theme(
       background: var(--input-bg) !important;
       border-radius: 0.75rem !important;
       box-shadow: var(--shadow-xs) !important;
-      border: 1.5px solid var(--input-border) !important;
+      border: none !important;
       transition: all 0.3s ease !important;
     }
 
     .mat-mdc-text-field-wrapper:hover {
-      border-color: var(--border-hover) !important;
+      background: var(--input-bg-focus) !important;
     }
 
     .mat-mdc-form-field-input-control {
@@ -564,7 +564,7 @@ $light-theme: mat.define-light-theme(
 
     .mdc-text-field--filled .mdc-line-ripple::before,
     .mdc-text-field--filled .mdc-line-ripple::after {
-      border-bottom-color: var(--input-border-focus) !important;
+      display: none !important;
     }
 
     .mat-mdc-form-field-label {
@@ -575,12 +575,73 @@ $light-theme: mat.define-light-theme(
     .mat-mdc-form-field-label.mdc-floating-label--float-above {
       color: var(--input-border-focus) !important;
     }
+
+    // Eliminar líneas de outline de Material Design
+    .mdc-notched-outline {
+      display: none !important;
+    }
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      display: none !important;
+      border: none !important;
+    }
+
+    // Eliminar líneas de ripple
+    .mdc-line-ripple {
+      display: none !important;
+    }
+
+    // Eliminar cualquier línea vertical en inputs
+    .mdc-text-field--outlined
+      .mdc-notched-outline
+      .mdc-notched-outline__leading,
+    .mdc-text-field--outlined
+      .mdc-notched-outline
+      .mdc-notched-outline__trailing,
+    .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch {
+      border: none !important;
+      border-left: none !important;
+      border-right: none !important;
+    }
+
+    // Eliminar separadores verticales
+    .mat-mdc-form-field-infix::after,
+    .mat-mdc-form-field-infix::before {
+      display: none !important;
+    }
+
+    // Eliminar todas las líneas verticales de Material Design
+    .mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+    .mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+      border-right: none !important;
+      border-left: none !important;
+    }
+
+    // Asegurar que no hay pseudo-elementos que creen líneas
+    *::before,
+    *::after {
+      border-left: none !important;
+      border-right: none !important;
+    }
+  }
+
+  // Estilos globales para eliminar líneas verticales en todos los inputs
+  .mat-mdc-form-field * {
+    border-left: none !important;
+    border-right: none !important;
+  }
+
+  .mdc-text-field * {
+    border-left: none !important;
+    border-right: none !important;
   }
 
   .mat-mdc-form-field:not(.mat-form-field-disabled)
     .mat-mdc-text-field-wrapper:focus-within {
     box-shadow: 0 0 0 3px var(--focus-ring) !important;
-    border-color: var(--input-border-focus) !important;
+    background: var(--input-bg-focus) !important;
   }
 
   /* Enhanced Material Card Overrides */
