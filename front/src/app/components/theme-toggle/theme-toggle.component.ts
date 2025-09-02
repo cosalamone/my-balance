@@ -12,6 +12,7 @@ import { Observable, map } from 'rxjs';
 })
 export class ThemeToggleComponent implements OnInit {
   isDarkMode$: Observable<boolean>;
+  isTransitioning = false;
 
   constructor(private themeService: ThemeService) {
     this.isDarkMode$ = this.themeService.theme$.pipe(
@@ -22,6 +23,12 @@ export class ThemeToggleComponent implements OnInit {
   ngOnInit(): void {}
 
   toggleTheme(): void {
+    this.isTransitioning = true;
     this.themeService.toggleTheme();
+    
+    // Reset animation state after animation completes
+    setTimeout(() => {
+      this.isTransitioning = false;
+    }, 600);
   }
 }

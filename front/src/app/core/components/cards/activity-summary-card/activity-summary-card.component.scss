@@ -1,43 +1,94 @@
 // Estilos específicos para la tarjeta de actividad
 .activity-items {
   .activity-item {
-    transition: background-color 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    border-radius: 8px;
+    margin-bottom: 4px;
     
     &:hover {
-      background-color: rgb(243 244 246);
+      background-color: var(--hover-bg-light);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
   }
   
   .balance-item {
-    border-left-width: 3px;
+    border-left-width: 4px;
+    border-radius: 0 8px 8px 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 12px;
     
     &.positive-balance {
-      border-left-color: var(--income-color, #10b981);
+      border-left-color: var(--success-color);
+      background: var(--success-bg);
+      
+      &:hover {
+        background: var(--success-hover-bg);
+      }
     }
     
     &.negative-balance {
-      border-left-color: var(--expense-color, #ef4444);
+      border-left-color: var(--danger-color);
+      background: var(--danger-bg);
+      
+      &:hover {
+        background: var(--danger-hover-bg);
+      }
     }
   }
 }
 
-// Scrollbar styling
+// Dark mode enhancements for activity items
+[data-theme="dark"] .activity-items {
+  .activity-item {
+    &:hover {
+      background-color: var(--hover-bg-dark);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  .balance-item {
+    background: var(--surface-dark);
+    border-color: var(--border-dark);
+    
+    &.positive-balance {
+      background: rgba(16, 185, 129, 0.1);
+      border-left-color: var(--success-color);
+      
+      &:hover {
+        background: rgba(16, 185, 129, 0.15);
+      }
+    }
+    
+    &.negative-balance {
+      background: rgba(239, 68, 68, 0.1);
+      border-left-color: var(--danger-color);
+      
+      &:hover {
+        background: rgba(239, 68, 68, 0.15);
+      }
+    }
+  }
+}
+
+// Scrollbar styling with dark mode support
 .overflow-y-auto {
   &::-webkit-scrollbar {
-    width: 4px;
+    width: 6px;
   }
   
   &::-webkit-scrollbar-track {
-    background: rgb(243 244 246);
-    border-radius: 2px;
+    background: var(--scrollbar-track-bg);
+    border-radius: 3px;
   }
   
   &::-webkit-scrollbar-thumb {
-    background: rgb(156 163 175);
-    border-radius: 2px;
+    background: var(--scrollbar-thumb-bg);
+    border-radius: 3px;
     
     &:hover {
-      background: rgb(107 114 128);
+      background: var(--scrollbar-thumb-hover-bg);
     }
   }
 }

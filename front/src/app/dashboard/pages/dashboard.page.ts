@@ -58,6 +58,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
   };
   isLoading = true;
   currentUser: any = null;
+  lastUpdated = new Date();
+
+  // Daily tips array
+  private dailyTips = [
+    "💡 Consejo: Revisa tus gastos semanalmente para mantener el control de tu presupuesto.",
+    "💰 Tip: Ahorra al menos el 20% de tus ingresos mensuales.",
+    "📊 Sugerencia: Categoriza tus gastos para identificar áreas de mejora.",
+    "🎯 Meta: Establece objetivos financieros específicos y alcanzables.",
+    "📈 Estrategia: Invierte en tu educación financiera para mejores decisiones.",
+    "💳 Consejo: Evita las compras impulsivas, espera 24 horas antes de decidir.",
+    "🏦 Tip: Mantén un fondo de emergencia equivalente a 3-6 meses de gastos."
+  ];
 
   get summaryCardModel(): SummaryCardModel {
     return {
@@ -123,5 +135,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   refreshData(): void {
     this.loadDashboardData();
+    this.lastUpdated = new Date();
+  }
+
+  getDailyTip(): string {
+    const today = new Date().getDate();
+    const tipIndex = today % this.dailyTips.length;
+    return this.dailyTips[tipIndex];
   }
 }

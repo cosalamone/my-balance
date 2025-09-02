@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
   biometricSupported = false;
   biometricLoading = false;
   showRegisterBiometric = false;
+  hidePassword = true;
 
   constructor(
     private formBuilder: FormBuilder,
