@@ -1,20 +1,12 @@
-/* Login page specific styles with dark/light theme support */
+// Estilos para la página de registro con soporte para modo claro y oscuro
 
-.login-container {
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-
+// Tema claro (por defecto)
 .login-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease-in-out;
-  max-height: calc(100vh - 2rem);
-  overflow-y: auto;
-  animation: fadeInUp 0.6s ease-out;
 }
 
 .login-title {
@@ -23,19 +15,17 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  letter-spacing: -1px;
 }
 
 .logo-svg-container {
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border-radius: 50%;
-  width: 56px;
-  height: 56px;
-  margin-bottom: 8px;
+}
+
+// Información de términos y condiciones
+.terms-info {
+  background: rgba(249, 250, 251, 0.8);
+  border: 1px solid rgba(229, 231, 235, 0.6);
+  transition: all 0.3s ease-in-out;
 }
 
 // Enlaces de navegación
@@ -46,24 +36,6 @@
   &:hover {
     color: #7c3aed;
   }
-}
-
-.submit-btn {
-  transition: all 0.3s ease;
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
-  border-radius: 12px;
-}
-
-.submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
-}
-
-.demo-info {
-  background: rgba(249, 250, 251, 0.8);
-  border: 1px solid rgba(229, 231, 235, 0.6);
-  border-radius: 12px;
-  transition: all 0.3s ease-in-out;
 }
 
 // Tema oscuro
@@ -81,7 +53,7 @@
     background-clip: text;
   }
 
-  .demo-info {
+  .terms-info {
     background: rgba(17, 24, 39, 0.8);
     border: 1px solid rgba(75, 85, 99, 0.4);
   }
@@ -109,14 +81,6 @@
 
   .text-primary-200 {
     color: #c4b5fd !important;
-  }
-
-  .text-yellow-800 {
-    color: #fbbf24 !important;
-  }
-
-  .text-yellow-600 {
-    color: #f59e0b !important;
   }
 }
 
@@ -162,15 +126,6 @@
     }
   }
 
-  &.mat-accent {
-    background-color: #6366f1;
-    color: #ffffff;
-    
-    &:hover {
-      background-color: #4f46e5;
-    }
-  }
-
   &.mat-mdc-button-base {
     color: #a78bfa;
     
@@ -180,40 +135,23 @@
   }
 }
 
-/* Mobile optimizations */
-@media (max-width: 767px) {
+// Responsive para pantallas pequeñas
+@media (max-width: 480px) {
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
   .login-card {
-    margin: 8px;
-    padding: 20px;
-    max-height: calc(100vh - 1rem);
-  }
-  
-  .logo-svg-container {
-    height: 48px;
-    width: 48px;
-  }
-  
-  .submit-btn {
-    height: 44px;
-    font-size: 16px;
-  }
-}
-
-/* Samsung S24 optimizations */
-@media (max-width: 411px) {
-  .login-card {
-    margin: 4px;
-    padding: 16px;
-    max-height: calc(100vh - 0.5rem);
-  }
-  
-  .demo-info {
-    padding: 8px;
-    font-size: 11px;
+    margin: 1rem;
+    padding: 1.5rem;
   }
 }
 
 // Animaciones suaves
+.login-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

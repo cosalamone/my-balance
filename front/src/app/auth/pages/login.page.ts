@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +13,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../core/services/auth.service';
 import { BiometricAuthService } from '../../core/services/biometric-auth.service';
+import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'mb-login',
@@ -22,6 +23,7 @@ import { BiometricAuthService } from '../../core/services/biometric-auth.service
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -30,7 +32,8 @@ import { BiometricAuthService } from '../../core/services/biometric-auth.service
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatDividerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ThemeToggleComponent
   ],
 
 })
@@ -62,8 +65,8 @@ export class LoginComponent implements OnInit {
 
   initForm(): void {
     this.loginForm = this.formBuilder.group({
-      email: ['demo@example.com', [Validators.required, Validators.email]],
-      password: ['demo123', [Validators.required, Validators.minLength(6)]]
+      email: ['test@example.com', [Validators.required, Validators.email]],
+      password: ['Test123456!', [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -75,16 +78,22 @@ export class LoginComponent implements OnInit {
       const { email, password } = this.loginForm.value;
 
       try {
-        const success = await this.authService.login(email, password);
-        
-        if (success) {
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.errorMessage = 'Credenciales inválidas. Use demo@example.com / demo123';
-        }
+        this.authService.login(email, password).subscribe({
+          next: (response) => {
+            this.snackBar.open(`¡Bienvenido, ${response.user.firstName}!`, 'Cerrar', {
+              duration: 3000
+            });
+            this.router.navigate(['/dashboard']);
+            this.isLoading = false;
+          },
+          error: (error) => {
+            console.error('Error en login:', error);
+            this.errorMessage = error.error?.message || 'Credenciales inválidas. Verifique su email y contraseña.';
+            this.isLoading = false;
+          }
+        });
       } catch (error) {
         this.errorMessage = 'Error al iniciar sesión. Intente nuevamente.';
-      } finally {
         this.isLoading = false;
       }
     }

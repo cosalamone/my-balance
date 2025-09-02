@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -6,7 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Subject, takeUntil } from 'rxjs';
 import { FinancialDataService } from '../../core/services/financial-data.service';
+import { AuthService } from '../../core/services/auth.service';
 import { FinancialSummary } from '../../core/models/financial.models';
 import { SummaryCardModel } from '../../core/models/summary-card.model';
 import { 
@@ -28,12 +31,15 @@ import {
     MatIconModule,
     MatProgressSpinnerModule,
     MatGridListModule,
+    MatSnackBarModule,
     SummaryCardsComponent,
     QuickActionsCardComponent,
     ActivitySummaryCardComponent
   ],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  
   currentSummary: FinancialSummary = {
     totalIncome: 0,
     totalExpenses: 0,
@@ -51,6 +57,7 @@ export class DashboardComponent implements OnInit {
     }
   };
   isLoading = true;
+  currentUser: any = null;
 
   get summaryCardModel(): SummaryCardModel {
     return {
@@ -62,27 +69,56 @@ export class DashboardComponent implements OnInit {
   }
 
   constructor(
-    private financialService: FinancialDataService
+    private financialService: FinancialDataService,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
+    // Get current user info
+    this.authService.currentUser$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => {
+        this.currentUser = user;
+      });
+
     this.loadDashboardData();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadDashboardData(): void {
     this.isLoading = true;
     
-    // Load sample data if none exists
-    const hasData = localStorage.getItem('incomes') || 
-                   localStorage.getItem('expenses') || 
-                   localStorage.getItem('savings');
-    
-    if (!hasData) {
-      this.financialService.loadSampleData();
-    }
+    // Load dashboard summary from API
+    this.financialService.getDashboardSummary()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (summary) => {
+          this.currentSummary = {
+            totalIncome: summary.totalIncome,
+            totalExpenses: summary.totalExpenses,
+            totalSavings: summary.totalSavings,
+            balance: summary.balance,
+            currentMonth: summary.currentMonth,
+            previousMonth: summary.previousMonth
+          };
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading dashboard data:', error);
+          this.snackBar.open('Error al cargar los datos del dashboard', 'Cerrar', {
+            duration: 3000
+          });
+          this.isLoading = false;
+        }
+      });
 
-    this.currentSummary = this.financialService.getCurrentMonthSummary();
-    this.isLoading = false;
+    // Also load user data for detailed views
+    this.financialService.loadUserData();
   }
 
   refreshData(): void {
