@@ -5,7 +5,7 @@ namespace MyBalance.Core.Interfaces;
 public interface IAuthService
 {
     Task<LoginResponseDto> LoginAsync(LoginRequestDto request);
-    Task<UserDto> RegisterAsync(RegisterRequestDto request);
+    Task<LoginResponseDto> RegisterAsync(RegisterRequestDto request);
     Task<bool> ValidateTokenAsync(string token);
     Task<UserDto?> GetCurrentUserAsync(int userId);
 }

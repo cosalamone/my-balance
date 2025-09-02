@@ -51,7 +51,7 @@ public class AuthService : IAuthService
         };
     }
 
-    public async Task<UserDto> RegisterAsync(RegisterRequestDto request)
+    public async Task<LoginResponseDto> RegisterAsync(RegisterRequestDto request)
     {
         // Check if user already exists
         if (await _userRepository.EmailExistsAsync(request.Email))
@@ -73,13 +73,20 @@ public class AuthService : IAuthService
 
         var createdUser = await _userRepository.AddAsync(user);
 
-        return new UserDto
+        // Generate token for the new user
+        var token = GenerateJwtToken(createdUser);
+
+        return new LoginResponseDto
         {
-            Id = createdUser.Id,
-            Email = createdUser.Email,
-            FirstName = createdUser.FirstName,
-            LastName = createdUser.LastName,
-            CreatedAt = createdUser.CreatedAt
+            Token = token,
+            User = new UserDto
+            {
+                Id = createdUser.Id,
+                Email = createdUser.Email,
+                FirstName = createdUser.FirstName,
+                LastName = createdUser.LastName,
+                CreatedAt = createdUser.CreatedAt
+            }
         };
     }
 

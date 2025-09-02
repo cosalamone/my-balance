@@ -104,6 +104,45 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.EnsureCreated();
+    
+    // Seed demo user if not exists
+    if (!context.Users.Any(u => u.Email == "demo@example.com"))
+    {
+        try
+        {
+            // Create demo user with proper password hashing using same method as AuthService
+            using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();
+            var salt = new byte[16];
+            rng.GetBytes(salt);
+            
+            using var pbkdf2 = new System.Security.Cryptography.Rfc2898DeriveBytes("demo123", salt, 10000, System.Security.Cryptography.HashAlgorithmName.SHA256);
+            var hash = pbkdf2.GetBytes(32);
+            
+            var hashBytes = new byte[48];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 32);
+            
+            var demoUser = new MyBalance.Core.Entities.User
+            {
+                Email = "demo@example.com",
+                FirstName = "Demo",
+                LastName = "User",
+                PasswordHash = Convert.ToBase64String(hashBytes),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+            
+            context.Users.Add(demoUser);
+            context.SaveChanges();
+            
+            Console.WriteLine("Demo user created successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating demo user: {ex.Message}");
+        }
+    }
 }
 
 app.Run();
