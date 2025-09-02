@@ -1,22 +1,36 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarModule,
+} from '@angular/material/snack-bar';
+import { RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { FinancialDataService } from '../../core/services/financial-data.service';
-import { AuthService } from '../../core/services/auth.service';
+import {
+  ActivitySummaryCardComponent,
+  QuickActionsCardComponent,
+  SummaryCardsComponent,
+} from '../../core/components/cards';
 import { FinancialSummary } from '../../core/models/financial.models';
 import { SummaryCardModel } from '../../core/models/summary-card.model';
+import { AuthService } from '../../core/services/auth.service';
+import { FinancialDataService } from '../../core/services/financial-data.service';
+
+// Importar componentes compartidos
 import {
-  SummaryCardsComponent,
-  QuickActionsCardComponent,
-  ActivitySummaryCardComponent,
-} from '../../core/components/cards';
+  DashboardSectionComponent,
+  MessageComponent,
+  PageHeaderComponent,
+} from '../../shared';
 
 @Component({
   selector: 'mb-dashboard',
@@ -35,9 +49,15 @@ import {
     SummaryCardsComponent,
     QuickActionsCardComponent,
     ActivitySummaryCardComponent,
+    // Componentes compartidos
+    PageHeaderComponent,
+    DashboardSectionComponent,
+    MessageComponent,
   ],
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent
+  implements OnInit, OnDestroy
+{
   private destroy$ = new Subject<void>();
 
   currentSummary: FinancialSummary = {
@@ -122,7 +142,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: error => {
-          console.error('Error loading dashboard data:', error);
+          console.error(
+            'Error loading dashboard data:',
+            error
+          );
           this.snackBar.open(
             'Error al cargar los datos del dashboard',
             'Cerrar',

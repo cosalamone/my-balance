@@ -122,6 +122,9 @@ $light-theme: mat.define-light-theme(
 @tailwind components;
 @tailwind utilities;
 
+/* Design System - Único archivo necesario */
+@import './styles/design-system.scss';
+
 /* Enhanced CSS Variables for Theme System */
 :root {
   /* Light theme variables - Refined for better contrast and accessibility */

@@ -1,0 +1,194 @@
+<!-- Demo del Design System -->
+<div class="container-app mb-space-y-8 py-8">
+  <div class="text-center mb-space-y-4">
+    <h1 class="mb-text--3xl mb-text--bold mb-text--primary">🎨 Design System Demo</h1>
+    <p class="mb-text--lg mb-text--secondary">
+      Demostración de componentes con estilos predefinidos que se adaptan automáticamente al tema
+    </p>
+  </div>
+
+  <!-- Botones -->
+  <section class="mb-card mb-card--lg">
+    <h2 class="mb-text--xl mb-text--semibold mb-text--primary mb-6">Botones</h2>
+    <div class="mb-space-y-4">
+      <!-- Tamaños -->
+      <div>
+        <h3 class="mb-text--lg mb-text--medium mb-text--secondary mb-4">Tamaños</h3>
+        <div class="mb-flex-center mb-space-x-3 flex-wrap gap-4">
+          <button class="mb-btn mb-btn--primary mb-btn--sm">Pequeño</button>
+          <button class="mb-btn mb-btn--primary mb-btn--md">Mediano</button>
+          <button class="mb-btn mb-btn--primary mb-btn--lg">Grande</button>
+        </div>
+      </div>
+
+      <!-- Variantes -->
+      <div>
+        <h3 class="mb-text--lg mb-text--medium mb-text--secondary mb-4">Variantes</h3>
+        <div class="mb-flex-center mb-space-x-3 flex-wrap gap-4">
+          <button class="mb-btn mb-btn--primary">Primario</button>
+          <button class="mb-btn mb-btn--secondary">Secundario</button>
+          <button class="mb-btn mb-btn--success">Éxito</button>
+          <button class="mb-btn mb-btn--danger">Peligro</button>
+        </div>
+      </div>
+
+      <!-- Estados -->
+      <div>
+        <h3 class="mb-text--lg mb-text--medium mb-text--secondary mb-4">Estados</h3>
+        <div class="mb-flex-center mb-space-x-3 flex-wrap gap-4">
+          <button class="mb-btn mb-btn--primary" disabled>Deshabilitado</button>
+          <button class="mb-btn mb-btn--primary mb-btn--loading">Cargando</button>
+          <button class="mb-btn mb-btn--primary mb-btn--full">Ancho completo</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alertas -->
+  <section class="mb-card mb-card--lg">
+    <h2 class="mb-text--xl mb-text--semibold mb-text--primary mb-6">Alertas</h2>
+    <div class="mb-space-y-4">
+      <div class="mb-alert mb-alert--success">
+        <mat-icon class="mb-alert__icon">check_circle</mat-icon>
+        <div class="mb-alert__content">
+          <div class="mb-alert__title">¡Operación exitosa!</div>
+          <div class="mb-alert__message">Los datos se han guardado correctamente.</div>
+        </div>
+      </div>
+
+      <div class="mb-alert mb-alert--error">
+        <mat-icon class="mb-alert__icon">error</mat-icon>
+        <div class="mb-alert__content">
+          <div class="mb-alert__title">Error en el proceso</div>
+          <div class="mb-alert__message">Ha ocurrido un error al procesar la solicitud.</div>
+        </div>
+      </div>
+
+      <div class="mb-alert mb-alert--warning">
+        <mat-icon class="mb-alert__icon">warning</mat-icon>
+        <div class="mb-alert__content">
+          <div class="mb-alert__title">Advertencia importante</div>
+          <div class="mb-alert__message">Revisa los datos antes de continuar.</div>
+        </div>
+      </div>
+
+      <div class="mb-alert mb-alert--info">
+        <mat-icon class="mb-alert__icon">info</mat-icon>
+        <div class="mb-alert__content">
+          <div class="mb-alert__title">Información</div>
+          <div class="mb-alert__message">Estos componentes se adaptan automáticamente al tema.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cards -->
+  <section class="mb-card mb-card--lg">
+    <h2 class="mb-text--xl mb-text--semibold mb-text--primary mb-6">Cards</h2>
+    <div class="mb-grid-3">
+      <div class="mb-card mb-card--sm mb-card--hover">
+        <h3 class="mb-text--lg mb-text--semibold mb-text--primary">Card Simple</h3>
+        <p class="mb-text--base mb-text--secondary">Contenido básico con hover effect.</p>
+      </div>
+
+      <div class="mb-card mb-card--md mb-card--clickable">
+        <h3 class="mb-text--lg mb-text--semibold mb-text--primary">Card Clickeable</h3>
+        <p class="mb-text--base mb-text--secondary">Esta card tiene efecto de click.</p>
+      </div>
+
+      <div class="mb-card mb-card--lg">
+        <h3 class="mb-text--lg mb-text--semibold mb-text--primary">Card Grande</h3>
+        <p class="mb-text--base mb-text--secondary">Card con más padding para contenido extenso.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Links -->
+  <section class="mb-card mb-card--lg">
+    <h2 class="mb-text--xl mb-text--semibold mb-text--primary mb-6">Enlaces</h2>
+    <div class="mb-space-y-4">
+      <div class="mb-space-x-4">
+        <a href="#" class="mb-link">Enlace normal</a>
+        <a href="#" class="mb-link mb-link--underlined">Enlace subrayado</a>
+        <a href="#" class="mb-link mb-link--muted">Enlace muted</a>
+        <a href="#" class="mb-link mb-link--nav">Enlace de navegación</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Formularios -->
+  <section class="mb-card mb-card--lg">
+    <h2 class="mb-text--xl mb-text--semibold mb-text--primary mb-6">Formularios</h2>
+    <div class="mb-space-y-4">
+      <input type="text" placeholder="Input normal" class="mb-input" />
+      <input type="email" placeholder="Input con error" class="mb-input mb-input--error" />
+      <input type="text" placeholder="Input con éxito" class="mb-input mb-input--success" />
+    </div>
+  </section>
+
+  <!-- Tipografía -->
+  <section class="mb-card mb-card--lg">
+    <h2 class="mb-text--xl mb-text--semibold mb-text--primary mb-6">Tipografía</h2>
+    <div class="mb-space-y-3">
+      <p class="mb-text--xs mb-text--muted">Texto extra pequeño (XS)</p>
+      <p class="mb-text--sm mb-text--secondary">Texto pequeño (SM)</p>
+      <p class="mb-text--base mb-text--primary">Texto base normal</p>
+      <p class="mb-text--lg mb-text--medium mb-text--primary">Texto grande medium</p>
+      <p class="mb-text--xl mb-text--semibold mb-text--primary">Texto extra grande semibold</p>
+      <p class="mb-text--2xl mb-text--bold mb-text--primary">Texto 2XL bold</p>
+    </div>
+  </section>
+
+  <!-- Layout Helpers -->
+  <section class="mb-card mb-card--lg">
+    <h2 class="mb-text--xl mb-text--semibold mb-text--primary mb-6">Layout Helpers</h2>
+
+    <!-- Flexbox -->
+    <div class="mb-space-y-4">
+      <div class="mb-card mb-card--sm">
+        <h3 class="mb-text--lg mb-text--medium mb-4">Flexbox Center</h3>
+        <div class="mb-flex-center h-20 bg-gray-100 rounded">
+          <span class="mb-text--sm">Centrado horizontal y vertical</span>
+        </div>
+      </div>
+
+      <div class="mb-card mb-card--sm">
+        <h3 class="mb-text--lg mb-text--medium mb-4">Flexbox Between</h3>
+        <div class="mb-flex-between h-20 bg-gray-100 rounded px-4">
+          <span class="mb-text--sm">Izquierda</span>
+          <span class="mb-text--sm">Derecha</span>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div class="mb-card mb-card--sm">
+        <h3 class="mb-text--lg mb-text--medium mb-4">Grid 2 Columnas</h3>
+        <div class="mb-grid-2">
+          <div class="mb-card mb-card--sm bg-blue-100">Grid 1</div>
+          <div class="mb-card mb-card--sm bg-blue-100">Grid 2</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demostración automática del tema -->
+  <section class="mb-card mb-card--lg">
+    <h2 class="mb-text--xl mb-text--semibold mb-text--primary mb-6">
+      🌓 Adaptación Automática al Tema
+    </h2>
+    <div class="mb-alert mb-alert--info">
+      <mat-icon class="mb-alert__icon">lightbulb</mat-icon>
+      <div class="mb-alert__content">
+        <div class="mb-alert__title">¡Todos los componentes se adaptan automáticamente!</div>
+        <div class="mb-alert__message">
+          Cambia el tema usando el toggle en la esquina superior derecha. Todos los botones, alerts,
+          cards, links y textos se adaptan automáticamente sin necesidad de clases adicionales.
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 mb-flex-center">
+      <mb-theme-toggle></mb-theme-toggle>
+    </div>
+  </section>
+</div>

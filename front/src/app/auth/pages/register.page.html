@@ -1,53 +1,59 @@
-<div
-  class="h-screen flex items-center justify-center bg-gradient-to-br from-primary-600 to-primary-800 p-4 overflow-hidden">
+<div class="page-container">
   <!-- Theme Toggle Button -->
   <div class="absolute top-4 right-4 z-10">
     <mb-theme-toggle></mb-theme-toggle>
   </div>
 
-  <div class="max-w-md w-full max-h-full overflow-y-auto">
-    <!-- Logo and Header -->
-    <div class="text-center mb-6">
-      <div class="mx-auto flex flex-col items-center justify-center mb-3">
-        <div class="logo-svg-container mb-3">
-          <svg
-            width="48"
-            height="48"
-            viewBox="0 0 64 64"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <circle cx="32" cy="32" r="32" fill="url(#paint0_linear)" />
-            <path
-              d="M20 40V24C20 21.7909 21.7909 20 24 20H40C42.2091 20 44 21.7909 44 24V40C44 42.2091 42.2091 44 40 44H24C21.7909 44 20 42.2091 20 40Z"
-              fill="white" />
-            <path d="M32 28V36" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
-            <path d="M28 32H36" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
-            <defs>
-              <linearGradient
-                id="paint0_linear"
-                x1="0"
-                y1="0"
-                x2="64"
-                y2="64"
-                gradientUnits="userSpaceOnUse">
-                <stop stop-color="#8B5CF6" />
-                <stop offset="1" stop-color="#4C1D95" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h2 class="text-2xl font-extrabold login-title mb-1">Crear Cuenta</h2>
-        <p class="text-primary-200 text-sm">Únete a My Balance y toma control de tus finanzas</p>
-      </div>
-    </div>
+  <!-- Background -->
+  <div class="auth-background"></div>
+
+  <!-- Floating Elements -->
+  <div class="floating-elements">
+    <div class="element-1"></div>
+    <div class="element-2"></div>
+  </div>
+
+  <div class="container-center">
+    <!-- Header -->
+    <mb-page-header
+      title="Crear Cuenta"
+      subtitle="Únete a My Balance y toma control de tus finanzas"
+      [showLogo]="true">
+      <svg
+        slot="logo"
+        width="48"
+        height="48"
+        viewBox="0 0 64 64"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="32" fill="url(#paint0_linear)" />
+        <path
+          d="M20 40V24C20 21.7909 21.7909 20 24 20H40C42.2091 20 44 21.7909 44 24V40C44 42.2091 42.2091 44 40 44H24C21.7909 44 20 42.2091 20 40Z"
+          fill="white" />
+        <path d="M32 28V36" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M28 32H36" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
+        <defs>
+          <linearGradient
+            id="paint0_linear"
+            x1="0"
+            y1="0"
+            x2="64"
+            y2="64"
+            gradientUnits="userSpaceOnUse">
+            <stop stop-color="#8B5CF6" />
+            <stop offset="1" stop-color="#4C1D95" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </mb-page-header>
 
     <!-- Register Form -->
-    <div class="login-card rounded-2xl shadow-2xl p-6">
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div class="card card--auth">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form">
         <!-- Name Fields Row -->
-        <div class="grid grid-cols-2 gap-4">
+        <div class="form__row">
           <!-- First Name Field -->
-          <mat-form-field appearance="outline" class="w-full">
+          <mat-form-field appearance="outline" class="field">
             <input
               matInput
               type="text"
@@ -59,7 +65,7 @@
           </mat-form-field>
 
           <!-- Last Name Field -->
-          <mat-form-field appearance="outline" class="w-full">
+          <mat-form-field appearance="outline" class="field">
             <input
               matInput
               type="text"
@@ -72,7 +78,7 @@
         </div>
 
         <!-- Email Field -->
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field appearance="outline" class="field">
           <input
             matInput
             type="email"
@@ -84,7 +90,7 @@
         </mat-form-field>
 
         <!-- Password Field -->
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field appearance="outline" class="field">
           <input
             matInput
             [type]="hidePassword ? 'password' : 'text'"
@@ -104,7 +110,7 @@
         </mat-form-field>
 
         <!-- Confirm Password Field -->
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field appearance="outline" class="field">
           <input
             matInput
             [type]="hideConfirmPassword ? 'password' : 'text'"
@@ -124,19 +130,22 @@
         </mat-form-field>
 
         <!-- Error Message -->
-        <div
+        <mb-message
           *ngIf="errorMessage"
-          class="bg-expense-50 border border-expense-200 rounded-lg p-4 flex items-center space-x-3">
-          <mat-icon class="text-expense-500">error_outline</mat-icon>
-          <span class="text-expense-700 text-sm">{{ errorMessage }}</span>
-        </div>
+          [message]="errorMessage"
+          title="Error de registro"
+          type="error"></mb-message>
 
         <!-- Submit Button -->
         <button
           mat-raised-button
-          color="primary"
           type="submit"
-          class="w-full h-12 text-lg font-semibold rounded-lg"
+          mbButton
+          variant="primary"
+          size="lg"
+          class="mb-btn--full"
+          *ngIf="!isLoading"
+          class="mb-btn"
           [disabled]="!registerForm.valid || isLoading">
           <div *ngIf="isLoading" class="flex items-center justify-center space-x-2">
             <mat-spinner diameter="20"></mat-spinner>
@@ -150,7 +159,7 @@
       </form>
 
       <!-- Login Link -->
-      <div class="mt-6 pt-4 border-t border-gray-200 text-center">
+      <div class="footer--page">
         <p class="text-sm text-gray-600">
           ¿Ya tienes una cuenta?
           <button
@@ -165,12 +174,12 @@
 
       <!-- Terms Info -->
       <div class="mt-4">
-        <div class="terms-info rounded-xl p-3">
-          <div class="flex items-start space-x-2">
-            <mat-icon class="text-sm text-blue-600 mt-0.5">info</mat-icon>
-            <div class="text-xs text-gray-600">
-              <p class="font-medium text-gray-900 mb-1">Al crear una cuenta, aceptas:</p>
-              <ul class="space-y-0.5">
+        <div class="terms-info">
+          <div class="terms-info__content">
+            <mat-icon class="terms-info__icon">info</mat-icon>
+            <div class="terms-info__text">
+              <p class="terms-info__title">Al crear una cuenta, aceptas:</p>
+              <ul class="terms-info__list">
                 <li>• Nuestros términos y condiciones de uso</li>
                 <li>• El procesamiento seguro de tus datos financieros</li>
                 <li>• Recibir notificaciones importantes sobre tu cuenta</li>
@@ -182,7 +191,7 @@
     </div>
 
     <!-- Footer -->
-    <div class="text-center text-primary-200 text-xs mt-4">
+    <div class="footer footer--auth">
       <p>&copy; 2025 My Balance. Control financiero inteligente.</p>
     </div>
   </div>

@@ -1,24 +1,32 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
-  ReactiveFormsModule,
   FormBuilder,
   FormGroup,
+  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {
+  MatSnackBar,
+  MatSnackBarModule,
+} from '@angular/material/snack-bar';
+import { Router, RouterLink } from '@angular/router';
+import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
 import { AuthService } from '../../core/services/auth.service';
 import { BiometricAuthService } from '../../core/services/biometric-auth.service';
-import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
+
+import {
+  MessageComponent,
+  PageHeaderComponent,
+} from '../../shared';
 
 @Component({
   selector: 'mb-login',
@@ -39,6 +47,9 @@ import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle
     MatDividerModule,
     MatSnackBarModule,
     ThemeToggleComponent,
+    // Componentes compartidos
+    MessageComponent,
+    PageHeaderComponent,
   ],
 })
 export class LoginComponent implements OnInit {
@@ -70,8 +81,14 @@ export class LoginComponent implements OnInit {
 
   initForm(): void {
     this.loginForm = this.formBuilder.group({
-      email: ['test@example.com', [Validators.required, Validators.email]],
-      password: ['Test123456!', [Validators.required, Validators.minLength(6)]],
+      email: [
+        'test@example.com',
+        [Validators.required, Validators.email],
+      ],
+      password: [
+        'Test123456!',
+        [Validators.required, Validators.minLength(6)],
+      ],
     });
   }
 
@@ -104,7 +121,8 @@ export class LoginComponent implements OnInit {
           },
         });
       } catch (error) {
-        this.errorMessage = 'Error al iniciar sesión. Intente nuevamente.';
+        this.errorMessage =
+          'Error al iniciar sesión. Intente nuevamente.';
         this.isLoading = false;
       }
     }
@@ -130,14 +148,18 @@ export class LoginComponent implements OnInit {
    * Verifica soporte biométrico
    */
   private checkBiometricSupport(): void {
-    this.biometricService.biometricSupport$.subscribe(supported => {
-      this.biometricSupported = supported;
-      if (supported) {
-        // Verificar si hay credenciales guardadas
-        const credentials = this.biometricService.getSavedCredentials();
-        this.showRegisterBiometric = credentials.length === 0;
+    this.biometricService.biometricSupport$.subscribe(
+      supported => {
+        this.biometricSupported = supported;
+        if (supported) {
+          // Verificar si hay credenciales guardadas
+          const credentials =
+            this.biometricService.getSavedCredentials();
+          this.showRegisterBiometric =
+            credentials.length === 0;
+        }
       }
-    });
+    );
   }
 
   /**
@@ -159,23 +181,38 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      const username = await this.biometricService.authenticateWithBiometric();
+      const username =
+        await this.biometricService.authenticateWithBiometric();
 
       if (username) {
         // Simular login exitoso con el usuario autenticado
-        await this.authService.login(username, 'biometric-auth');
-        this.snackBar.open('¡Login biométrico exitoso!', 'Cerrar', {
-          duration: 2000,
-        });
+        await this.authService.login(
+          username,
+          'biometric-auth'
+        );
+        this.snackBar.open(
+          '¡Login biométrico exitoso!',
+          'Cerrar',
+          {
+            duration: 2000,
+          }
+        );
         this.router.navigate(['/dashboard']);
       } else {
-        this.errorMessage = 'Autenticación biométrica fallida';
-        this.snackBar.open('Autenticación biométrica fallida', 'Cerrar', {
-          duration: 3000,
-        });
+        this.errorMessage =
+          'Autenticación biométrica fallida';
+        this.snackBar.open(
+          'Autenticación biométrica fallida',
+          'Cerrar',
+          {
+            duration: 3000,
+          }
+        );
       }
     } catch (error: any) {
-      this.errorMessage = error.message || 'Error en autenticación biométrica';
+      this.errorMessage =
+        error.message ||
+        'Error en autenticación biométrica';
       this.snackBar.open(this.errorMessage, 'Cerrar', {
         duration: 3000,
       });
@@ -214,10 +251,11 @@ export class LoginComponent implements OnInit {
     this.biometricLoading = true;
 
     try {
-      const success = await this.biometricService.registerBiometric(
-        email,
-        email.split('@')[0] // Usar la parte antes del @ como display name
-      );
+      const success =
+        await this.biometricService.registerBiometric(
+          email,
+          email.split('@')[0] // Usar la parte antes del @ como display name
+        );
 
       if (success) {
         this.showRegisterBiometric = false;
@@ -229,13 +267,18 @@ export class LoginComponent implements OnInit {
           }
         );
       } else {
-        this.snackBar.open('Error al registrar la huella digital', 'Cerrar', {
-          duration: 3000,
-        });
+        this.snackBar.open(
+          'Error al registrar la huella digital',
+          'Cerrar',
+          {
+            duration: 3000,
+          }
+        );
       }
     } catch (error: any) {
       this.snackBar.open(
-        error.message || 'Error al registrar huella digital',
+        error.message ||
+          'Error al registrar huella digital',
         'Cerrar',
         {
           duration: 3000,
@@ -252,8 +295,12 @@ export class LoginComponent implements OnInit {
   onClearBiometricCredentials(): void {
     this.biometricService.clearAllCredentials();
     this.showRegisterBiometric = true;
-    this.snackBar.open('Credenciales biométricas eliminadas', 'Cerrar', {
-      duration: 2000,
-    });
+    this.snackBar.open(
+      'Credenciales biométricas eliminadas',
+      'Cerrar',
+      {
+        duration: 2000,
+      }
+    );
   }
 }

@@ -1,21 +1,33 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
-  ReactiveFormsModule,
   FormBuilder,
   FormGroup,
+  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService, RegisterRequest } from '../../core/services/auth.service';
+import {
+  MatSnackBar,
+  MatSnackBarModule,
+} from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
+import {
+  AuthService,
+  RegisterRequest,
+} from '../../core/services/auth.service';
+
+// Importar componentes compartidos
+import {
+  MessageComponent,
+  PageHeaderComponent,
+} from '../../shared';
 
 @Component({
   selector: 'mb-register',
@@ -33,6 +45,9 @@ import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle
     MatProgressSpinnerModule,
     MatSnackBarModule,
     ThemeToggleComponent,
+    // Componentes compartidos
+    MessageComponent,
+    PageHeaderComponent,
   ],
 })
 export class RegisterComponent implements OnInit {
@@ -77,8 +92,14 @@ export class RegisterComponent implements OnInit {
             Validators.maxLength(50),
           ],
         ],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
+        email: [
+          '',
+          [Validators.required, Validators.email],
+        ],
+        password: [
+          '',
+          [Validators.required, Validators.minLength(6)],
+        ],
         confirmPassword: ['', [Validators.required]],
       },
       {
@@ -102,7 +123,9 @@ export class RegisterComponent implements OnInit {
 
     if (confirmPassword?.hasError('passwordMismatch')) {
       delete confirmPassword.errors!['passwordMismatch'];
-      if (Object.keys(confirmPassword.errors!).length === 0) {
+      if (
+        Object.keys(confirmPassword.errors!).length === 0
+      ) {
         confirmPassword.setErrors(null);
       }
     }
@@ -115,7 +138,8 @@ export class RegisterComponent implements OnInit {
       this.isLoading = true;
       this.errorMessage = '';
 
-      const { firstName, lastName, email, password } = this.registerForm.value;
+      const { firstName, lastName, email, password } =
+        this.registerForm.value;
 
       const registerData: RegisterRequest = {
         firstName,
@@ -144,7 +168,8 @@ export class RegisterComponent implements OnInit {
           },
         });
       } catch (error) {
-        this.errorMessage = 'Error al crear la cuenta. Intente nuevamente.';
+        this.errorMessage =
+          'Error al crear la cuenta. Intente nuevamente.';
         this.isLoading = false;
       }
     }
@@ -160,11 +185,13 @@ export class RegisterComponent implements OnInit {
         return 'Email inválido';
       }
       if (field.errors['minlength']) {
-        const minLength = field.errors['minlength'].requiredLength;
+        const minLength =
+          field.errors['minlength'].requiredLength;
         return `${this.getFieldDisplayName(fieldName)} debe tener al menos ${minLength} caracteres`;
       }
       if (field.errors['maxlength']) {
-        const maxLength = field.errors['maxlength'].requiredLength;
+        const maxLength =
+          field.errors['maxlength'].requiredLength;
         return `${this.getFieldDisplayName(fieldName)} no puede tener más de ${maxLength} caracteres`;
       }
       if (field.errors['passwordMismatch']) {
