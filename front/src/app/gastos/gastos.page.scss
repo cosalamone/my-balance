@@ -1,0 +1,13 @@
+@use '../../styles/design-system.scss' as *;
+
+.mb-btn {
+  @extend .mb-btn;
+}
+
+.mb-btn--primary {
+  @extend .mb-btn--primary;
+}
+
+.mb-card__title {
+  @extend .mb-card__title;
+}

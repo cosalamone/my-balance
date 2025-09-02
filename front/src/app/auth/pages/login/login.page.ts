@@ -19,14 +19,14 @@ import {
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
-import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
-import { AuthService } from '../../core/services/auth.service';
-import { BiometricAuthService } from '../../core/services/biometric-auth.service';
+import { ThemeToggleComponent } from '../../../components/theme-toggle/theme-toggle.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { BiometricAuthService } from '../../../core/services/biometric-auth.service';
 
 import {
   MessageComponent,
   PageHeaderComponent,
-} from '../../shared';
+} from '../../../shared';
 
 @Component({
   selector: 'mb-login',

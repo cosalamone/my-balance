@@ -1,0 +1,17 @@
+<section class="mb-card">
+  <h2 class="mb-card__title">Gastos</h2>
+  <div *ngIf="loading" class="mb-alert mb-alert--info">Cargando...</div>
+  <div *ngIf="error" class="mb-alert mb-alert--error">{{ error }}</div>
+  <ul *ngIf="!loading && !error">
+    <li *ngFor="let gasto of gastos" class="mb-card mb-card--hover mb-2">
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="font-bold">{{ gasto.category }}</div>
+          <div class="text-sm text-gray-500">{{ gasto.description }}</div>
+          <div class="text-xs text-gray-400">{{ gasto.date | date }}</div>
+        </div>
+        <div class="font-bold text-expense-700">${{ gasto.amount | number: '1.2-2' }}</div>
+      </div>
+    </li>
+  </ul>
+</section>

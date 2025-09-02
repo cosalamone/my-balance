@@ -10,12 +10,16 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./auth/pages/login.page').then(m => m.LoginComponent),
+      import('./auth/pages/login/login.page').then(
+        m => m.LoginComponent
+      ),
   },
   {
     path: 'register',
     loadComponent: () =>
-      import('./auth/pages/register.page').then(m => m.RegisterComponent),
+      import('./auth/pages/register/register.page').then(
+        m => m.RegisterComponent
+      ),
   },
   {
     path: 'dashboard',
@@ -28,7 +32,17 @@ export const routes: Routes = [
   {
     path: 'ingresos',
     loadComponent: () =>
-      import('./ingresos/pages/ingresos.page').then(m => m.IncomeComponent),
+      import('./ingresos/pages/ingresos.page').then(
+        m => m.IncomeComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'gastos',
+    loadComponent: () =>
+      import('./gastos/gastos.page').then(
+        m => m.GastosPage
+      ),
     canActivate: [AuthGuard],
   },
   {

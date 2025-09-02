@@ -1,0 +1,10 @@
+<section>
+  <h1 class="mb-card__title">Gestión de Gastos</h1>
+  <button class="mb-btn mb-btn--primary mb-4" (click)="onAdd()">Agregar Gasto</button>
+  <app-gasto-form
+    *ngIf="showForm"
+    [gasto]="editingGasto || defaultGasto"
+    (save)="onSave($event)"
+    (cancel)="onCancel()"></app-gasto-form>
+  <app-gastos-list *ngIf="!showForm"></app-gastos-list>
+</section>

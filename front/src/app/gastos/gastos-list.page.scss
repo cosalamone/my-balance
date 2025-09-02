@@ -1,0 +1,20 @@
+@use '../../styles/design-system.scss' as *;
+
+.mb-card {
+  @extend .mb-card;
+}
+
+.mb-alert {
+  @extend .mb-alert;
+}
+
+.mb-card--hover {
+  transition: box-shadow 0.2s;
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.text-expense-700 {
+  color: var(--color-expense-700, #b91c1c);
+}
