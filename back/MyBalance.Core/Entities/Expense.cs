@@ -15,12 +15,6 @@ public enum ExpenseCategory
     Other = 8
 }
 
-public enum ExpenseType
-{
-    Fixed = 0,
-    Variable = 1
-}
-
 public class Expense
 {
     public int Id { get; set; }
@@ -30,8 +24,6 @@ public class Expense
 
     [Required]
     public ExpenseCategory Category { get; set; }
-
-    public ExpenseType Type { get; set; } = ExpenseType.Variable;
 
     [Required]
     [StringLength(500)]

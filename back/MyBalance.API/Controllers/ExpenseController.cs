@@ -70,7 +70,6 @@ public class ExpenseController : ControllerBase
             expense.UserId = userId;
             expense.CreatedAt = DateTime.UtcNow;
             expense.UpdatedAt = DateTime.UtcNow;
-            expense.IsFixed = expense.Type == ExpenseType.Fixed;
 
             var created = await _expenseRepository.AddAsync(expense);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
@@ -101,7 +100,6 @@ public class ExpenseController : ControllerBase
             expense.UserId = userId;
             expense.CreatedAt = existingExpense.CreatedAt;
             expense.UpdatedAt = DateTime.UtcNow;
-            expense.IsFixed = expense.Type == ExpenseType.Fixed;
 
             await _expenseRepository.UpdateAsync(expense);
             return NoContent();
