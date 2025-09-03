@@ -10,16 +10,15 @@ export enum IncomeCategory {
 }
 
 export enum ExpenseCategory {
-  HOUSING = 'housing',
-  FOOD = 'food',
-  TRANSPORTATION = 'transportation',
-  ENTERTAINMENT = 'entertainment',
-  HEALTHCARE = 'healthcare',
-  EDUCATION = 'education',
-  SHOPPING = 'shopping',
-  UTILITIES = 'utilities',
-  RENT = 'rent',
-  OTHER = 'other',
+  HOUSING = 0,
+  FOOD = 1,
+  TRANSPORTATION = 2,
+  ENTERTAINMENT = 3,
+  HEALTHCARE = 4,
+  EDUCATION = 5,
+  SHOPPING = 6,
+  UTILITIES = 7,
+  OTHER = 8,
 }
 
 export enum SavingsCategory {
@@ -34,8 +33,8 @@ export enum SavingsCategory {
 
 // Enum para tipos de gasto
 export enum ExpenseType {
-  FIXED = 'fixed',
-  VARIABLE = 'variable',
+  FIXED = 0,
+  VARIABLE = 1,
 }
 
 // Interfaces principales

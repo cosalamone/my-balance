@@ -40,8 +40,8 @@ export const routes: Routes = [
   {
     path: 'gastos',
     loadComponent: () =>
-      import('./gastos/gastos.page').then(
-        m => m.GastosPage
+      import('./gastos/pages/gastos.page').then(
+        m => m.ExpenseComponent
       ),
     canActivate: [AuthGuard],
   },
