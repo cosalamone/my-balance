@@ -22,13 +22,12 @@ export enum ExpenseCategory {
 }
 
 export enum SavingsCategory {
-  EMERGENCY_FUND = 'emergency_fund',
-  VACATION = 'vacation',
-  RETIREMENT = 'retirement',
-  INVESTMENT = 'investment',
-  GOAL = 'goal',
-  USD_SAVINGS = 'usd_savings',
-  OTHER = 'other',
+  EMERGENCY_FUND = 'EmergencyFund',
+  VACATION = 'Vacation',
+  RETIREMENT = 'Retirement',
+  INVESTMENT = 'Investment',
+  GOAL = 'Goal',
+  OTHER = 'Other',
 }
 
 // Enum para tipos de gasto

@@ -10,12 +10,16 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "MyBalance API", Version = "v1" });
-    
+
     // Add JWT authentication to Swagger
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
@@ -25,7 +29,7 @@ builder.Services.AddSwaggerGen(c =>
         Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-    
+
     c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
         {
@@ -104,7 +108,7 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.EnsureCreated();
-    
+
     // Seed demo user if not exists
     if (!context.Users.Any(u => u.Email == "demo@example.com"))
     {
@@ -114,14 +118,14 @@ using (var scope = app.Services.CreateScope())
             using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();
             var salt = new byte[16];
             rng.GetBytes(salt);
-            
+
             using var pbkdf2 = new System.Security.Cryptography.Rfc2898DeriveBytes("demo123", salt, 10000, System.Security.Cryptography.HashAlgorithmName.SHA256);
             var hash = pbkdf2.GetBytes(32);
-            
+
             var hashBytes = new byte[48];
             Array.Copy(salt, 0, hashBytes, 0, 16);
             Array.Copy(hash, 0, hashBytes, 16, 32);
-            
+
             var demoUser = new MyBalance.Core.Entities.User
             {
                 Email = "demo@example.com",
@@ -132,10 +136,10 @@ using (var scope = app.Services.CreateScope())
                 UpdatedAt = DateTime.UtcNow,
                 IsActive = true
             };
-            
+
             context.Users.Add(demoUser);
             context.SaveChanges();
-            
+
             Console.WriteLine("Demo user created successfully!");
         }
         catch (Exception ex)

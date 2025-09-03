@@ -46,6 +46,14 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'ahorros',
+    loadComponent: () =>
+      import('./ahorros/pages/ahorros.page').then(
+        m => m.SavingsComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
     path: '**',
     redirectTo: '/dashboard',
   },
