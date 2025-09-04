@@ -1,0 +1,383 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Backend (CMD)",
+      "type": "shell",
+      "command": "cmd",
+      "args": ["/c", "run-backend.bat"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "isBackground": true
+    },
+    {
+      "label": "Run Backend (Bash)",
+      "type": "shell",
+      "command": "bash",
+      "args": ["./run-backend.sh"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "isBackground": true
+    },
+    {
+      "label": "Start Backend Simple (CMD)",
+      "type": "shell",
+      "command": "cmd",
+      "args": ["/c", "start.bat"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "isBackground": true
+    },
+    {
+      "label": "Start Backend Simple (Bash)",
+      "type": "shell",
+      "command": "bash",
+      "args": ["./start.sh"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "isBackground": true
+    },
+    {
+      "label": "Run Frontend",
+      "type": "shell",
+      "command": "ng",
+      "args": ["serve", "--open"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/front"
+      },
+      "problemMatcher": [],
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "isBackground": true
+    },
+    {
+      "label": "Run Full Stack (CMD)",
+      "dependsOrder": "parallel",
+      "dependsOn": ["Run Backend (CMD)", "Run Frontend"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Run Full Stack (Bash)",
+      "dependsOrder": "parallel",
+      "dependsOn": ["Run Backend (Bash)", "Run Frontend"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Build Backend",
+      "type": "shell",
+      "command": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "args": ["build"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Build Frontend",
+      "type": "shell",
+      "command": "ng",
+      "args": ["build"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/front"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build Frontend (Production)",
+      "type": "shell",
+      "command": "ng",
+      "args": ["build", "--configuration=production"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/front"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build Backend (Release)",
+      "type": "shell",
+      "command": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "args": ["build", "--configuration", "Release"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Build All (Development)",
+      "dependsOrder": "parallel",
+      "dependsOn": ["Build Backend", "Build Frontend"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Build All (Production)",
+      "dependsOrder": "parallel",
+      "dependsOn": ["Build Backend (Release)", "Build Frontend (Production)"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Clean Backend",
+      "type": "shell",
+      "command": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "args": ["clean"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean Frontend",
+      "type": "shell",
+      "command": "rm",
+      "args": ["-rf", "dist", "node_modules/.cache"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/front"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install Frontend Dependencies",
+      "type": "shell",
+      "command": "npm",
+      "args": ["install"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/front"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Restore Backend Dependencies",
+      "type": "shell",
+      "command": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "args": ["restore"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test Backend",
+      "type": "shell",
+      "command": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "args": ["test"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/back"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test Frontend",
+      "type": "shell",
+      "command": "ng",
+      "args": ["test", "--watch=false", "--browsers=ChromeHeadless"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/front"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Lint Frontend",
+      "type": "shell",
+      "command": "ng",
+      "args": ["lint"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/front"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

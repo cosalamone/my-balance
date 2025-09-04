@@ -1,33 +1,59 @@
-<div class="container-app h-screen flex flex-col p-0">
-  <!-- Header -->
-  <div class="flex-shrink-0 pt-2 pb-1 px-2">
-    <h1 class="text-lg font-bold dashboard-title">Dashboard Financiero</h1>
-    <p class="dashboard-subtitle text-xs">Resumen de tu actividad financiera actual</p>
-  </div>
+<div class="dashboard-layout container-app">
+  <!-- Header Section -->
+  <header class="dashboard-header">
+    <mb-page-header
+      title="💰 Dashboard Financiero"
+      subtitle="Resumen completo de tu actividad financiera actual"></mb-page-header>
+  </header>
 
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="flex-1 flex justify-center items-center">
-    <mat-spinner diameter="50"></mat-spinner>
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="60" strokeWidth="4"></mat-spinner>
+    <p class="loading-text">Cargando tu información financiera...</p>
   </div>
 
   <!-- Dashboard Content -->
-  <div *ngIf="!isLoading" class="flex-1 flex flex-col space-y-3 px-2 pb-2">
-    <!-- Summary Cards -->
-    <div class="flex-shrink-0">
+  <main *ngIf="!isLoading" class="dashboard-main">
+    <!-- Summary Cards Section -->
+    <mb-dashboard-section title="📊 Resumen General">
       <mb-summary-cards [model]="summaryCardModel"></mb-summary-cards>
-    </div>
+    </mb-dashboard-section>
 
-    <!-- Quick Actions -->
-    <div class="flex-shrink-0">
+    <!-- Quick Actions Section -->
+    <mb-dashboard-section
+      title="⚡ Acciones Rápidas"
+      subtitle="Gestiona tus finanzas de forma rápida y eficiente">
       <mb-quick-actions-card></mb-quick-actions-card>
-    </div>
+    </mb-dashboard-section>
 
-    <!-- Activity Summary -->
-    <div class="flex-shrink-0">
-      <mb-activity-summary-card 
+    <!-- Activity Summary Section -->
+    <mb-dashboard-section
+      title="📈 Actividad Reciente"
+      subtitle="Tu actividad financiera de los últimos días">
+      <mb-activity-summary-card
         [summary]="currentSummary"
-        (refreshClicked)="refreshData()">
-      </mb-activity-summary-card>
+        (refreshClicked)="refreshData()"></mb-activity-summary-card>
+    </mb-dashboard-section>
+
+    <!-- Daily Tip Section -->
+    <mb-dashboard-section *ngIf="currentSummary" title="💡 Consejo del día">
+      <div class="financial-card dashboard-card stat-card">
+        <div class="flex items-center justify-between mb-3">
+          <mat-icon class="text-primary-accent">lightbulb</mat-icon>
+        </div>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          {{ getDailyTip() }}
+        </p>
+      </div>
+    </mb-dashboard-section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="flex-shrink-0 py-3 px-2" *ngIf="!isLoading">
+    <div class="text-center">
+      <p class="text-xs text-gray-500">
+        Última actualización: {{ lastUpdated | date: 'medium' : 'es' }}
+      </p>
     </div>
-  </div>
+  </footer>
 </div>

@@ -5,24 +5,56 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: '/dashboard',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',
-    loadComponent: () => import('./auth/pages/login.page').then(m => m.LoginComponent)
+    loadComponent: () =>
+      import('./auth/pages/login/login.page').then(
+        m => m.LoginComponent
+      ),
+  },
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./auth/pages/register/register.page').then(
+        m => m.RegisterComponent
+      ),
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./dashboard/pages/dashboard.page').then(m => m.DashboardComponent),
-    canActivate: [AuthGuard]
+    loadComponent: () =>
+      import('./dashboard/pages/dashboard.page').then(
+        m => m.DashboardComponent
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'ingresos',
-    loadComponent: () => import('./ingresos/pages/ingresos.page').then(m => m.IncomeComponent),
-    canActivate: [AuthGuard]
+    loadComponent: () =>
+      import('./ingresos/pages/ingresos.page').then(
+        m => m.IncomeComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'gastos',
+    loadComponent: () =>
+      import('./gastos/pages/gastos.page').then(
+        m => m.ExpenseComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'ahorros',
+    loadComponent: () =>
+      import('./ahorros/pages/ahorros.page').then(
+        m => m.SavingsComponent
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: '**',
-    redirectTo: '/dashboard'
-  }
+    redirectTo: '/dashboard',
+  },
 ];

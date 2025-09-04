@@ -1,147 +1,342 @@
+import {
+  HttpClient,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { 
-  Income, 
-  Expense, 
-  Savings, 
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import {
+  Expense,
   FinancialSummary,
-  IncomeCategory,
-  ExpenseCategory,
-  SavingsCategory
+  Income,
+  Savings,
 } from '../models/financial.models';
+import { AuthService } from './auth.service';
+
+export interface DashboardSummaryResponse {
+  totalIncome: number;
+  totalExpenses: number;
+  totalSavings: number;
+  balance: number;
+  currentMonth: {
+    income: number;
+    expenses: number;
+    savings: number;
+  };
+  previousMonth: {
+    income: number;
+    expenses: number;
+    savings: number;
+  };
+}
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FinancialDataService {
-  private incomesSubject = new BehaviorSubject<Income[]>([]);
-  private expensesSubject = new BehaviorSubject<Expense[]>([]);
-  private savingsSubject = new BehaviorSubject<Savings[]>([]);
+  private readonly API_URL = 'http://localhost:5019/api';
+
+  private incomesSubject = new BehaviorSubject<Income[]>(
+    []
+  );
+  private expensesSubject = new BehaviorSubject<Expense[]>(
+    []
+  );
+  private savingsSubject = new BehaviorSubject<Savings[]>(
+    []
+  );
 
   public incomes$ = this.incomesSubject.asObservable();
   public expenses$ = this.expensesSubject.asObservable();
   public savings$ = this.savingsSubject.asObservable();
 
-  constructor() {
-    this.loadDataFromStorage();
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
+    // Initialize with empty data, will be loaded when user logs in
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${token}`
+    );
+  }
+
+  // Dashboard Summary
+  getDashboardSummary(): Observable<DashboardSummaryResponse> {
+    return this.http.get<DashboardSummaryResponse>(
+      `${this.API_URL}/dashboard/summary`,
+      { headers: this.getAuthHeaders() }
+    );
   }
 
   // Income methods
-  addIncome(income: Omit<Income, 'id'>): void {
-    const newIncome: Income = {
-      ...income,
-      id: this.generateId()
-    };
-    
-    const currentIncomes = this.incomesSubject.value;
-    const updatedIncomes = [...currentIncomes, newIncome];
-    
-    this.incomesSubject.next(updatedIncomes);
-    this.saveToStorage('incomes', updatedIncomes);
+  addIncome(
+    income: Omit<Income, 'id'>
+  ): Observable<Income> {
+    return this.http
+      .post<Income>(`${this.API_URL}/income`, income, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        tap(newIncome => {
+          const currentIncomes = this.incomesSubject.value;
+          this.incomesSubject.next([
+            ...currentIncomes,
+            newIncome,
+          ]);
+        })
+      );
   }
 
-  updateIncome(id: string, updates: Partial<Income>): void {
-    const currentIncomes = this.incomesSubject.value;
-    const updatedIncomes = currentIncomes.map(income => 
-      income.id === id ? { ...income, ...updates } : income
-    );
-    
-    this.incomesSubject.next(updatedIncomes);
-    this.saveToStorage('incomes', updatedIncomes);
+  getIncomes(): Observable<Income[]> {
+    return this.http
+      .get<
+        Income[]
+      >(`${this.API_URL}/income`, { headers: this.getAuthHeaders() })
+      .pipe(
+        tap(incomes => {
+          this.incomesSubject.next(incomes);
+        })
+      );
   }
 
-  deleteIncome(id: string): void {
-    const currentIncomes = this.incomesSubject.value;
-    const updatedIncomes = currentIncomes.filter(income => income.id !== id);
-    
-    this.incomesSubject.next(updatedIncomes);
-    this.saveToStorage('incomes', updatedIncomes);
+  updateIncome(
+    id: string,
+    updates: Partial<Income>
+  ): Observable<Income> {
+    return this.http
+      .put<Income>(
+        `${this.API_URL}/income/${id}`,
+        updates,
+        {
+          headers: this.getAuthHeaders(),
+        }
+      )
+      .pipe(
+        tap(updatedIncome => {
+          const currentIncomes = this.incomesSubject.value;
+          const updatedIncomes = currentIncomes.map(
+            income =>
+              income.id === updatedIncome.id
+                ? updatedIncome
+                : income
+          );
+          this.incomesSubject.next(updatedIncomes);
+        })
+      );
+  }
+
+  deleteIncome(id: string): Observable<void> {
+    return this.http
+      .delete<void>(`${this.API_URL}/income/${id}`, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        tap(() => {
+          const currentIncomes = this.incomesSubject.value;
+          const updatedIncomes = currentIncomes.filter(
+            income => income.id !== id
+          );
+          this.incomesSubject.next(updatedIncomes);
+        })
+      );
   }
 
   // Expense methods
-  addExpense(expense: Omit<Expense, 'id'>): void {
-    const newExpense: Expense = {
-      ...expense,
-      id: this.generateId()
-    };
-    
-    const currentExpenses = this.expensesSubject.value;
-    const updatedExpenses = [...currentExpenses, newExpense];
-    
-    this.expensesSubject.next(updatedExpenses);
-    this.saveToStorage('expenses', updatedExpenses);
+  addExpense(
+    expense: Omit<Expense, 'id'>
+  ): Observable<Expense> {
+    return this.http
+      .post<Expense>(`${this.API_URL}/expenses`, expense, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        tap(newExpense => {
+          const currentExpenses =
+            this.expensesSubject.value;
+          this.expensesSubject.next([
+            ...currentExpenses,
+            newExpense,
+          ]);
+        })
+      );
   }
 
-  updateExpense(id: string, updates: Partial<Expense>): void {
-    const currentExpenses = this.expensesSubject.value;
-    const updatedExpenses = currentExpenses.map(expense => 
-      expense.id === id ? { ...expense, ...updates } : expense
-    );
-    
-    this.expensesSubject.next(updatedExpenses);
-    this.saveToStorage('expenses', updatedExpenses);
+  getExpenses(): Observable<Expense[]> {
+    return this.http
+      .get<
+        Expense[]
+      >(`${this.API_URL}/expenses`, { headers: this.getAuthHeaders() })
+      .pipe(
+        tap(expenses => {
+          this.expensesSubject.next(expenses);
+        })
+      );
   }
 
-  deleteExpense(id: string): void {
-    const currentExpenses = this.expensesSubject.value;
-    const updatedExpenses = currentExpenses.filter(expense => expense.id !== id);
-    
-    this.expensesSubject.next(updatedExpenses);
-    this.saveToStorage('expenses', updatedExpenses);
+  updateExpense(
+    id: string,
+    updates: Partial<Expense>
+  ): Observable<Expense> {
+    return this.http
+      .put<Expense>(
+        `${this.API_URL}/expenses/${id}`,
+        updates,
+        {
+          headers: this.getAuthHeaders(),
+        }
+      )
+      .pipe(
+        tap(updatedExpense => {
+          const currentExpenses =
+            this.expensesSubject.value;
+          const updatedExpenses = currentExpenses.map(
+            expense =>
+              expense.id === id ? updatedExpense : expense
+          );
+          this.expensesSubject.next(updatedExpenses);
+        })
+      );
+  }
+
+  deleteExpense(id: string): Observable<void> {
+    return this.http
+      .delete<void>(`${this.API_URL}/expenses/${id}`, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        tap(() => {
+          const currentExpenses =
+            this.expensesSubject.value;
+          const updatedExpenses = currentExpenses.filter(
+            expense => expense.id !== id
+          );
+          this.expensesSubject.next(updatedExpenses);
+        })
+      );
   }
 
   // Savings methods
-  addSaving(saving: Omit<Savings, 'id'>): void {
-    const newSaving: Savings = {
-      ...saving,
-      id: this.generateId()
-    };
-    
-    const currentSavings = this.savingsSubject.value;
-    const updatedSavings = [...currentSavings, newSaving];
-    
-    this.savingsSubject.next(updatedSavings);
-    this.saveToStorage('savings', updatedSavings);
+  addSaving(
+    saving: Omit<Savings, 'id'>
+  ): Observable<Savings> {
+    return this.http
+      .post<Savings>(`${this.API_URL}/savings`, saving, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        tap(newSaving => {
+          const currentSavings = this.savingsSubject.value;
+          this.savingsSubject.next([
+            ...currentSavings,
+            newSaving,
+          ]);
+        })
+      );
   }
 
-  updateSaving(id: string, updates: Partial<Savings>): void {
-    const currentSavings = this.savingsSubject.value;
-    const updatedSavings = currentSavings.map(saving => 
-      saving.id === id ? { ...saving, ...updates } : saving
+  getSavings(): Observable<Savings[]> {
+    return this.http
+      .get<
+        Savings[]
+      >(`${this.API_URL}/savings`, { headers: this.getAuthHeaders() })
+      .pipe(
+        tap(savings => {
+          this.savingsSubject.next(savings);
+        })
+      );
+  }
+
+  updateSaving(
+    id: string,
+    updates: Partial<Savings>
+  ): Observable<Savings> {
+    return this.http
+      .put<Savings>(
+        `${this.API_URL}/savings/${id}`,
+        updates,
+        {
+          headers: this.getAuthHeaders(),
+        }
+      )
+      .pipe(
+        tap(updatedSaving => {
+          const currentSavings = this.savingsSubject.value;
+          const updatedSavings = currentSavings.map(
+            saving =>
+              saving.id === id ? updatedSaving : saving
+          );
+          this.savingsSubject.next(updatedSavings);
+        })
+      );
+  }
+
+  deleteSaving(id: string): Observable<void> {
+    return this.http
+      .delete<void>(`${this.API_URL}/savings/${id}`, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        tap(() => {
+          const currentSavings = this.savingsSubject.value;
+          const updatedSavings = currentSavings.filter(
+            saving => saving.id !== id
+          );
+          this.savingsSubject.next(updatedSavings);
+        })
+      );
+  }
+
+  // Local methods for compatibility
+  getMonthlyData(
+    month: number,
+    year: number
+  ): FinancialSummary {
+    const incomes = this.incomesSubject.value.filter(
+      income => {
+        const date = new Date(income.date);
+        return (
+          date.getMonth() === month &&
+          date.getFullYear() === year
+        );
+      }
     );
-    
-    this.savingsSubject.next(updatedSavings);
-    this.saveToStorage('savings', updatedSavings);
-  }
 
-  deleteSaving(id: string): void {
-    const currentSavings = this.savingsSubject.value;
-    const updatedSavings = currentSavings.filter(saving => saving.id !== id);
-    
-    this.savingsSubject.next(updatedSavings);
-    this.saveToStorage('savings', updatedSavings);
-  }
+    const expenses = this.expensesSubject.value.filter(
+      expense => {
+        const date = new Date(expense.date);
+        return (
+          date.getMonth() === month &&
+          date.getFullYear() === year
+        );
+      }
+    );
 
-  // Summary methods
-  getMonthlyData(month: number, year: number): FinancialSummary {
-    const incomes = this.incomesSubject.value.filter(income => {
-      const date = new Date(income.date);
-      return date.getMonth() === month && date.getFullYear() === year;
-    });
+    const savings = this.savingsSubject.value.filter(
+      saving => {
+        const date = new Date(saving.date);
+        return (
+          date.getMonth() === month &&
+          date.getFullYear() === year
+        );
+      }
+    );
 
-    const expenses = this.expensesSubject.value.filter(expense => {
-      const date = new Date(expense.date);
-      return date.getMonth() === month && date.getFullYear() === year;
-    });
-
-    const savings = this.savingsSubject.value.filter(saving => {
-      const date = new Date(saving.date);
-      return date.getMonth() === month && date.getFullYear() === year;
-    });
-
-    const totalIncome = incomes.reduce((sum, income) => sum + income.amount, 0);
-    const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-    const totalSavings = savings.reduce((sum, saving) => sum + saving.amount, 0);
+    const totalIncome = incomes.reduce(
+      (sum, income) => sum + income.amount,
+      0
+    );
+    const totalExpenses = expenses.reduce(
+      (sum, expense) => sum + expense.amount,
+      0
+    );
+    const totalSavings = savings.reduce(
+      (sum, saving) => sum + saving.amount,
+      0
+    );
 
     return {
       totalIncome,
@@ -151,111 +346,37 @@ export class FinancialDataService {
       currentMonth: {
         income: totalIncome,
         expenses: totalExpenses,
-        savings: totalSavings
+        savings: totalSavings,
       },
       previousMonth: {
         income: 0,
         expenses: 0,
-        savings: 0
-      }
+        savings: 0,
+      },
     };
   }
 
   getCurrentMonthSummary(): FinancialSummary {
     const now = new Date();
-    return this.getMonthlyData(now.getMonth(), now.getFullYear());
+    return this.getMonthlyData(
+      now.getMonth(),
+      now.getFullYear()
+    );
   }
 
-  // Utility methods
-  private generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
-  }
-
-  private saveToStorage(key: string, data: any): void {
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-
-  private loadDataFromStorage(): void {
-    const incomes = localStorage.getItem('incomes');
-    const expenses = localStorage.getItem('expenses');
-    const savings = localStorage.getItem('savings');
-
-    if (incomes) {
-      this.incomesSubject.next(JSON.parse(incomes));
-    }
-    if (expenses) {
-      this.expensesSubject.next(JSON.parse(expenses));
-    }
-    if (savings) {
-      this.savingsSubject.next(JSON.parse(savings));
+  // Load all data for current user
+  loadUserData(): void {
+    if (this.authService.isLoggedIn()) {
+      this.getIncomes().subscribe();
+      this.getExpenses().subscribe();
+      this.getSavings().subscribe();
     }
   }
 
-  // Sample data for demo
-  loadSampleData(): void {
-    const sampleIncomes: Income[] = [
-      {
-        id: '1',
-        amount: 150000,
-        description: 'Salario Mensual',
-        category: IncomeCategory.SALARY,
-        date: new Date(),
-        isRecurring: true
-      },
-      {
-        id: '2',
-        amount: 25000,
-        description: 'Bonus Trimestral',
-        category: IncomeCategory.BONUS,
-        date: new Date(),
-        isRecurring: false
-      }
-    ];
-
-    const sampleExpenses: Expense[] = [
-      {
-        id: '1',
-        amount: 45000,
-        description: 'Alquiler',
-        category: ExpenseCategory.HOUSING,
-        isFixed: true,
-        date: new Date(),
-        isRecurring: true
-      },
-      {
-        id: '2',
-        amount: 15000,
-        description: 'Supermercado',
-        category: ExpenseCategory.FOOD,
-        isFixed: false,
-        date: new Date(),
-        isRecurring: false
-      }
-    ];
-
-    const sampleSavings: Savings[] = [
-      {
-        id: '1',
-        amount: 20000,
-        description: 'Fondo de Emergencia',
-        category: SavingsCategory.EMERGENCY_FUND,
-        date: new Date()
-      },
-      {
-        id: '2',
-        amount: 100,
-        description: 'Ahorro en USD',
-        category: SavingsCategory.INVESTMENT,
-        date: new Date()
-      }
-    ];
-
-    this.incomesSubject.next(sampleIncomes);
-    this.expensesSubject.next(sampleExpenses);
-    this.savingsSubject.next(sampleSavings);
-
-    this.saveToStorage('incomes', sampleIncomes);
-    this.saveToStorage('expenses', sampleExpenses);
-    this.saveToStorage('savings', sampleSavings);
+  // Clear data on logout
+  clearData(): void {
+    this.incomesSubject.next([]);
+    this.expensesSubject.next([]);
+    this.savingsSubject.next([]);
   }
 }

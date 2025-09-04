@@ -1,0 +1,198 @@
+<div class="page-container">
+  <!-- Theme Toggle Button -->
+  <div class="absolute top-4 right-4 z-10">
+    <mb-theme-toggle></mb-theme-toggle>
+  </div>
+
+  <!-- Background -->
+  <div class="auth-background"></div>
+
+  <!-- Floating Elements -->
+  <div class="floating-elements">
+    <div class="element-1"></div>
+    <div class="element-2"></div>
+  </div>
+
+  <div class="container-center">
+    <!-- Header -->
+    <mb-page-header
+      title="Crear Cuenta"
+      subtitle="Únete a My Balance y toma control de tus finanzas"
+      [showLogo]="true">
+      <svg
+        slot="logo"
+        width="48"
+        height="48"
+        viewBox="0 0 64 64"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="32" fill="url(#paint0_linear)" />
+        <path
+          d="M20 40V24C20 21.7909 21.7909 20 24 20H40C42.2091 20 44 21.7909 44 24V40C44 42.2091 42.2091 44 40 44H24C21.7909 44 20 42.2091 20 40Z"
+          fill="white" />
+        <path d="M32 28V36" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M28 32H36" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
+        <defs>
+          <linearGradient
+            id="paint0_linear"
+            x1="0"
+            y1="0"
+            x2="64"
+            y2="64"
+            gradientUnits="userSpaceOnUse">
+            <stop stop-color="#8B5CF6" />
+            <stop offset="1" stop-color="#4C1D95" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </mb-page-header>
+
+    <!-- Register Form -->
+    <div class="card card--auth">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form">
+        <!-- Name Fields Row -->
+        <div class="form__row">
+          <!-- First Name Field -->
+          <mat-form-field appearance="outline" class="field">
+            <input
+              matInput
+              type="text"
+              formControlName="firstName"
+              placeholder="Nombre"
+              class="text-lg" />
+            <mat-icon matSuffix class="text-gray-400">person</mat-icon>
+            <mat-error>{{ getFieldError('firstName') }}</mat-error>
+          </mat-form-field>
+
+          <!-- Last Name Field -->
+          <mat-form-field appearance="outline" class="field">
+            <input
+              matInput
+              type="text"
+              formControlName="lastName"
+              placeholder="Apellido"
+              class="text-lg" />
+            <mat-icon matSuffix class="text-gray-400">person_outline</mat-icon>
+            <mat-error>{{ getFieldError('lastName') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Email Field -->
+        <mat-form-field appearance="outline" class="field">
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="Correo electrónico"
+            class="text-lg" />
+          <mat-icon matSuffix class="text-gray-400">email</mat-icon>
+          <mat-error>{{ getFieldError('email') }}</mat-error>
+        </mat-form-field>
+
+        <!-- Password Field -->
+        <mat-form-field appearance="outline" class="field">
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Contraseña (mínimo 6 caracteres)"
+            class="text-lg" />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Ocultar contraseña'"
+            [attr.aria-pressed]="hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error>{{ getFieldError('password') }}</mat-error>
+        </mat-form-field>
+
+        <!-- Confirm Password Field -->
+        <mat-form-field appearance="outline" class="field">
+          <input
+            matInput
+            [type]="hideConfirmPassword ? 'password' : 'text'"
+            formControlName="confirmPassword"
+            placeholder="Confirmar contraseña"
+            class="text-lg" />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hideConfirmPassword = !hideConfirmPassword"
+            [attr.aria-label]="'Ocultar contraseña'"
+            [attr.aria-pressed]="hideConfirmPassword">
+            <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error>{{ getFieldError('confirmPassword') }}</mat-error>
+        </mat-form-field>
+
+        <!-- Error Message -->
+        <mb-message
+          *ngIf="errorMessage"
+          [message]="errorMessage"
+          title="Error de registro"
+          type="error"></mb-message>
+
+        <!-- Submit Button -->
+        <button
+          mat-raised-button
+          type="submit"
+          mbButton
+          variant="primary"
+          size="lg"
+          class="mb-btn--full"
+          *ngIf="!isLoading"
+          class="mb-btn"
+          [disabled]="!registerForm.valid || isLoading">
+          <div *ngIf="isLoading" class="flex items-center justify-center space-x-2">
+            <mat-spinner diameter="20"></mat-spinner>
+            <span>Creando cuenta...</span>
+          </div>
+          <span *ngIf="!isLoading" class="flex items-center justify-center space-x-2">
+            <mat-icon>person_add</mat-icon>
+            <span>Crear Cuenta</span>
+          </span>
+        </button>
+      </form>
+
+      <!-- Login Link -->
+      <div class="footer--page">
+        <p class="text-sm text-gray-600">
+          ¿Ya tienes una cuenta?
+          <button
+            mat-button
+            color="primary"
+            class="nav-link ml-1 font-semibold"
+            (click)="navigateToLogin()">
+            Iniciar Sesión
+          </button>
+        </p>
+      </div>
+
+      <!-- Terms Info -->
+      <div class="mt-4">
+        <div class="terms-info">
+          <div class="terms-info__content">
+            <mat-icon class="terms-info__icon">info</mat-icon>
+            <div class="terms-info__text">
+              <p class="terms-info__title">Al crear una cuenta, aceptas:</p>
+              <ul class="terms-info__list">
+                <li>• Nuestros términos y condiciones de uso</li>
+                <li>• El procesamiento seguro de tus datos financieros</li>
+                <li>• Recibir notificaciones importantes sobre tu cuenta</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer footer--auth">
+      <p>&copy; 2025 My Balance. Control financiero inteligente.</p>
+    </div>
+  </div>
+</div>

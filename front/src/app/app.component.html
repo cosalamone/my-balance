@@ -1,56 +1,95 @@
 <div class="app-container">
   <mat-sidenav-container class="sidenav-container" *ngIf="isAuthenticated">
-    <mat-sidenav #drawer class="sidenav" fixedInViewport
-        [attr.role]="'navigation'"
-        [mode]="'over'"
-        [opened]="false">
-      <mat-toolbar>Menú</mat-toolbar>
-      <mat-nav-list>
-        <a mat-list-item routerLink="/dashboard" (click)="drawer.close()">
-          <mat-icon>dashboard</mat-icon>
-          <span>Dashboard</span>
+    <mat-sidenav
+      #drawer
+      class="sidenav"
+      fixedInViewport
+      [attr.role]="'navigation'"
+      [mode]="'over'"
+      [opened]="false"
+    >
+      <mat-toolbar class="menu-header">Menú</mat-toolbar>
+      <mat-nav-list class="navigation-list">
+        <a
+          mat-list-item
+          routerLink="/dashboard"
+          routerLinkActive="active-nav-item"
+          (click)="drawer.close()"
+          class="nav-item"
+        >
+          <mat-icon class="nav-icon">dashboard</mat-icon>
+          <span class="nav-text">Dashboard</span>
         </a>
-        <a mat-list-item routerLink="/ingresos" (click)="drawer.close()">
-          <mat-icon>trending_up</mat-icon>
-          <span>Ingresos</span>
+        <a
+          mat-list-item
+          routerLink="/ingresos"
+          routerLinkActive="active-nav-item"
+          (click)="drawer.close()"
+          class="nav-item"
+        >
+          <mat-icon class="nav-icon">trending_up</mat-icon>
+          <span class="nav-text">Ingresos</span>
         </a>
-        <a mat-list-item routerLink="/gastos" (click)="drawer.close()">
-          <mat-icon>trending_down</mat-icon>
-          <span>Gastos</span>
+        <a
+          mat-list-item
+          routerLink="/gastos"
+          routerLinkActive="active-nav-item"
+          (click)="drawer.close()"
+          class="nav-item"
+        >
+          <mat-icon class="nav-icon">trending_down</mat-icon>
+          <span class="nav-text">Gastos</span>
         </a>
-        <a mat-list-item routerLink="/ahorros" (click)="drawer.close()">
-          <mat-icon>savings</mat-icon>
-          <span>Ahorros</span>
+        <a
+          mat-list-item
+          routerLink="/ahorros"
+          routerLinkActive="active-nav-item"
+          (click)="drawer.close()"
+          class="nav-item"
+        >
+          <mat-icon class="nav-icon">savings</mat-icon>
+          <span class="nav-text">Ahorros</span>
         </a>
-        <a mat-list-item routerLink="/reportes" (click)="drawer.close()">
-          <mat-icon>analytics</mat-icon>
-          <span>Reportes</span>
+        <a
+          mat-list-item
+          routerLink="/reportes"
+          routerLinkActive="active-nav-item"
+          (click)="drawer.close()"
+          class="nav-item"
+        >
+          <mat-icon class="nav-icon">analytics</mat-icon>
+          <span class="nav-text">Reportes</span>
         </a>
-        <mat-divider></mat-divider>
-        <a mat-list-item (click)="logout(); drawer.close()">
-          <mat-icon>logout</mat-icon>
-          <span>Cerrar Sesión</span>
+        <mat-divider class="nav-divider"></mat-divider>
+        <a
+          mat-list-item
+          (click)="logout(); drawer.close()"
+          class="nav-item logout-item"
+        >
+          <mat-icon class="nav-icon">logout</mat-icon>
+          <span class="nav-text">Cerrar Sesión</span>
         </a>
       </mat-nav-list>
     </mat-sidenav>
-    
+
     <mat-sidenav-content>
       <mat-toolbar color="primary">
         <button
           type="button"
           aria-label="Toggle sidenav"
           mat-icon-button
-          (click)="drawer.toggle()">
+          (click)="drawer.toggle()"
+        >
           <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
-        <span>{{title}}</span>
+        <span>{{ title }}</span>
         <span class="spacer"></span>
         <mb-theme-toggle></mb-theme-toggle>
         <button mat-icon-button (click)="logout()">
           <mat-icon>logout</mat-icon>
         </button>
       </mat-toolbar>
-      
+
       <main class="main-content">
         <router-outlet></router-outlet>
       </main>

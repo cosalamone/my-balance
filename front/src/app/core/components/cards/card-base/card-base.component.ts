@@ -4,7 +4,12 @@ import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { CardBaseModel, CardAction, CardSection, CardContent } from '../../../models/card-base.model';
+import {
+  CardBaseModel,
+  CardAction,
+  CardSection,
+  CardContent,
+} from '../../../models/card-base.model';
 
 @Component({
   selector: 'mb-card-base',
@@ -16,9 +21,8 @@ import { CardBaseModel, CardAction, CardSection, CardContent } from '../../../mo
     RouterModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
-
 })
 export class CardBaseComponent {
   @Input() cardModel!: CardBaseModel;
@@ -40,12 +44,13 @@ export class CardBaseComponent {
   }
 
   getSectionLayoutClasses(section: CardSection): string {
-    const baseClass = section.layout === 'grid' 
-      ? `grid grid-cols-${section.gridCols || 2} gap-1` 
-      : section.layout === 'flex' 
-        ? 'flex flex-wrap gap-1' 
-        : 'space-y-1';
-    
+    const baseClass =
+      section.layout === 'grid'
+        ? `grid grid-cols-${section.gridCols || 2} gap-1`
+        : section.layout === 'flex'
+          ? 'flex flex-wrap gap-1'
+          : 'space-y-1';
+
     return baseClass;
   }
 
@@ -58,25 +63,27 @@ export class CardBaseComponent {
 
   formatValue(value: any, formatType?: string): string {
     if (value === null || value === undefined) return '';
-    
+
     switch (formatType) {
       case 'currency':
         return new Intl.NumberFormat('es-ES', {
           style: 'currency',
           currency: 'EUR',
           minimumFractionDigits: 0,
-          maximumFractionDigits: 0
-        }).format(value).replace('€', '$');
-      
+          maximumFractionDigits: 0,
+        })
+          .format(value)
+          .replace('€', '$');
+
       case 'number':
         return new Intl.NumberFormat('es-ES', {
           minimumFractionDigits: 0,
-          maximumFractionDigits: 0
+          maximumFractionDigits: 0,
         }).format(value);
-      
+
       case 'percentage':
         return `${value}%`;
-      
+
       default:
         return value.toString();
     }

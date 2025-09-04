@@ -23,6 +23,6 @@ bootstrapApplication(AppComponent, {
     FinancialDataService,
     NotificationService,
     BiometricAuthService,
-    ThemeService
-  ]
+    ThemeService,
+  ],
 }).catch(err => console.error(err));

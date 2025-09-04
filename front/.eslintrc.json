@@ -1,0 +1,25 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": [
+        "@angular-eslint/recommended",
+        "@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "array-bracket-newline": [
+          "error",
+          { "multiline": true, "minItems": 2 }
+        ],
+        "array-element-newline": ["error", { "multiline": true, "minItems": 2 }]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["@angular-eslint/template/recommended"],
+      "rules": {}
+    }
+  ]
+}

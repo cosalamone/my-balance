@@ -1,0 +1,147 @@
+<div class="mb-flex-center mb-min-h-screen p-4">
+  <!-- Theme Toggle -->
+  <div class="absolute top-6 right-6 z-50">
+    <mb-theme-toggle></mb-theme-toggle>
+  </div>
+
+  <!-- Login Card -->
+  <div class="mb-card mb-card--lg w-full max-w-md">
+    <!-- Header -->
+    <div class="text-center mb-space-y-4">
+      <h1 class="mb-text--2xl mb-text--bold mb-text--primary">💰 MyBalance</h1>
+      <h2 class="mb-text--lg mb-text--semibold mb-text--primary">Bienvenido de vuelta</h2>
+      <p class="mb-text--base mb-text--secondary">Ingresa tus credenciales para continuar</p>
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mb-space-y-6">
+      <!-- Email Field -->
+      <div>
+        <mat-form-field appearance="outline" class="mb-w-full">
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="Correo electrónico"
+            class="mb-input" />
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error>{{ getFieldError('email') }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Password Field -->
+      <div>
+        <mat-form-field appearance="outline" class="mb-w-full">
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Contraseña"
+            class="mb-input" />
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error>{{ getFieldError('password') }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Error Message -->
+      <mb-message
+        *ngIf="errorMessage"
+        [message]="errorMessage"
+        title="Error de autenticación"
+        type="error"></mb-message>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="mb-btn mb-btn--primary mb-btn--lg mb-btn--full"
+        [class.mb-btn--loading]="isLoading"
+        [disabled]="!loginForm.valid || isLoading">
+        <span *ngIf="!isLoading" class="mb-flex-center mb-space-x-2">
+          <mat-icon>login</mat-icon>
+          <span>Iniciar Sesión</span>
+        </span>
+      </button>
+    </form>
+
+    <!-- Biometric Section -->
+    <div *ngIf="biometricSupported" class="mb-space-y-4 mt-8">
+      <div class="text-center">
+        <span class="mb-text--sm mb-text--muted">o continúa con</span>
+      </div>
+
+      <button
+        class="mb-btn mb-btn--secondary mb-btn--lg mb-btn--full"
+        [class.mb-btn--loading]="biometricLoading"
+        [disabled]="biometricLoading"
+        (click)="onBiometricLogin()">
+        <span *ngIf="!biometricLoading" class="mb-flex-center mb-space-x-2">
+          <mat-icon>fingerprint</mat-icon>
+          <span>Autenticación Biométrica</span>
+        </span>
+      </button>
+
+      <button
+        *ngIf="showRegisterBiometric"
+        class="mb-btn mb-btn--secondary mb-btn--md mb-btn--full"
+        [disabled]="biometricLoading || !loginForm.valid"
+        (click)="onRegisterBiometric()">
+        <span class="mb-flex-center mb-space-x-2">
+          <mat-icon>add_circle_outline</mat-icon>
+          <span>Configurar Huella Digital</span>
+        </span>
+      </button>
+
+      <button
+        *ngIf="!showRegisterBiometric"
+        class="mb-btn mb-btn--danger mb-btn--sm mb-btn--full"
+        (click)="onClearBiometricCredentials()">
+        <span class="mb-flex-center mb-space-x-2">
+          <mat-icon>delete_outline</mat-icon>
+          <span>Eliminar Credenciales Biométricas</span>
+        </span>
+      </button>
+    </div>
+
+    <!-- Not Supported Message -->
+    <mb-message
+      *ngIf="!biometricSupported"
+      message="Tu dispositivo no soporta autenticación por huella digital o no está configurada correctamente."
+      title="Autenticación biométrica no disponible"
+      type="warning"
+      class="mt-8"></mb-message>
+
+    <!-- Register Link -->
+    <div class="text-center mt-8">
+      <p class="mb-text--sm mb-text--secondary">
+        ¿No tienes una cuenta?
+        <a routerLink="/register" class="mb-link">Crear cuenta nueva</a>
+      </p>
+    </div>
+
+    <!-- Demo Info -->
+    <div class="mb-alert mb-alert--info mt-6">
+      <mat-icon class="mb-alert__icon">info</mat-icon>
+      <div class="mb-alert__content">
+        <div class="mb-alert__title">Datos de demostración</div>
+        <div class="mb-alert__message">
+          <strong>Email:</strong>
+          demo&#64;example.com
+          <br />
+          <strong>Contraseña:</strong>
+          demo123
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="absolute bottom-4 left-0 right-0 text-center">
+    <p class="mb-text--sm mb-text--muted mb-flex-center mb-space-x-2">
+      <span>&copy; 2025</span>
+      <mat-icon class="text-sm">favorite</mat-icon>
+      <span>MyBalance - Control financiero inteligente</span>
+    </p>
+  </div>
+</div>

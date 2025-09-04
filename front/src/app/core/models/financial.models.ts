@@ -1,32 +1,39 @@
 // Enums para categorías
 export enum IncomeCategory {
-  SALARY = 'salary',
-  BONUS = 'bonus',
-  FREELANCE = 'freelance',
-  INVESTMENT = 'investment',
-  GIFT = 'gift',
-  OTHER = 'other'
+  SALARY = 0,
+  BONUS = 1,
+  FREELANCE = 2,
+  INVESTMENT = 3,
+  GIFT = 4,
+  AGUINALDO = 5,
+  OTHER = 6,
 }
 
 export enum ExpenseCategory {
-  HOUSING = 'housing',
-  FOOD = 'food',
-  TRANSPORTATION = 'transportation',
-  ENTERTAINMENT = 'entertainment',
-  HEALTHCARE = 'healthcare',
-  EDUCATION = 'education',
-  SHOPPING = 'shopping',
-  UTILITIES = 'utilities',
-  OTHER = 'other'
+  HOUSING = 0,
+  FOOD = 1,
+  TRANSPORTATION = 2,
+  ENTERTAINMENT = 3,
+  HEALTHCARE = 4,
+  EDUCATION = 5,
+  SHOPPING = 6,
+  UTILITIES = 7,
+  OTHER = 8,
 }
 
 export enum SavingsCategory {
-  EMERGENCY_FUND = 'emergency_fund',
-  VACATION = 'vacation',
-  RETIREMENT = 'retirement',
-  INVESTMENT = 'investment',
-  GOAL = 'goal',
-  OTHER = 'other'
+  EMERGENCY_FUND = 'EmergencyFund',
+  VACATION = 'Vacation',
+  RETIREMENT = 'Retirement',
+  INVESTMENT = 'Investment',
+  GOAL = 'Goal',
+  OTHER = 'Other',
+}
+
+// Enum para tipos de gasto
+export enum ExpenseType {
+  FIXED = 0,
+  VARIABLE = 1,
 }
 
 // Interfaces principales
@@ -48,6 +55,7 @@ export interface Expense {
   date: Date;
   isFixed: boolean;
   isRecurring: boolean;
+  type?: ExpenseType;
   recurrencePattern?: 'monthly' | 'weekly' | 'yearly';
 }
 
@@ -59,6 +67,7 @@ export interface Savings {
   date: Date;
   goalAmount?: number;
   targetDate?: Date;
+  targetAmount?: number;
 }
 
 // Interface para el resumen financiero
@@ -106,5 +115,8 @@ export interface MonthlyTrend {
 }
 
 // Tipos de utilidad
-export type TransactionType = 'income' | 'expense' | 'savings';
+export type TransactionType =
+  | 'income'
+  | 'expense'
+  | 'savings';
 export type Transaction = Income | Expense | Savings;

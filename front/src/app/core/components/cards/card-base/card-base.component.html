@@ -1,48 +1,69 @@
-<div class="financial-card dashboard-card" [ngClass]="cardModel.config.containerClasses">
+<div
+  class="financial-card dashboard-card"
+  [ngClass]="cardModel.config.containerClasses"
+>
   <!-- Header -->
-  <div *ngIf="cardModel.config.title" 
-       class="flex items-center justify-between mb-1" 
-       [ngClass]="cardModel.config.headerClasses">
+  <div
+    *ngIf="cardModel.config.title"
+    class="flex items-center justify-between mb-1"
+    [ngClass]="cardModel.config.headerClasses"
+  >
     <div>
-      <h2 class="text-sm font-semibold dashboard-title">{{ cardModel.config.title }}</h2>
-      <p *ngIf="cardModel.config.subtitle" class="dashboard-subtitle text-xs">{{ cardModel.config.subtitle }}</p>
+      <h2 class="text-sm font-semibold dashboard-title">
+        {{ cardModel.config.title }}
+      </h2>
+      <p *ngIf="cardModel.config.subtitle" class="dashboard-subtitle text-xs">
+        {{ cardModel.config.subtitle }}
+      </p>
     </div>
-    <button *ngIf="cardModel.config.showRefreshButton" 
-            mat-icon-button 
-            (click)="onRefresh()" 
-            class="text-xs p-1">
+    <button
+      *ngIf="cardModel.config.showRefreshButton"
+      mat-icon-button
+      (click)="onRefresh()"
+      class="text-xs p-1"
+    >
       <mat-icon class="text-xs">refresh</mat-icon>
     </button>
   </div>
 
   <!-- Divider -->
-  <hr *ngIf="cardModel.config.showDivider" class="my-2 border-gray-200">
+  <hr *ngIf="cardModel.config.showDivider" class="my-2 border-gray-200" />
 
   <!-- Content -->
   <div class="card-content" [ngClass]="cardModel.config.contentClasses">
     <!-- Sections -->
-    <div *ngFor="let section of cardModel.sections" 
-         class="section" 
-         [ngClass]="section.sectionClasses">
-      
+    <div
+      *ngFor="let section of cardModel.sections"
+      class="section"
+      [ngClass]="section.sectionClasses"
+    >
       <!-- Section Header -->
-      <div *ngIf="section.showHeader && (section.title || section.subtitle)" 
-           class="section-header mb-1">
-        <h3 *ngIf="section.title" class="text-xs font-medium text-gray-700">{{ section.title }}</h3>
-        <p *ngIf="section.subtitle" class="text-xs text-gray-500">{{ section.subtitle }}</p>
+      <div
+        *ngIf="section.showHeader && (section.title || section.subtitle)"
+        class="section-header mb-1"
+      >
+        <h3 *ngIf="section.title" class="text-xs font-medium text-gray-700">
+          {{ section.title }}
+        </h3>
+        <p *ngIf="section.subtitle" class="text-xs text-gray-500">
+          {{ section.subtitle }}
+        </p>
       </div>
 
       <!-- Section Content -->
       <div [ngClass]="getSectionLayoutClasses(section)">
-        <div *ngFor="let content of section.contents" 
-             class="content-item" 
-             [ngClass]="content.containerClasses">
-          
+        <div
+          *ngFor="let content of section.contents"
+          class="content-item"
+          [ngClass]="content.containerClasses"
+        >
           <!-- Text Content -->
           <div *ngIf="content.type === 'text'" class="flex flex-col">
-            <span *ngIf="content.label" 
-                  class="text-xs font-medium text-gray-600 mb-0.5" 
-                  [ngClass]="content.labelClasses">
+            <span
+              *ngIf="content.label"
+              class="text-xs font-medium text-gray-600 mb-0.5"
+              [ngClass]="content.labelClasses"
+            >
               {{ content.label }}
             </span>
             <span class="text-sm" [ngClass]="content.valueClasses">
@@ -52,9 +73,11 @@
 
           <!-- Number Content -->
           <div *ngIf="content.type === 'number'" class="flex flex-col">
-            <span *ngIf="content.label" 
-                  class="text-xs font-medium text-gray-600 mb-0.5" 
-                  [ngClass]="content.labelClasses">
+            <span
+              *ngIf="content.label"
+              class="text-xs font-medium text-gray-600 mb-0.5"
+              [ngClass]="content.labelClasses"
+            >
               {{ content.label }}
             </span>
             <span class="text-sm font-bold" [ngClass]="content.valueClasses">
@@ -65,17 +88,23 @@
           <!-- Icon Content -->
           <div *ngIf="content.type === 'icon'" class="flex items-center">
             <div class="p-1 rounded-lg" [ngClass]="content.containerClasses">
-              <mat-icon class="text-sm" [ngClass]="content.iconClasses">{{ content.icon }}</mat-icon>
+              <mat-icon class="text-sm" [ngClass]="content.iconClasses">{{
+                content.icon
+              }}</mat-icon>
             </div>
             <div *ngIf="content.label || content.value" class="ml-1.5">
-              <span *ngIf="content.label" 
-                    class="text-xs font-medium" 
-                    [ngClass]="content.labelClasses">
+              <span
+                *ngIf="content.label"
+                class="text-xs font-medium"
+                [ngClass]="content.labelClasses"
+              >
                 {{ content.label }}
               </span>
-              <span *ngIf="content.value" 
-                    class="text-xs" 
-                    [ngClass]="content.valueClasses">
+              <span
+                *ngIf="content.value"
+                class="text-xs"
+                [ngClass]="content.valueClasses"
+              >
                 {{ formatValue(content.value, content.formatType) }}
               </span>
             </div>
@@ -95,16 +124,20 @@
     </div>
 
     <!-- Global Actions -->
-    <div *ngIf="cardModel.actions && cardModel.actions.length > 0" 
-         class="actions-section mt-2">
+    <div
+      *ngIf="cardModel.actions && cardModel.actions.length > 0"
+      class="actions-section mt-2"
+    >
       <div class="grid gap-1" [ngClass]="getActionsGridClasses()">
-        <button *ngFor="let action of cardModel.actions"
-                mat-raised-button
-                [color]="action.color"
-                [routerLink]="action.routerLink"
-                (click)="onActionClick(action)"
-                class="w-full h-8 flex flex-col items-center justify-center space-y-0 text-xs"
-                [ngClass]="action.classes">
+        <button
+          *ngFor="let action of cardModel.actions"
+          mat-raised-button
+          [color]="action.color"
+          [routerLink]="action.routerLink"
+          (click)="onActionClick(action)"
+          class="w-full h-8 flex flex-col items-center justify-center space-y-0 text-xs"
+          [ngClass]="action.classes"
+        >
           <mat-icon class="text-xs">{{ action.icon }}</mat-icon>
           <span class="text-xs">{{ action.label }}</span>
         </button>

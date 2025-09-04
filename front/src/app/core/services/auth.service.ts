@@ -1,50 +1,84 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: {
+    id: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+}
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  private readonly API_URL = 'http://localhost:5019/api';
+
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Check if user is logged in from localStorage
     const token = localStorage.getItem('authToken');
     const user = localStorage.getItem('currentUser');
-    
+
     if (token && user) {
       this.isAuthenticatedSubject.next(true);
       this.currentUserSubject.next(JSON.parse(user));
     }
   }
 
-  login(email: string, password: string): Promise<boolean> {
-    // Simulate API call - In production, this would call your backend
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Simple validation for demo purposes
-        if (email === 'demo@example.com' && password === 'demo123') {
-          const user = {
-            id: '1',
-            email: email,
-            name: 'Usuario Demo'
-          };
-          
-          localStorage.setItem('authToken', 'demo-token');
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          
+  login(email: string, password: string): Observable<AuthResponse> {
+    const loginData: LoginRequest = { email, password };
+
+    return this.http
+      .post<AuthResponse>(`${this.API_URL}/auth/login`, loginData)
+      .pipe(
+        tap((response: AuthResponse) => {
+          // Store token and user data
+          localStorage.setItem('authToken', response.token);
+          localStorage.setItem('currentUser', JSON.stringify(response.user));
+
+          // Update subjects
           this.isAuthenticatedSubject.next(true);
-          this.currentUserSubject.next(user);
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      }, 1000);
-    });
+          this.currentUserSubject.next(response.user);
+        })
+      );
+  }
+
+  register(registerData: RegisterRequest): Observable<AuthResponse> {
+    return this.http
+      .post<AuthResponse>(`${this.API_URL}/auth/register`, registerData)
+      .pipe(
+        tap((response: AuthResponse) => {
+          // Store token and user data
+          localStorage.setItem('authToken', response.token);
+          localStorage.setItem('currentUser', JSON.stringify(response.user));
+
+          // Update subjects
+          this.isAuthenticatedSubject.next(true);
+          this.currentUserSubject.next(response.user);
+        })
+      );
   }
 
   logout(): void {
@@ -60,5 +94,9 @@ export class AuthService {
 
   getCurrentUser(): any {
     return this.currentUserSubject.value;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('authToken');
   }
 }

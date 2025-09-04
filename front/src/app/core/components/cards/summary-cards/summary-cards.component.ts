@@ -19,7 +19,7 @@ import { SummaryCardModel } from '../../../models/summary-card.model';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    CardBaseComponent
+    CardBaseComponent,
   ],
 })
 export class SummaryCardsComponent implements OnChanges {
@@ -39,7 +39,7 @@ export class SummaryCardsComponent implements OnChanges {
 
     const cardContents = {
       income: {
-        type: showIcons ? 'icon' as const : 'number' as const,
+        type: showIcons ? ('icon' as const) : ('number' as const),
         label: 'Ingresos del Mes',
         value: summary.totalIncome,
         icon: 'trending_up',
@@ -49,7 +49,7 @@ export class SummaryCardsComponent implements OnChanges {
         formatType: 'currency' as const,
       },
       expenses: {
-        type: showIcons ? 'icon' as const : 'number' as const,
+        type: showIcons ? ('icon' as const) : ('number' as const),
         label: 'Gastos del Mes',
         value: summary.totalExpenses,
         icon: 'trending_down',
@@ -59,7 +59,7 @@ export class SummaryCardsComponent implements OnChanges {
         formatType: 'currency' as const,
       },
       savings: {
-        type: showIcons ? 'icon' as const : 'number' as const,
+        type: showIcons ? ('icon' as const) : ('number' as const),
         label: 'Ahorros del Mes',
         value: summary.totalSavings,
         icon: 'savings',
@@ -69,15 +69,19 @@ export class SummaryCardsComponent implements OnChanges {
         formatType: 'currency' as const,
       },
       balance: {
-        type: showIcons ? 'icon' as const : 'number' as const,
+        type: showIcons ? ('icon' as const) : ('number' as const),
         label: 'Balance Neto',
         value: summary.balance,
         icon: summary.balance >= 0 ? 'trending_up' : 'trending_down',
-        iconClasses: (summary.balance >= 0 ? 'text-income-600' : 'text-expense-600') + ' text-sm',
-        valueClasses: 'text-sm font-bold ' + (summary.balance >= 0 ? 'text-income-600' : 'text-expense-600'),
+        iconClasses:
+          (summary.balance >= 0 ? 'text-income-600' : 'text-expense-600') +
+          ' text-sm',
+        valueClasses:
+          'text-sm font-bold ' +
+          (summary.balance >= 0 ? 'text-income-600' : 'text-expense-600'),
         containerClasses: 'financial-card dashboard-card',
         formatType: 'currency' as const,
-      }
+      },
     };
 
     return {
@@ -93,11 +97,11 @@ export class SummaryCardsComponent implements OnChanges {
           gridCols: 2,
           sectionClasses: 'lg:grid-cols-4',
           showHeader: false,
-          contents: order.map(key => cardContents[key])
-        }
+          contents: order.map(key => cardContents[key]),
+        },
       ],
       actions: model.actions,
-      refreshAction: model.refreshAction
+      refreshAction: model.refreshAction,
     };
   }
 }
