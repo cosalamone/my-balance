@@ -421,9 +421,8 @@ export class SavingsComponent implements OnInit {
   }
 
   scrollToForm(): void {
-    const formElement = document.querySelector(
-      '.savings-form-card'
-    );
+    const formElement =
+      document.querySelector('.content-card');
     if (formElement) {
       formElement.scrollIntoView({
         behavior: 'smooth',
