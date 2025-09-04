@@ -1,0 +1,72 @@
+<!-- Select Dropdown -->
+<mat-form-field
+  *ngIf="!config.autocomplete"
+  [appearance]="config.appearance || 'outline'"
+  class="w-full">
+  <mat-select
+    [placeholder]="config.placeholder + (config.required ? '*' : '')"
+    [multiple]="config.multiple"
+    [value]="value"
+    (selectionChange)="onSelectionChange($event)"
+    (blur)="onTouched()"
+    [disabled]="disabled">
+    <mat-option
+      *ngFor="let option of config.options"
+      [value]="option.value"
+      [disabled]="option.disabled">
+      <div class="flex items-center space-x-2">
+        <mat-icon *ngIf="option.icon" class="text-gray-500 text-sm">
+          {{ option.icon }}
+        </mat-icon>
+        <span>{{ option.label }}</span>
+      </div>
+    </mat-option>
+  </mat-select>
+
+  <mat-icon *ngIf="config.icon" matSuffix class="text-gray-400">
+    {{ config.icon }}
+  </mat-icon>
+
+  <mat-hint *ngIf="config.hint">{{ config.hint }}</mat-hint>
+
+  <mat-error *ngIf="control && control.invalid && control.touched">
+    {{ getErrorMessage() }}
+  </mat-error>
+</mat-form-field>
+
+<!-- Autocomplete -->
+<mat-form-field
+  *ngIf="config.autocomplete"
+  [appearance]="config.appearance || 'outline'"
+  class="w-full">
+  <input
+    matInput
+    [placeholder]="config.placeholder + (config.required ? '*' : '')"
+    [matAutocomplete]="auto"
+    [value]="displayValue"
+    (input)="onAutocompleteInput($event)"
+    (blur)="onTouched()"
+    [disabled]="disabled"
+    class="text-lg" />
+
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAutocompleteSelection($event)">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.value">
+      <div class="flex items-center space-x-2">
+        <mat-icon *ngIf="option.icon" class="text-gray-500 text-sm">
+          {{ option.icon }}
+        </mat-icon>
+        <span>{{ option.label }}</span>
+      </div>
+    </mat-option>
+  </mat-autocomplete>
+
+  <mat-icon *ngIf="config.icon" matSuffix class="text-gray-400">
+    {{ config.icon }}
+  </mat-icon>
+
+  <mat-hint *ngIf="config.hint">{{ config.hint }}</mat-hint>
+
+  <mat-error *ngIf="control && control.invalid && control.touched">
+    {{ getErrorMessage() }}
+  </mat-error>
+</mat-form-field>

@@ -15,23 +15,21 @@ import {
 } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+
 import {
   ActivitySummaryCardComponent,
   QuickActionsCardComponent,
   SummaryCardsComponent,
-} from '../../core/components/cards';
+} from 'src/app/core/components/cards';
+import { DashboardSectionComponent } from 'src/app/core/components/dashboard-section/dashboard-section.component';
+import { MessageComponent } from 'src/app/core/components/message/message.component';
+import { PageHeaderComponent } from 'src/app/core/components/page-header/page-header.component';
 import { FinancialSummary } from '../../core/models/financial.models';
 import { SummaryCardModel } from '../../core/models/summary-card.model';
 import { AuthService } from '../../core/services/auth.service';
 import { FinancialDataService } from '../../core/services/financial-data.service';
 
-// Importar componentes compartidos
-import {
-  DashboardSectionComponent,
-  MessageComponent,
-  PageHeaderComponent,
-} from '../../shared';
-
+// Importar componentes compartido
 @Component({
   selector: 'mb-dashboard',
   templateUrl: './dashboard.page.html',
@@ -49,7 +47,6 @@ import {
     SummaryCardsComponent,
     QuickActionsCardComponent,
     ActivitySummaryCardComponent,
-    // Componentes compartidos
     PageHeaderComponent,
     DashboardSectionComponent,
     MessageComponent,

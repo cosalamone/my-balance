@@ -1,0 +1,78 @@
+<!-- Basic Button -->
+<button
+  *ngIf="config.type === 'basic' || !config.type"
+  mat-button
+  [color]="config.color"
+  [disabled]="config.disabled || config.loading"
+  [matTooltip]="config.tooltip || ''"
+  [ngClass]="getButtonClasses()"
+  (click)="onClick()">
+  <mat-spinner *ngIf="config.loading" [diameter]="getSpinnerSize()" class="mr-2"></mat-spinner>
+  <mat-icon *ngIf="config.icon && !config.loading" [ngClass]="getIconClasses()">
+    {{ config.icon }}
+  </mat-icon>
+  <span *ngIf="config.label">{{ config.label }}</span>
+</button>
+
+<!-- Raised Button -->
+<button
+  *ngIf="config.type === 'primary'"
+  mat-raised-button
+  [color]="config.color || 'primary'"
+  [disabled]="config.disabled || config.loading"
+  [matTooltip]="config.tooltip || ''"
+  [ngClass]="getButtonClasses()"
+  (click)="onClick()">
+  <mat-spinner *ngIf="config.loading" [diameter]="getSpinnerSize()" class="mr-2"></mat-spinner>
+  <mat-icon *ngIf="config.icon && !config.loading" [ngClass]="getIconClasses()">
+    {{ config.icon }}
+  </mat-icon>
+  <span *ngIf="config.label">{{ config.label }}</span>
+</button>
+
+<!-- Stroked Button -->
+<button
+  *ngIf="config.type === 'stroked'"
+  mat-stroked-button
+  [color]="config.color"
+  [disabled]="config.disabled || config.loading"
+  [matTooltip]="config.tooltip || ''"
+  [ngClass]="getButtonClasses()"
+  (click)="onClick()">
+  <mat-spinner *ngIf="config.loading" [diameter]="getSpinnerSize()" class="mr-2"></mat-spinner>
+  <mat-icon *ngIf="config.icon && !config.loading" [ngClass]="getIconClasses()">
+    {{ config.icon }}
+  </mat-icon>
+  <span *ngIf="config.label">{{ config.label }}</span>
+</button>
+
+<!-- Flat Button -->
+<button
+  *ngIf="config.type === 'flat'"
+  mat-flat-button
+  [color]="config.color"
+  [disabled]="config.disabled || config.loading"
+  [matTooltip]="config.tooltip || ''"
+  [ngClass]="getButtonClasses()"
+  (click)="onClick()">
+  <mat-spinner *ngIf="config.loading" [diameter]="getSpinnerSize()" class="mr-2"></mat-spinner>
+  <mat-icon *ngIf="config.icon && !config.loading" [ngClass]="getIconClasses()">
+    {{ config.icon }}
+  </mat-icon>
+  <span *ngIf="config.label">{{ config.label }}</span>
+</button>
+
+<!-- Icon Button -->
+<button
+  *ngIf="config.type === 'icon'"
+  mat-icon-button
+  [color]="config.color"
+  [disabled]="config.disabled || config.loading"
+  [matTooltip]="config.tooltip || config.label"
+  [ngClass]="getButtonClasses()"
+  (click)="onClick()">
+  <mat-spinner *ngIf="config.loading" [diameter]="getSpinnerSize()"></mat-spinner>
+  <mat-icon *ngIf="config.icon && !config.loading">
+    {{ config.icon }}
+  </mat-icon>
+</button>

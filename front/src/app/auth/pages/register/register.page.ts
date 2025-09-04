@@ -17,17 +17,13 @@ import {
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MessageComponent } from 'src/app/core/components/message/message.component';
+import { PageHeaderComponent } from 'src/app/core/components/page-header/page-header.component';
 import { ThemeToggleComponent } from '../../../components/theme-toggle/theme-toggle.component';
 import {
   AuthService,
   RegisterRequest,
 } from '../../../core/services/auth.service';
-
-// Importar componentes compartidos
-import {
-  MessageComponent,
-  PageHeaderComponent,
-} from '../../../shared';
 
 @Component({
   selector: 'mb-register',
@@ -45,7 +41,6 @@ import {
     MatProgressSpinnerModule,
     MatSnackBarModule,
     ThemeToggleComponent,
-    // Componentes compartidos
     MessageComponent,
     PageHeaderComponent,
   ],

@@ -1,0 +1,20 @@
+<!-- Text/Number/Email/Password inputs -->
+<mb-text-input
+  *ngIf="isTextInput()"
+  [config]="getTextInputConfig()"
+  [control]="control"
+  [customErrors]="customErrors"></mb-text-input>
+
+<!-- Textarea -->
+<mb-textarea
+  *ngIf="config.type === 'textarea'"
+  [config]="getTextareaConfig()"
+  [control]="control"
+  [customErrors]="customErrors"></mb-textarea>
+
+<!-- Date input -->
+<mb-datepicker
+  *ngIf="config.type === 'date'"
+  [config]="getDatepickerConfig()"
+  [control]="control"
+  [customErrors]="customErrors"></mb-datepicker>

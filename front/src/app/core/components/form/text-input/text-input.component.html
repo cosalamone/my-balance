@@ -1,0 +1,38 @@
+<mat-form-field [appearance]="config.appearance || 'outline'" class="w-full">
+  <input
+    matInput
+    [type]="config.type || 'text'"
+    [placeholder]="config.placeholder + (config.required ? '*' : '')"
+    [maxLength]="config.maxLength"
+    [min]="config.min"
+    [max]="config.max"
+    [step]="config.step"
+    [value]="value"
+    (input)="onInput($event)"
+    (blur)="onTouched()"
+    [disabled]="disabled"
+    class="text-lg" />
+
+  <!-- Prefix text -->
+  <span *ngIf="config.prefixText" matTextPrefix>{{ config.prefixText }}&nbsp;</span>
+
+  <!-- Suffix text -->
+  <span *ngIf="config.suffixText" matTextSuffix>&nbsp;{{ config.suffixText }}</span>
+
+  <!-- Icons -->
+  <mat-icon *ngIf="config.icon && !config.suffixIcon" matSuffix class="text-gray-400">
+    {{ config.icon }}
+  </mat-icon>
+
+  <mat-icon *ngIf="config.suffixIcon" matSuffix class="text-gray-400">
+    {{ config.suffixIcon }}
+  </mat-icon>
+
+  <!-- Hint -->
+  <mat-hint *ngIf="config.hint">{{ config.hint }}</mat-hint>
+
+  <!-- Error display -->
+  <mat-error *ngIf="control && control.invalid && control.touched">
+    {{ getErrorMessage() }}
+  </mat-error>
+</mat-form-field>

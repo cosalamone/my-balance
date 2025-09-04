@@ -1,0 +1,21 @@
+<div
+  *ngIf="config.show"
+  class="mb-4 p-3 rounded-lg border transition-all duration-300"
+  [ngClass]="getMessageClasses()">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <mat-icon [ngClass]="getIconClasses()">
+        {{ getIcon() }}
+      </mat-icon>
+      <span [ngClass]="getTextClasses()" class="text-sm">
+        {{ config.message }}
+      </span>
+    </div>
+    <button
+      *ngIf="config.dismissible"
+      (click)="dismiss()"
+      class="ml-4 text-gray-400 hover:text-gray-600 transition-colors">
+      <mat-icon class="text-sm">close</mat-icon>
+    </button>
+  </div>
+</div>

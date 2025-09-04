@@ -42,10 +42,24 @@ import {
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Observable } from 'rxjs';
 import {
+  DropdownComponent,
+  DropdownConfig,
+} from '../../core/components/form/dropdown/dropdown.component';
+import {
+  InputWrapperComponent,
+  InputWrapperConfig,
+} from '../../core/components/form/input-wrapper/input-wrapper.component';
+import {
+  MessageComponent,
+  MessageConfig,
+} from '../../core/components/form/message/message.component';
+
+import {
   Savings,
   SavingsCategory,
 } from '../../core/models/financial.models';
 import { FinancialDataService } from '../../core/services/financial-data.service';
+import { FormConfigService } from '../../core/services/form-config.service';
 
 @Component({
   selector: 'mb-ahorros',
@@ -69,6 +83,10 @@ import { FinancialDataService } from '../../core/services/financial-data.service
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatOptionModule,
+    // Custom Components
+    InputWrapperComponent,
+    DropdownComponent,
+    MessageComponent,
   ],
   templateUrl: './ahorros.page.html',
   styleUrls: ['./ahorros.page.scss'],
@@ -128,11 +146,52 @@ export class SavingsComponent implements OnInit {
   message = '';
   showMessageFlag = false;
 
+  // Form configurations using new components
+  amountConfig: InputWrapperConfig;
+  descriptionConfig: InputWrapperConfig;
+  dateConfig: InputWrapperConfig;
+  goalAmountConfig: InputWrapperConfig;
+  targetDateConfig: InputWrapperConfig;
+  categoryConfig: DropdownConfig;
+  searchConfig: InputWrapperConfig;
+  messageConfig: MessageConfig;
+
   constructor(
     private fb: FormBuilder,
     private financialService: FinancialDataService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private formConfigService: FormConfigService
+  ) {
+    // Initialize form configurations
+    this.amountConfig =
+      this.formConfigService.getAmountInputConfig();
+    this.descriptionConfig = {
+      ...this.formConfigService.getDescriptionInputConfig(),
+      placeholder: 'Describe tu ahorro...',
+    };
+    this.dateConfig =
+      this.formConfigService.getDateInputConfig();
+    this.goalAmountConfig =
+      this.formConfigService.getGoalAmountInputConfig();
+    this.targetDateConfig =
+      this.formConfigService.getOptionalDateInputConfig(
+        'Fecha Objetivo'
+      );
+    this.categoryConfig =
+      this.formConfigService.getSavingsCategoryDropdownConfig();
+    this.searchConfig =
+      this.formConfigService.getSearchInputConfig(
+        'Buscar ahorros...'
+      );
+
+    // Initialize message config
+    this.messageConfig = {
+      message: '',
+      type: 'success',
+      show: false,
+      dismissible: true,
+    };
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -331,13 +390,29 @@ export class SavingsComponent implements OnInit {
     }
   }
 
-  private displayMessage(message: string): void {
+  private displayMessage(
+    message: string,
+    type: 'success' | 'error' = 'success'
+  ): void {
     this.message = message;
     this.showMessageFlag = true;
+
+    // Update message config for new component
+    this.messageConfig = {
+      message,
+      type:
+        message.includes('exitosamente') ||
+        message.includes('éxito')
+          ? 'success'
+          : 'error',
+      show: true,
+      dismissible: true,
+    };
 
     // Auto-hide message after 5 seconds
     setTimeout(() => {
       this.showMessageFlag = false;
+      this.messageConfig.show = false;
     }, 5000);
 
     this.snackBar.open(message, 'Cerrar', {

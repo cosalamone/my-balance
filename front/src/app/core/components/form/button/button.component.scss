@@ -1,0 +1,353 @@
+// Estilos específicos para mb-button component
+.btn-container {
+  display: inline-block;
+  position: relative;
+}
+
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
+  border-radius: 0.375rem; // rounded-md
+  transition: all 0.15s ease-in-out;
+  font-weight: 500;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+}
+
+// Button sizes
+.btn-small {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  min-height: 2rem;
+}
+
+.btn-medium {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  min-height: 2.5rem;
+}
+
+.btn-large {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 3rem;
+}
+
+// Button variants with Tailwind-like colors
+.btn-primary {
+  background-color: #3b82f6; // bg-blue-500
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #2563eb; // bg-blue-600
+  }
+
+  &:disabled {
+    background-color: #9ca3af; // bg-gray-400
+    color: #6b7280; // text-gray-500
+  }
+}
+
+.btn-secondary {
+  background-color: #6b7280; // bg-gray-500
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #4b5563; // bg-gray-600
+  }
+
+  &:disabled {
+    background-color: #d1d5db; // bg-gray-300
+    color: #9ca3af; // text-gray-400
+  }
+}
+
+.btn-success {
+  background-color: #10b981; // bg-emerald-500
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #059669; // bg-emerald-600
+  }
+
+  &:disabled {
+    background-color: #9ca3af; // bg-gray-400
+    color: #6b7280; // text-gray-500
+  }
+}
+
+.btn-danger {
+  background-color: #ef4444; // bg-red-500
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #dc2626; // bg-red-600
+  }
+
+  &:disabled {
+    background-color: #9ca3af; // bg-gray-400
+    color: #6b7280; // text-gray-500
+  }
+}
+
+.btn-warning {
+  background-color: #f59e0b; // bg-amber-500
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #d97706; // bg-amber-600
+  }
+
+  &:disabled {
+    background-color: #9ca3af; // bg-gray-400
+    color: #6b7280; // text-gray-500
+  }
+}
+
+.btn-info {
+  background-color: #06b6d4; // bg-cyan-500
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #0891b2; // bg-cyan-600
+  }
+
+  &:disabled {
+    background-color: #9ca3af; // bg-gray-400
+    color: #6b7280; // text-gray-500
+  }
+}
+
+// Outlined button variants
+.btn-outlined {
+  background-color: transparent;
+  border: 1px solid;
+
+  &.btn-primary {
+    border-color: #3b82f6;
+    color: #3b82f6;
+
+    &:hover:not(:disabled) {
+      background-color: #3b82f6;
+      color: white;
+    }
+  }
+
+  &.btn-secondary {
+    border-color: #6b7280;
+    color: #6b7280;
+
+    &:hover:not(:disabled) {
+      background-color: #6b7280;
+      color: white;
+    }
+  }
+
+  &.btn-success {
+    border-color: #10b981;
+    color: #10b981;
+
+    &:hover:not(:disabled) {
+      background-color: #10b981;
+      color: white;
+    }
+  }
+
+  &.btn-danger {
+    border-color: #ef4444;
+    color: #ef4444;
+
+    &:hover:not(:disabled) {
+      background-color: #ef4444;
+      color: white;
+    }
+  }
+
+  &.btn-warning {
+    border-color: #f59e0b;
+    color: #f59e0b;
+
+    &:hover:not(:disabled) {
+      background-color: #f59e0b;
+      color: white;
+    }
+  }
+
+  &.btn-info {
+    border-color: #06b6d4;
+    color: #06b6d4;
+
+    &:hover:not(:disabled) {
+      background-color: #06b6d4;
+      color: white;
+    }
+  }
+}
+
+// Text button variants
+.btn-text {
+  background-color: transparent;
+  box-shadow: none;
+
+  &.btn-primary {
+    color: #3b82f6;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(59, 130, 246, 0.1);
+    }
+  }
+
+  &.btn-secondary {
+    color: #6b7280;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(107, 114, 128, 0.1);
+    }
+  }
+
+  &.btn-success {
+    color: #10b981;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(16, 185, 129, 0.1);
+    }
+  }
+
+  &.btn-danger {
+    color: #ef4444;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+  }
+
+  &.btn-warning {
+    color: #f59e0b;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(245, 158, 11, 0.1);
+    }
+  }
+
+  &.btn-info {
+    color: #06b6d4;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(6, 182, 212, 0.1);
+    }
+  }
+}
+
+// Full width buttons
+.btn-full-width {
+  width: 100%;
+}
+
+// Button with icon spacing
+.btn-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// Loading state
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+
+  .btn-content {
+    opacity: 0.6;
+  }
+
+  .btn-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// FAB specific styles
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
+  &.btn-primary {
+    background-color: #3b82f6;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #2563eb;
+    }
+  }
+
+  &.btn-secondary {
+    background-color: #6b7280;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #4b5563;
+    }
+  }
+
+  &.btn-success {
+    background-color: #10b981;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #059669;
+    }
+  }
+
+  &.btn-danger {
+    background-color: #ef4444;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #dc2626;
+    }
+  }
+
+  &.btn-warning {
+    background-color: #f59e0b;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #d97706;
+    }
+  }
+
+  &.btn-info {
+    background-color: #06b6d4;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #0891b2;
+    }
+  }
+}
+
+// Animation for button press
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button {
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+}
+
+// Component host styles
+:host {
+  display: inline-block;
+
+  &.full-width {
+    display: block;
+    width: 100%;
+  }
+}

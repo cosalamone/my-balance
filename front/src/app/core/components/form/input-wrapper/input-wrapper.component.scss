@@ -1,0 +1,13 @@
+// Wrapper component styles - delegating to specific components
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Ensure all child components inherit full width
+mb-text-input,
+mb-textarea,
+mb-datepicker {
+  display: block;
+  width: 100%;
+}

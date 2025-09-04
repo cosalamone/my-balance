@@ -1,0 +1,55 @@
+// Estilos específicos para mb-text-input component
+:host {
+  display: block;
+  width: 100%;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+// Input focus styles
+.mat-mdc-text-field-wrapper:not(.mdc-text-field--disabled):hover
+  .mdc-line-ripple::before {
+  border-bottom-color: #3b82f6;
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--focused .mdc-line-ripple::after {
+  border-bottom-color: #3b82f6;
+}
+
+// Error states
+.mat-mdc-form-field.mat-form-field-invalid {
+  .mdc-text-field--outlined .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-color: #ef4444;
+  }
+}
+
+// Disabled states
+.mat-mdc-text-field-wrapper.mdc-text-field--disabled {
+  background-color: #f9fafb;
+  opacity: 0.6;
+}
+
+// Custom sizing
+.text-lg {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+// Prefix/Suffix text styling
+.mat-mdc-form-field-text-prefix,
+.mat-mdc-form-field-text-suffix {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+// Icon styling
+.mat-icon.text-gray-400 {
+  color: #9ca3af;
+  font-size: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
