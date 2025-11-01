@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { ButtonComponent } from '../../form/button/button.component';
 
 export type MessageType =
   | 'success'
@@ -18,21 +19,25 @@ export interface MessageConfig {
 @Component({
   selector: 'mb-message',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, ButtonComponent],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss'],
 })
 export class MessageComponent {
-  @Input() config!: MessageConfig;
+  public readonly config = input<MessageConfig>();
 
   dismiss(): void {
-    this.config.show = false;
+    const cfg = this.config();
+    if (cfg) {
+      cfg.show = false;
+    }
   }
 
   getMessageClasses(): string {
     const baseClasses = 'border';
 
-    switch (this.config.type) {
+    const t = this.config()?.type;
+    switch (t) {
       case 'success':
         return `${baseClasses} bg-green-50 border-green-200`;
       case 'error':
@@ -47,7 +52,8 @@ export class MessageComponent {
   }
 
   getIconClasses(): string {
-    switch (this.config.type) {
+    const type = this.config()?.type;
+    switch (type) {
       case 'success':
         return 'text-green-600';
       case 'error':
@@ -62,7 +68,8 @@ export class MessageComponent {
   }
 
   getTextClasses(): string {
-    switch (this.config.type) {
+    const type2 = this.config()?.type;
+    switch (type2) {
       case 'success':
         return 'text-green-700';
       case 'error':
@@ -77,7 +84,8 @@ export class MessageComponent {
   }
 
   getIcon(): string {
-    switch (this.config.type) {
+    const type3 = this.config()?.type;
+    switch (type3) {
       case 'success':
         return 'check_circle';
       case 'error':

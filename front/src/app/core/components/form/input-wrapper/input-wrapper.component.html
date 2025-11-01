@@ -2,19 +2,19 @@
 <mb-text-input
   *ngIf="isTextInput()"
   [config]="getTextInputConfig()"
-  [control]="control"
-  [customErrors]="customErrors"></mb-text-input>
+  [control]="control()"
+  [customErrors]="customErrors()"></mb-text-input>
 
 <!-- Textarea -->
 <mb-textarea
-  *ngIf="config.type === 'textarea'"
+  *ngIf="config()?.type === 'textarea'"
   [config]="getTextareaConfig()"
-  [control]="control"
-  [customErrors]="customErrors"></mb-textarea>
+  [control]="control()"
+  [customErrors]="customErrors()"></mb-textarea>
 
 <!-- Date input -->
 <mb-datepicker
-  *ngIf="config.type === 'date'"
+  *ngIf="config()?.type === 'date'"
   [config]="getDatepickerConfig()"
-  [control]="control"
-  [customErrors]="customErrors"></mb-datepicker>
+  [control]="control()"
+  [customErrors]="customErrors()"></mb-datepicker>

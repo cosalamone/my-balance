@@ -1,0 +1,9 @@
+<div [attr.data-cy]="dataCy()">
+  <ng-container *ngIf="buttonModel()">
+    <ng-container
+      *ngComponentOutlet="
+        (buttonModel()?.buttonType || null);
+        inputs: { buttonModel: buttonModel(), targetId: targetId() }
+      "></ng-container>
+  </ng-container>
+</div>

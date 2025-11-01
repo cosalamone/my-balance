@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   forwardRef,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import {
@@ -18,8 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { BaseInputComponent } from '../shared/base-input.component';
 import { BaseInputConfig } from '../shared/base-input.interface';
 
-export interface DatepickerConfig
-  extends BaseInputConfig {
+export interface DatepickerConfig extends BaseInputConfig {
   minDate?: Date;
   maxDate?: Date;
   startView?: 'month' | 'year' | 'multi-year';
@@ -52,12 +51,16 @@ export class DatepickerComponent
   extends BaseInputComponent
   implements ControlValueAccessor, OnInit
 {
-  @Input() config!: DatepickerConfig;
-  @Input() control?: FormControl;
-  @Input() customErrors?: { [key: string]: string };
+  public readonly config = input<DatepickerConfig>();
+  public readonly control = input<
+    FormControl | undefined
+  >();
+  public readonly customErrors = input<
+    { [key: string]: string } | undefined
+  >();
 
   ngOnInit() {
-    if (!this.config) {
+    if (!this.config()) {
       throw new Error(
         'DatepickerComponent requires a config input'
       );

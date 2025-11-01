@@ -1,11 +1,11 @@
-<mat-form-field [appearance]="config.appearance || 'outline'" class="w-full">
+<mat-form-field [appearance]="config()?.appearance || 'outline'" class="w-full">
   <input
     matInput
     [matDatepicker]="picker"
-    [placeholder]="config.placeholder + (config.required ? '*' : '')"
+    [placeholder]="(config()?.placeholder || '') + (config()?.required ? '*' : '')"
     [value]="value"
-    [min]="config.minDate"
-    [max]="config.maxDate"
+    [min]="config()?.minDate"
+    [max]="config()?.maxDate"
     (dateChange)="onDateChange($event)"
     (dateInput)="onDateInput($event)"
     (blur)="onTouched()"
@@ -13,34 +13,34 @@
     class="text-lg" />
 
   <!-- Prefix text -->
-  <span *ngIf="config.prefixText" matTextPrefix>{{ config.prefixText }}&nbsp;</span>
+  <span *ngIf="config()?.prefixText" matTextPrefix>{{ config()?.prefixText }}&nbsp;</span>
 
   <!-- Suffix text -->
-  <span *ngIf="config.suffixText" matTextSuffix>&nbsp;{{ config.suffixText }}</span>
+  <span *ngIf="config()?.suffixText" matTextSuffix>&nbsp;{{ config()?.suffixText }}</span>
 
   <!-- Icon prefix -->
-  <mat-icon *ngIf="config.icon" matPrefix class="text-gray-400">
-    {{ config.icon }}
+  <mat-icon *ngIf="config()?.icon" matPrefix class="text-gray-400">
+    {{ config()?.icon }}
   </mat-icon>
 
   <!-- Date picker toggle -->
   <mat-datepicker-toggle matIconSuffix [for]="picker">
-    <mat-icon *ngIf="config.suffixIcon" matDatepickerToggleIcon>
-      {{ config.suffixIcon }}
+    <mat-icon *ngIf="config()?.suffixIcon" matDatepickerToggleIcon>
+      {{ config()?.suffixIcon }}
     </mat-icon>
   </mat-datepicker-toggle>
 
   <!-- Hint -->
-  <mat-hint *ngIf="config.hint">{{ config.hint }}</mat-hint>
+  <mat-hint *ngIf="config()?.hint">{{ config()?.hint }}</mat-hint>
 
   <!-- Error display -->
-  <mat-error *ngIf="control && control.invalid && control.touched">
+  <mat-error *ngIf="control()?.invalid && control()?.touched">
     {{ getErrorMessage() }}
   </mat-error>
 
   <!-- Date picker -->
   <mat-datepicker
     #picker
-    [startView]="config.startView || 'month'"
-    [touchUi]="config.touchUi || false"></mat-datepicker>
+    [startView]="config()?.startView || 'month'"
+    [touchUi]="config()?.touchUi || false"></mat-datepicker>
 </mat-form-field>

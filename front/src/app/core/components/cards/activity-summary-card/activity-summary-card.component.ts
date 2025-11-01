@@ -3,8 +3,8 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnChanges,
-  SimpleChanges,
+  effect,
+  input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -27,16 +27,18 @@ import { FinancialSummary } from '../../../models/financial.models';
     CardBaseComponent,
   ],
 })
-export class ActivitySummaryCardComponent implements OnChanges {
-  @Input() summary: FinancialSummary | null = null;
+export class ActivitySummaryCardComponent {
+  public readonly summary = input<FinancialSummary | null>(null);
   @Output() refreshClicked = new EventEmitter<void>();
+  public readonly onRefreshCallback = input<(() => void) | undefined>();
 
   cardModel: ActivitySummaryCardModel = this.buildModel(null);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['summary']) {
-      this.cardModel = this.buildModel(this.summary);
-    }
+  constructor() {
+    effect(() => {
+      const s = this.summary();
+      this.cardModel = this.buildModel(s);
+    });
   }
 
   buildModel(summary: FinancialSummary | null): ActivitySummaryCardModel {
@@ -119,7 +121,11 @@ export class ActivitySummaryCardComponent implements OnChanges {
           ],
         },
       ],
-      refreshAction: () => this.refreshClicked.emit(),
+      refreshAction: () => {
+        const cb = this.onRefreshCallback();
+        if (cb) cb();
+        this.refreshClicked.emit();
+      },
     };
   }
 }

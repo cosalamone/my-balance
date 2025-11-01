@@ -1,15 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  forwardRef,
-  Input,
-  OnInit,
-} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { Component, forwardRef, input, OnInit } from '@angular/core';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -25,12 +16,7 @@ export interface TextareaConfig extends BaseInputConfig {
 @Component({
   selector: 'mb-textarea',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-  ],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatIconModule],
   templateUrl: './textarea.component.html',
   styleUrls: ['./textarea.component.scss'],
   providers: [
@@ -41,19 +27,14 @@ export interface TextareaConfig extends BaseInputConfig {
     },
   ],
 })
-export class TextareaComponent
-  extends BaseInputComponent
-  implements ControlValueAccessor, OnInit
-{
-  @Input() config!: TextareaConfig;
-  @Input() control?: FormControl;
-  @Input() customErrors?: { [key: string]: string };
+export class TextareaComponent extends BaseInputComponent implements ControlValueAccessor, OnInit {
+  public readonly config = input<TextareaConfig>();
+  public readonly control = input<FormControl | undefined>();
+  public readonly customErrors = input<{ [key: string]: string } | undefined>();
 
   ngOnInit() {
-    if (!this.config) {
-      throw new Error(
-        'TextareaComponent requires a config input'
-      );
+    if (!this.config()) {
+      throw new Error('TextareaComponent requires a config input');
     }
   }
 

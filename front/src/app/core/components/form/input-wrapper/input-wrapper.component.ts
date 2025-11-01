@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   forwardRef,
-  Input,
+  input,
   OnInit,
 } from '@angular/core';
 import {
@@ -79,9 +79,13 @@ export interface InputWrapperConfig {
 export class InputWrapperComponent
   implements ControlValueAccessor, OnInit
 {
-  @Input() config!: InputWrapperConfig;
-  @Input() control?: FormControl;
-  @Input() customErrors?: { [key: string]: string };
+  public readonly config = input<InputWrapperConfig>();
+  public readonly control = input<
+    FormControl | undefined
+  >();
+  public readonly customErrors = input<
+    { [key: string]: string } | undefined
+  >();
 
   value: any = '';
   disabled = false;
@@ -90,7 +94,7 @@ export class InputWrapperComponent
   private onTouched = () => {};
 
   ngOnInit() {
-    if (!this.config) {
+    if (!this.config()) {
       throw new Error(
         'InputWrapperComponent requires a config input'
       );
@@ -115,70 +119,74 @@ export class InputWrapperComponent
 
   // Helper methods to determine which component to use
   isTextInput(): boolean {
+    const cfg = this.config();
     return (
-      !this.config.type ||
-      this.config.type === 'text' ||
-      this.config.type === 'number' ||
-      this.config.type === 'email' ||
-      this.config.type === 'password'
+      !cfg?.type ||
+      cfg.type === 'text' ||
+      cfg.type === 'number' ||
+      cfg.type === 'email' ||
+      cfg.type === 'password'
     );
   }
 
   // Configuration mappers
   getTextInputConfig(): TextInputConfig {
+    const cfg = this.config() || ({} as InputWrapperConfig);
     return {
       type:
-        (this.config.type as
+        (cfg.type as
           | 'text'
           | 'number'
           | 'email'
           | 'password') || 'text',
-      placeholder: this.config.placeholder,
-      icon: this.config.icon,
-      hint: this.config.hint,
-      required: this.config.required,
-      maxLength: this.config.maxLength,
-      min: this.config.min,
-      max: this.config.max,
-      step: this.config.step,
-      appearance: this.config.appearance,
-      suffixIcon: this.config.suffixIcon,
-      prefixText: this.config.prefixText,
-      suffixText: this.config.suffixText,
+      placeholder: cfg.placeholder,
+      icon: cfg.icon,
+      hint: cfg.hint,
+      required: cfg.required,
+      maxLength: cfg.maxLength,
+      min: cfg.min,
+      max: cfg.max,
+      step: cfg.step,
+      appearance: cfg.appearance,
+      suffixIcon: cfg.suffixIcon,
+      prefixText: cfg.prefixText,
+      suffixText: cfg.suffixText,
     };
   }
 
   getTextareaConfig(): TextareaConfig {
+    const cfg = this.config() || ({} as InputWrapperConfig);
     return {
-      placeholder: this.config.placeholder,
-      icon: this.config.icon,
-      hint: this.config.hint,
-      required: this.config.required,
-      maxLength: this.config.maxLength,
-      rows: this.config.rows,
-      appearance: this.config.appearance,
-      suffixIcon: this.config.suffixIcon,
-      prefixText: this.config.prefixText,
-      suffixText: this.config.suffixText,
-      autoResize: this.config.autoResize,
+      placeholder: cfg.placeholder,
+      icon: cfg.icon,
+      hint: cfg.hint,
+      required: cfg.required,
+      maxLength: cfg.maxLength,
+      rows: cfg.rows,
+      appearance: cfg.appearance,
+      suffixIcon: cfg.suffixIcon,
+      prefixText: cfg.prefixText,
+      suffixText: cfg.suffixText,
+      autoResize: cfg.autoResize,
     };
   }
 
   getDatepickerConfig(): DatepickerConfig {
+    const cfg = this.config() || ({} as InputWrapperConfig);
     return {
-      placeholder: this.config.placeholder,
-      icon: this.config.icon,
-      hint: this.config.hint,
-      required: this.config.required,
-      appearance: this.config.appearance,
-      suffixIcon: this.config.suffixIcon,
-      prefixText: this.config.prefixText,
-      suffixText: this.config.suffixText,
-      minDate: this.config.minDate,
-      maxDate: this.config.maxDate,
-      startView: this.config.startView,
-      touchUi: this.config.touchUi,
-      openOnFocus: this.config.openOnFocus,
+      placeholder: cfg.placeholder,
+      icon: cfg.icon,
+      hint: cfg.hint,
+      required: cfg.required,
+      appearance: cfg.appearance,
+      suffixIcon: cfg.suffixIcon,
+      prefixText: cfg.prefixText,
+      suffixText: cfg.suffixText,
+      minDate: cfg.minDate,
+      maxDate: cfg.maxDate,
+      startView: cfg.startView,
+      touchUi: cfg.touchUi,
+      openOnFocus: cfg.openOnFocus,
     };
   }
 }

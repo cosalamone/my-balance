@@ -1,0 +1,18 @@
+<div [attr.data-cy]="dataCy()">
+  <!-- Tooltip computed from permission and optionDisabled -->
+  <button
+    mat-button
+    [matTooltip]="getTooltip()"
+    matTooltipPosition="below"
+    [disabled]="isDisabled()"
+    [ngClass]="buttonModel()?.styleClass"
+    (click)="handleClick()">
+    <mat-icon *ngIf="buttonModel()?.iconName && buttonModel()?.iconPosition !== 'right'">
+      {{ buttonModel()?.iconName }}
+    </mat-icon>
+    <span *ngIf="buttonModel()?.label">{{ buttonModel()?.label }}</span>
+    <mat-icon *ngIf="buttonModel()?.iconName && buttonModel()?.iconPosition === 'right'">
+      {{ buttonModel()?.iconName }}
+    </mat-icon>
+  </button>
+</div>

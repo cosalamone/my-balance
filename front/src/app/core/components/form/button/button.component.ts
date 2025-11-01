@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   EventEmitter,
+  input,
   Input,
   Output,
 } from '@angular/core';
@@ -46,20 +47,25 @@ export interface ButtonConfig {
   styleUrls: ['./button.component.scss'],
 })
 export class ButtonComponent {
-  @Input() config!: ButtonConfig;
+  public readonly config = input<ButtonConfig>();
   @Output() buttonClick = new EventEmitter<void>();
+  public readonly onClickCallback = input<(() => void) | undefined>();
 
   onClick(): void {
-    if (!this.config.disabled && !this.config.loading) {
+    const cfg = this.config();
+    if (!cfg?.disabled && !cfg?.loading) {
+      const cb = this.onClickCallback();
+      if (cb) cb();
       this.buttonClick.emit();
     }
   }
 
   getButtonClasses(): string {
     const classes = [];
+    const cfg = this.config() || ({} as ButtonConfig);
 
     // Size classes
-    switch (this.config.size) {
+    switch (cfg.size) {
       case 'small':
         classes.push('text-sm', 'px-3', 'py-1');
         break;
@@ -71,7 +77,7 @@ export class ButtonComponent {
     }
 
     // Full width
-    if (this.config.fullWidth) {
+    if (cfg.fullWidth) {
       classes.push('w-full');
     }
 
@@ -80,14 +86,15 @@ export class ButtonComponent {
 
   getIconClasses(): string {
     const classes = [];
+    const cfg = this.config() || ({} as ButtonConfig);
 
     // Icon margin based on whether there's text
-    if (this.config.label) {
+    if (cfg.label) {
       classes.push('mr-2');
     }
 
     // Icon size based on button size
-    switch (this.config.size) {
+    switch (cfg.size) {
       case 'small':
         classes.push('text-sm');
         break;
@@ -102,7 +109,8 @@ export class ButtonComponent {
   }
 
   getSpinnerSize(): number {
-    switch (this.config.size) {
+    const cfg = this.config() || ({} as ButtonConfig);
+    switch (cfg.size) {
       case 'small':
         return 16;
       case 'large':

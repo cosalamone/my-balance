@@ -15,9 +15,9 @@
       <div>
         <h3 class="mb-text--lg mb-text--medium mb-text--secondary mb-4">Tamaños</h3>
         <div class="mb-flex-center mb-space-x-3 flex-wrap gap-4">
-          <button class="mb-btn mb-btn--primary mb-btn--sm">Pequeño</button>
-          <button class="mb-btn mb-btn--primary mb-btn--md">Mediano</button>
-          <button class="mb-btn mb-btn--primary mb-btn--lg">Grande</button>
+          <mb-button [config]="{ label: 'Pequeño', type: 'primary', size: 'small' }"></mb-button>
+          <mb-button [config]="{ label: 'Mediano', type: 'primary', size: 'medium' }"></mb-button>
+          <mb-button [config]="{ label: 'Grande', type: 'primary', size: 'large' }"></mb-button>
         </div>
       </div>
 
@@ -25,10 +25,12 @@
       <div>
         <h3 class="mb-text--lg mb-text--medium mb-text--secondary mb-4">Variantes</h3>
         <div class="mb-flex-center mb-space-x-3 flex-wrap gap-4">
-          <button class="mb-btn mb-btn--primary">Primario</button>
-          <button class="mb-btn mb-btn--secondary">Secundario</button>
-          <button class="mb-btn mb-btn--success">Éxito</button>
-          <button class="mb-btn mb-btn--danger">Peligro</button>
+          <mb-button
+            [config]="{ label: 'Primario', type: 'primary', color: 'primary' }"></mb-button>
+          <mb-button
+            [config]="{ label: 'Secundario', type: 'primary', color: 'accent' }"></mb-button>
+          <mb-button [config]="{ label: 'Éxito', type: 'primary', color: 'primary' }"></mb-button>
+          <mb-button [config]="{ label: 'Peligro', type: 'primary', color: 'warn' }"></mb-button>
         </div>
       </div>
 
@@ -36,9 +38,11 @@
       <div>
         <h3 class="mb-text--lg mb-text--medium mb-text--secondary mb-4">Estados</h3>
         <div class="mb-flex-center mb-space-x-3 flex-wrap gap-4">
-          <button class="mb-btn mb-btn--primary" disabled>Deshabilitado</button>
-          <button class="mb-btn mb-btn--primary mb-btn--loading">Cargando</button>
-          <button class="mb-btn mb-btn--primary mb-btn--full">Ancho completo</button>
+          <mb-button
+            [config]="{ label: 'Deshabilitado', type: 'primary', disabled: true }"></mb-button>
+          <mb-button [config]="{ label: 'Cargando', type: 'primary', loading: true }"></mb-button>
+          <mb-button
+            [config]="{ label: 'Ancho completo', type: 'primary', fullWidth: true }"></mb-button>
         </div>
       </div>
     </div>
@@ -86,20 +90,13 @@
   <section class="mb-card mb-card--lg">
     <h2 class="mb-text--xl mb-text--semibold mb-text--primary mb-6">Cards</h2>
     <div class="mb-grid-3">
-      <div class="mb-card mb-card--sm mb-card--hover">
-        <h3 class="mb-text--lg mb-text--semibold mb-text--primary">Card Simple</h3>
-        <p class="mb-text--base mb-text--secondary">Contenido básico con hover effect.</p>
-      </div>
+      <mb-card-base [cardModel]="simpleCard"></mb-card-base>
 
-      <div class="mb-card mb-card--md mb-card--clickable">
-        <h3 class="mb-text--lg mb-text--semibold mb-text--primary">Card Clickeable</h3>
-        <p class="mb-text--base mb-text--secondary">Esta card tiene efecto de click.</p>
-      </div>
+      <mb-card-base
+        [cardModel]="clickableCard"
+        (refreshClicked)="clickableCard.refreshAction?.()"></mb-card-base>
 
-      <div class="mb-card mb-card--lg">
-        <h3 class="mb-text--lg mb-text--semibold mb-text--primary">Card Grande</h3>
-        <p class="mb-text--base mb-text--secondary">Card con más padding para contenido extenso.</p>
-      </div>
+      <mb-card-base [cardModel]="largeCard"></mb-card-base>
     </div>
   </section>
 

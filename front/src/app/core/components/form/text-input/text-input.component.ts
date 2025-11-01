@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  forwardRef,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { Component, forwardRef, input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -47,15 +42,13 @@ export class TextInputComponent
   extends BaseInputComponent
   implements ControlValueAccessor, OnInit
 {
-  @Input() config!: TextInputConfig;
-  @Input() control?: FormControl;
-  @Input() customErrors?: { [key: string]: string };
+  public readonly config = input<TextInputConfig>();
+  public readonly control = input<FormControl | undefined>();
+  public readonly customErrors = input<{ [key: string]: string } | undefined>();
 
   ngOnInit() {
-    if (!this.config) {
-      throw new Error(
-        'TextInputComponent requires a config input'
-      );
+    if (!this.config()) {
+      throw new Error('TextInputComponent requires a config input');
     }
   }
 
@@ -63,7 +56,8 @@ export class TextInputComponent
     const target = event.target as HTMLInputElement;
     let value: any = target.value;
 
-    if (this.config.type === 'number') {
+    const cfg = this.config();
+    if (cfg?.type === 'number') {
       value = value === '' ? null : parseFloat(value);
     }
 

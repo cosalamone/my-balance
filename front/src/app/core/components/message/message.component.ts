@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 export type MessageType =
@@ -13,11 +13,11 @@ export type MessageType =
   standalone: true,
   template: `
     <div
-      *ngIf="message"
+      *ngIf="message()"
       [class]="getMessageClasses()"
-      [attr.role]="type === 'error' ? 'alert' : 'status'"
+      [attr.role]="type() === 'error' ? 'alert' : 'status'"
       [attr.aria-live]="
-        type === 'error' ? 'assertive' : 'polite'
+        type() === 'error' ? 'assertive' : 'polite'
       "
     >
       <mat-icon class="message__icon">{{
@@ -25,26 +25,28 @@ export type MessageType =
       }}</mat-icon>
 
       <div>
-        <p *ngIf="title" class="message__title">
-          {{ title }}
+        <p *ngIf="title()" class="message__title">
+          {{ title() }}
         </p>
-        <p class="message__text">{{ message }}</p>
+        <p class="message__text">{{ message() }}</p>
       </div>
     </div>
   `,
   imports: [CommonModule, MatIconModule],
 })
 export class MessageComponent {
-  @Input() message: string = '';
-  @Input() title?: string;
-  @Input() type: MessageType = 'info';
-  @Input() variant: 'default' | 'simple' = 'default';
+  public readonly message = input<string>('');
+  public readonly title = input<string | undefined>();
+  public readonly type = input<MessageType>('info');
+  public readonly variant = input<'default' | 'simple'>(
+    'default'
+  );
 
   getMessageClasses(): string {
     const baseClass = 'message';
-    const typeClass = `message--${this.type}`;
+    const typeClass = `message--${this.type()}`;
     const variantClass =
-      this.variant === 'simple' ? 'message--simple' : '';
+      this.variant() === 'simple' ? 'message--simple' : '';
 
     return [baseClass, typeClass, variantClass]
       .filter(Boolean)
@@ -59,6 +61,6 @@ export class MessageComponent {
       info: 'info_outline',
     };
 
-    return icons[this.type];
+    return icons[this.type()];
   }
 }

@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  forwardRef,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { Component, forwardRef, input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -58,12 +53,10 @@ export interface DropdownConfig {
     },
   ],
 })
-export class DropdownComponent
-  implements ControlValueAccessor, OnInit
-{
-  @Input() config!: DropdownConfig;
-  @Input() control?: FormControl;
-  @Input() customErrors?: { [key: string]: string };
+export class DropdownComponent implements ControlValueAccessor, OnInit {
+  public readonly config = input<DropdownConfig>();
+  public readonly control = input<FormControl | undefined>();
+  public readonly customErrors = input<{ [key: string]: string } | undefined>();
 
   value: any = null;
   displayValue = '';
@@ -74,20 +67,18 @@ export class DropdownComponent
   onTouched = () => {};
 
   ngOnInit() {
-    if (!this.config) {
-      throw new Error(
-        'DropdownComponent requires a config input'
-      );
+    if (!this.config()) {
+      throw new Error('DropdownComponent requires a config input');
     }
 
-    if (this.config.autocomplete) {
+    if (this.config()?.autocomplete) {
       this.initializeAutocomplete();
     }
   }
 
   writeValue(value: any): void {
     this.value = value;
-    if (this.config.autocomplete) {
+    if (this.config()?.autocomplete) {
       this.updateDisplayValue();
     }
   }
@@ -121,44 +112,37 @@ export class DropdownComponent
   }
 
   private initializeAutocomplete(): void {
-    this.filteredOptions = new Observable<string>(
-      observer => {
-        observer.next(this.displayValue);
-      }
-    ).pipe(
-      startWith(''),
-      map(value => this.filterOptions(value || ''))
-    );
+    this.filteredOptions = new Observable<string>(observer => {
+      observer.next(this.displayValue);
+    }).pipe(startWith(''), map(value => this.filterOptions(value || '')));
   }
 
   private filterOptions(value: string): DropdownOption[] {
     const filterValue = value.toLowerCase();
-    return this.config.options.filter(option =>
+    const opts = this.config()?.options || [];
+    return opts.filter((option: DropdownOption) =>
       option.label.toLowerCase().includes(filterValue)
     );
   }
 
   private updateDisplayValue(): void {
-    const selectedOption = this.config.options.find(
-      opt => opt.value === this.value
-    );
-    this.displayValue = selectedOption
-      ? selectedOption.label
-      : '';
+    const opts = this.config()?.options || [];
+    const selectedOption = opts.find((opt: DropdownOption) => opt.value === this.value);
+    this.displayValue = selectedOption ? selectedOption.label : '';
   }
 
   getErrorMessage(): string {
-    if (!this.control || !this.control.errors) {
+    const ctrl = this.control ? this.control() : undefined;
+    if (!ctrl || !ctrl.errors) {
       return '';
     }
 
-    const errors = this.control.errors;
+    const errors = ctrl.errors;
 
     // Custom errors first
-    if (this.customErrors) {
-      for (const [key, message] of Object.entries(
-        this.customErrors
-      )) {
+    const custom = this.customErrors ? this.customErrors() : undefined;
+    if (custom) {
+      for (const [key, message] of Object.entries(custom)) {
         if (errors[key]) {
           return message;
         }
@@ -167,7 +151,7 @@ export class DropdownComponent
 
     // Default error messages
     if (errors['required']) {
-      return `${this.config.placeholder} es requerido`;
+      return `${this.config()?.placeholder} es requerido`;
     }
 
     return 'Selección inválida';

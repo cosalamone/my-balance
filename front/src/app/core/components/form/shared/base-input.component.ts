@@ -1,9 +1,11 @@
 import { FormControl } from '@angular/forms';
+import { InputSignal } from '@angular/core';
 
 export abstract class BaseInputComponent {
-  abstract config: any;
-  abstract control?: FormControl;
-  abstract customErrors?: { [key: string]: string };
+  // Signals-based inputs (InputSignal) to work with input<>() in children
+  abstract config: InputSignal<any>;
+  abstract control?: InputSignal<FormControl | undefined>;
+  abstract customErrors?: InputSignal<{ [key: string]: string } | undefined>;
 
   value: any = '';
   disabled = false;
@@ -28,17 +30,17 @@ export abstract class BaseInputComponent {
   }
 
   getErrorMessage(): string {
-    if (!this.control || !this.control.errors) {
+    const ctrl = this.control ? this.control() : undefined;
+    if (!ctrl || !ctrl.errors) {
       return '';
     }
 
-    const errors = this.control.errors;
+    const errors = ctrl.errors;
 
     // Custom errors first
-    if (this.customErrors) {
-      for (const [key, message] of Object.entries(
-        this.customErrors
-      )) {
+    const custom = this.customErrors ? this.customErrors() : undefined;
+    if (custom) {
+      for (const [key, message] of Object.entries(custom)) {
         if (errors[key]) {
           return message;
         }
@@ -47,7 +49,7 @@ export abstract class BaseInputComponent {
 
     // Default error messages
     if (errors['required']) {
-      return `${this.config.placeholder} es requerido`;
+      return `${this.config()?.placeholder} es requerido`;
     }
 
     if (errors['min']) {

@@ -1,14 +1,18 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import {
-  CardBaseModel,
+  Component,
+  EventEmitter,
+  input,
+  Output,
+} from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import {
   CardAction,
+  CardBaseModel,
   CardSection,
-  CardContent,
 } from '../../../models/card-base.model';
 
 @Component({
@@ -25,14 +29,23 @@ import {
   ],
 })
 export class CardBaseComponent {
-  @Input() cardModel!: CardBaseModel;
+  public readonly cardModel = input<CardBaseModel>();
+  // Backwards-compatible EventEmitters
   @Output() refreshClicked = new EventEmitter<void>();
   @Output() actionClicked = new EventEmitter<CardAction>();
 
+  // Signal-based callbacks (preferred)
+  public readonly onRefreshCallback = input<(() => void) | undefined>();
+  public readonly onActionCallback = input<((action: CardAction) => void) | undefined>();
+
   onRefresh(): void {
-    if (this.cardModel.refreshAction) {
-      this.cardModel.refreshAction();
+    const cm = this.cardModel();
+    if (cm?.refreshAction) {
+      cm.refreshAction();
     }
+    // Prefer callback if provided
+    const rcb = this.onRefreshCallback();
+    if (rcb) rcb();
     this.refreshClicked.emit();
   }
 
@@ -40,6 +53,9 @@ export class CardBaseComponent {
     if (action.action) {
       action.action();
     }
+    // Prefer callback if provided
+    const acb = this.onActionCallback();
+    if (acb) acb(action);
     this.actionClicked.emit(action);
   }
 
@@ -55,9 +71,11 @@ export class CardBaseComponent {
   }
 
   getActionsGridClasses(): string {
-    const actionsCount = this.cardModel.actions?.length || 0;
+    const actionsCount =
+      this.cardModel()?.actions?.length || 0;
     if (actionsCount <= 2) return 'grid-cols-2';
-    if (actionsCount <= 4) return 'grid-cols-2 lg:grid-cols-4';
+    if (actionsCount <= 4)
+      return 'grid-cols-2 lg:grid-cols-4';
     return 'grid-cols-2 lg:grid-cols-3';
   }
 
