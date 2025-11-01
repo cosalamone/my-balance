@@ -30,8 +30,10 @@
             </defs>
           </svg>
         </div>
-        <h2 class="text-2xl font-extrabold page-title mb-1">Gestión de Ahorros</h2>
-        <p class="text-blue-200 text-sm">Registra y administra tus ahorros y metas financieras</p>
+        <h2 class="text-2xl font-extrabold page-title savings-title mb-1">Gestión de Ahorros</h2>
+        <p class="savings-subtitle text-sm">
+          Registra y administra tus ahorros y metas financieras
+        </p>
       </div>
     </div>
   </div>
@@ -43,17 +45,13 @@
       <div class="content-card rounded-2xl shadow-2xl p-6">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-semibold text-gray-900 flex items-center space-x-2">
-            <mat-icon class="text-blue-500">{{ editingId ? 'edit' : 'add_circle' }}</mat-icon>
+            <mat-icon class="savings-accent">{{ editingId ? 'edit' : 'add_circle' }}</mat-icon>
             <span>{{ editingId ? 'Editar Ahorro' : 'Nuevo Ahorro' }}</span>
           </h3>
-          <button
+          <mb-common-button
             *ngIf="editingId"
-            mat-icon-button
-            (click)="resetForm()"
-            matTooltip="Cancelar edición"
-            class="text-gray-500 hover:text-gray-700">
-            <mat-icon>close</mat-icon>
-          </button>
+            [buttonModel]="cancelEditModel"
+            class="text-gray-500 hover:text-gray-700"></mb-common-button>
         </div>
 
         <!-- Success/Error Message -->
@@ -174,25 +172,12 @@
 
           <!-- Action Buttons -->
           <div class="flex space-x-3 pt-4">
-            <button
-              type="button"
-              mat-stroked-button
-              (click)="resetForm()"
-              [disabled]="isLoading"
-              class="flex-1 md:flex-none">
-              <mat-icon class="mr-2">clear</mat-icon>
-              Limpiar
-            </button>
-            <button
-              type="submit"
-              mat-raised-button
-              color="primary"
-              [disabled]="savingsForm.invalid || isLoading"
-              class="flex-1 md:flex-none">
-              <mat-spinner *ngIf="isLoading" diameter="20" class="mr-2"></mat-spinner>
-              <mat-icon *ngIf="!isLoading" class="mr-2">{{ editingId ? 'save' : 'add' }}</mat-icon>
-              {{ editingId ? 'Actualizar' : 'Guardar' }} Ahorro
-            </button>
+            <mb-common-button
+              [buttonModel]="clearButtonModel"
+              class="flex-1 md:flex-none"></mb-common-button>
+            <mb-common-button
+              [buttonModel]="saveButtonModel"
+              class="flex-1 md:flex-none"></mb-common-button>
           </div>
         </form>
       </div>
@@ -201,7 +186,7 @@
       <div class="content-card rounded-2xl shadow-2xl p-6">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-semibold text-gray-900 flex items-center space-x-2">
-            <mat-icon class="text-blue-500">list</mat-icon>
+            <mat-icon class="savings-accent">list</mat-icon>
             <span>Mis Ahorros</span>
           </h3>
           <div class="text-right" *ngIf="dataSource.data.length > 0">
@@ -237,10 +222,7 @@
           <p class="text-gray-500 mb-4">
             Comienza agregando tu primer ahorro usando el formulario de al lado
           </p>
-          <button mat-raised-button color="primary" (click)="scrollToForm()">
-            <mat-icon class="mr-2">add</mat-icon>
-            Agregar Ahorro
-          </button>
+          <mb-common-button [buttonModel]="addCtaModel" class="savings-btn"></mb-common-button>
         </div>
 
         <!-- Savings Table -->
@@ -311,22 +293,14 @@
               <th mat-header-cell *matHeaderCellDef class="text-center">Acciones</th>
               <td mat-cell *matCellDef="let saving" class="text-center">
                 <div class="flex justify-center space-x-1">
-                  <button
-                    mat-icon-button
-                    color="primary"
-                    (click)="editSaving(saving)"
-                    matTooltip="Editar ahorro"
-                    class="text-sm">
-                    <mat-icon class="text-lg">edit</mat-icon>
-                  </button>
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    (click)="deleteSaving(saving.id)"
-                    matTooltip="Eliminar ahorro"
-                    class="text-sm">
-                    <mat-icon class="text-lg">delete</mat-icon>
-                  </button>
+                  <mb-common-button
+                    [buttonModel]="editRowButtonModel"
+                    [targetId]="saving"
+                    class="text-sm"></mb-common-button>
+                  <mb-common-button
+                    [buttonModel]="deleteRowButtonModel"
+                    [targetId]="saving"
+                    class="text-sm"></mb-common-button>
                 </div>
               </td>
             </ng-container>

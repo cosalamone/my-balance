@@ -1,37 +1,100 @@
-// Estilos para la página de ahorros con soporte para modo claro y oscuro
-// Basado en el diseño de las páginas de ingresos y gastos
+:root {
+  --ah-bg-start: #eff6ff; /* light blue */
+  --ah-bg-end: #e0f2fe;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-border: rgba(229, 231, 235, 0.6);
+  --text-primary: #0f172a;
+  --text-muted: #6b7280;
+  --accent: #2563eb; /* blue-600 */
+  --accent-600: #1e40af;
+  --accent-green: #10b981; /* savings green */
+  --accent-green-600: #059669;
+}
 
-// Tema claro (por defecto)
+/* Dark theme overrides (ThemeService adds .dark-theme on body and data-theme="dark") */
+body.dark-theme,
+:root[data-theme='dark'] {
+  --ah-bg-start: #07102a; /* darker blue */
+  --ah-bg-end: #03102a;
+  --card-bg: rgba(15, 23, 42, 0.75);
+  --card-border: rgba(75, 85, 99, 0.45);
+  --text-primary: #e6eef9;
+  --text-muted: #9ca3af;
+  --accent: #60a5fa; /* lighter accent on dark */
+  --accent-600: #3b82f6;
+  --accent-green: #34d399;
+  --accent-green-600: #10b981;
+}
+
+/* Page background (override Tailwind gradient used in template) */
+.min-h-screen.bg-gradient-to-br {
+  background: linear-gradient(120deg, var(--ah-bg-start), var(--ah-bg-end));
+}
+
 .content-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--card-bg);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--card-border);
   box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease-in-out;
+    0 20px 25px -5px rgba(0, 0, 0, 0.06),
+    0 10px 10px -5px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease-in-out;
+  color: var(--text-primary);
 }
 
 .page-title {
-  background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* use a solid color for better contrast across themes */
+  color: var(--text-primary);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
 }
 
-.logo-svg-container {
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+/* Savings-specific accent styles */
+.savings-accent {
+  color: var(--accent-green-600) !important;
 }
 
-// Información de consejos de formulario
+.savings-title {
+  color: var(--accent-green-600) !important;
+}
+
+.savings-subtitle {
+  color: var(--text-muted);
+}
+
+/* Ensure utility text classes inside cards follow our vars */
+.content-card .text-gray-900 {
+  color: var(--text-primary) !important;
+}
+.content-card .text-gray-500 {
+  color: var(--text-muted) !important;
+}
+
+/* Savings CTA button override */
+.mat-raised-button.savings-btn {
+  background: linear-gradient(
+    90deg,
+    var(--accent-green) 0%,
+    var(--accent-green-600) 100%
+  );
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.18);
+  border: none;
+}
+.mat-raised-button.savings-btn:hover {
+  filter: brightness(0.96);
+}
+
+.logo-svg-container svg {
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.08));
+}
+
 .form-tips {
-  background: rgba(249, 250, 251, 0.8);
-  border: 1px solid rgba(229, 231, 235, 0.6);
-  transition: all 0.3s ease-in-out;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--card-border);
+  transition: all 0.25s ease-in-out;
+  color: var(--text-primary);
 }
 
-// Badges para categorías
 .category-badge {
   display: inline-flex;
   align-items: center;
@@ -39,19 +102,17 @@
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 500;
-  background-color: rgba(59, 130, 246, 0.1);
-  color: rgba(59, 130, 246, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background-color: rgba(37, 99, 235, 0.08);
+  color: var(--accent-600);
+  border: 1px solid rgba(37, 99, 235, 0.12);
 }
 
-// Contenedor de tabla
 .table-container {
   overflow-x: auto;
   border-radius: 12px;
-  border: 1px solid rgba(229, 231, 235, 0.6);
+  border: 1px solid var(--card-border);
 }
 
-// Estilos para tabla responsiva
 @media (max-width: 768px) {
   .table-container {
     font-size: 0.875rem;
@@ -63,68 +124,23 @@
   }
 }
 
-// Tema oscuro
-@media (prefers-color-scheme: dark) {
-  .content-card {
-    background: rgba(17, 24, 39, 0.95);
-    border: 1px solid rgba(55, 65, 81, 0.3);
-    box-shadow:
-      0 20px 25px -5px rgba(0, 0, 0, 0.4),
-      0 10px 10px -5px rgba(0, 0, 0, 0.2);
-  }
-
-  .page-title {
-    background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .form-tips {
-    background: rgba(31, 41, 55, 0.8);
-    border: 1px solid rgba(75, 85, 99, 0.6);
-  }
-
-  .category-badge {
-    background-color: rgba(59, 130, 246, 0.2);
-    color: rgba(147, 197, 253, 0.9);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-  }
-
-  .table-container {
-    border: 1px solid rgba(75, 85, 99, 0.6);
-  }
+/* small helpers so template utility classes render nicely in dark */
+.dark-theme .text-gray-900,
+:root[data-theme='dark'] .text-gray-900 {
+  color: var(--text-primary) !important;
+}
+.dark-theme .text-gray-500,
+:root[data-theme='dark'] .text-gray-500,
+.dark-theme .text-gray-400,
+:root[data-theme='dark'] .text-gray-400 {
+  color: var(--text-muted) !important;
 }
 
-// Animaciones para los elementos de progreso de ahorros
-.progress-animation {
-  animation: progressPulse 2s ease-in-out infinite;
-}
-
-@keyframes progressPulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.8;
-  }
-}
-
-// Hover effects para las filas de la tabla
-.mat-mdc-row:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
-}
-
-// Estilos específicos para barras de progreso de ahorros
+/* progress bar visuals */
 .savings-progress-bar {
   width: 100%;
   height: 8px;
-  background-color: #e5e7eb;
+  background-color: rgba(229, 231, 235, 0.35);
   border-radius: 4px;
   overflow: hidden;
   margin: 0.25rem 0;
@@ -136,19 +152,15 @@
   }
 }
 
-// Estados de progreso con colores específicos para ahorros
 .progress-low {
   background: linear-gradient(90deg, #f87171 0%, #ef4444 100%);
 }
-
 .progress-medium {
   background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
 }
-
 .progress-high {
   background: linear-gradient(90deg, #34d399 0%, #10b981 100%);
 }
-
 .progress-complete {
   background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
   animation: completeGlow 1.5s ease-in-out infinite alternate;
@@ -156,9 +168,16 @@
 
 @keyframes completeGlow {
   from {
-    box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
   }
   to {
-    box-shadow: 0 0 15px rgba(34, 197, 94, 0.8);
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
   }
+}
+
+/* subtle hover for table rows */
+.mat-mdc-row:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(2, 6, 23, 0.06);
+  transition: all 0.18s ease-in-out;
 }

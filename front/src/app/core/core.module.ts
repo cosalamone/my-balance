@@ -1,6 +1,7 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ThemeToggleComponent } from '../components/theme-toggle/theme-toggle.component';
 
 // Shared services that should be singletons
 import { FinancialDataService } from './services/financial-data.service';
@@ -14,7 +15,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, ThemeToggleComponent],
+  exports: [ThemeToggleComponent],
   providers: [
     // Core services (singletons)
     FinancialDataService,

@@ -12,13 +12,10 @@
         {{ cardModel()?.config?.subtitle }}
       </p>
     </div>
-    <button
+    <mb-common-button
       *ngIf="cardModel()?.config?.showRefreshButton"
-      mat-icon-button
-      (click)="onRefresh()"
-      class="text-xs p-1">
-      <mat-icon class="text-xs">refresh</mat-icon>
-    </button>
+      [buttonModel]="getRefreshButtonModel()"
+      class="text-xs p-1"></mb-common-button>
   </div>
 
   <!-- Divider -->
@@ -111,17 +108,11 @@
     <!-- Global Actions -->
     <div *ngIf="(cardModel()?.actions?.length || 0) > 0" class="actions-section mt-2">
       <div class="grid gap-1" [ngClass]="getActionsGridClasses()">
-        <button
+        <mb-common-button
           *ngFor="let action of cardModel()?.actions || []"
-          mat-raised-button
-          [color]="action.color"
-          [routerLink]="action.routerLink"
-          (click)="onActionClick(action)"
+          [buttonModel]="getButtonModel(action)"
           class="w-full h-8 flex flex-col items-center justify-center space-y-0 text-xs"
-          [ngClass]="action.classes">
-          <mat-icon class="text-xs">{{ action.icon }}</mat-icon>
-          <span class="text-xs">{{ action.label }}</span>
-        </button>
+          [ngClass]="action.classes"></mb-common-button>
       </div>
     </div>
   </div>

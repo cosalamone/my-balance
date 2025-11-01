@@ -97,15 +97,9 @@
             formControlName="password"
             placeholder="Contraseña (mínimo 6 caracteres)"
             class="text-lg" />
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="hidePassword = !hidePassword"
-            [attr.aria-label]="'Ocultar contraseña'"
-            [attr.aria-pressed]="hidePassword">
-            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
+          <mb-common-button
+            [buttonModel]="passwordToggleModel"
+            class="mat-icon-button matSuffix"></mb-common-button>
           <mat-error>{{ getFieldError('password') }}</mat-error>
         </mat-form-field>
 
@@ -117,15 +111,9 @@
             formControlName="confirmPassword"
             placeholder="Confirmar contraseña"
             class="text-lg" />
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="hideConfirmPassword = !hideConfirmPassword"
-            [attr.aria-label]="'Ocultar contraseña'"
-            [attr.aria-pressed]="hideConfirmPassword">
-            <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
+          <mb-common-button
+            [buttonModel]="confirmPasswordToggleModel"
+            class="mat-icon-button matSuffix"></mb-common-button>
           <mat-error>{{ getFieldError('confirmPassword') }}</mat-error>
         </mat-form-field>
 
@@ -137,38 +125,17 @@
           type="error"></mb-message>
 
         <!-- Submit Button -->
-        <button
-          mat-raised-button
-          type="submit"
-          mbButton
-          variant="primary"
-          size="lg"
-          class="mb-btn--full"
-          *ngIf="!isLoading"
-          class="mb-btn"
-          [disabled]="!registerForm.valid || isLoading">
-          <div *ngIf="isLoading" class="flex items-center justify-center space-x-2">
-            <mat-spinner diameter="20"></mat-spinner>
-            <span>Creando cuenta...</span>
-          </div>
-          <span *ngIf="!isLoading" class="flex items-center justify-center space-x-2">
-            <mat-icon>person_add</mat-icon>
-            <span>Crear Cuenta</span>
-          </span>
-        </button>
+        <mb-common-button
+          [buttonModel]="registerButtonModel"
+          class="mb-btn--full mb-btn mb-btn--primary"
+          [ngClass]="{ 'mb-btn--loading': isLoading }"></mb-common-button>
       </form>
 
       <!-- Login Link -->
       <div class="footer--page">
         <p class="text-sm text-gray-600">
           ¿Ya tienes una cuenta?
-          <button
-            mat-button
-            color="primary"
-            class="nav-link ml-1 font-semibold"
-            (click)="navigateToLogin()">
-            Iniciar Sesión
-          </button>
+          <mb-common-button [buttonModel]="loginNavModel" class="ml-1"></mb-common-button>
         </p>
       </div>
 

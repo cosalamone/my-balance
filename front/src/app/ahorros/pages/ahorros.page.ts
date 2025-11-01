@@ -41,6 +41,7 @@ import {
 } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Observable } from 'rxjs';
+import { ButtonCommonComponent } from '../../core/components/buttons/common-button/common-button';
 import {
   DropdownComponent,
   DropdownConfig,
@@ -53,6 +54,7 @@ import {
   MessageComponent,
   MessageConfig,
 } from '../../core/components/form/message/message.component';
+import { ButtonModelBase } from '../../core/models/button-base.model';
 
 import {
   Savings,
@@ -87,6 +89,7 @@ import { FormConfigService } from '../../core/services/form-config.service';
     InputWrapperComponent,
     DropdownComponent,
     MessageComponent,
+    ButtonCommonComponent,
   ],
   templateUrl: './ahorros.page.html',
   styleUrls: ['./ahorros.page.scss'],
@@ -155,6 +158,13 @@ export class SavingsComponent implements OnInit {
   categoryConfig: DropdownConfig;
   searchConfig: InputWrapperConfig;
   messageConfig: MessageConfig;
+  // Button models
+  saveButtonModel!: ButtonModelBase;
+  clearButtonModel!: ButtonModelBase;
+  cancelEditModel!: ButtonModelBase;
+  addCtaModel!: ButtonModelBase;
+  editRowButtonModel!: ButtonModelBase;
+  deleteRowButtonModel!: ButtonModelBase;
 
   constructor(
     private fb: FormBuilder,
@@ -191,11 +201,77 @@ export class SavingsComponent implements OnInit {
       show: false,
       dismissible: true,
     };
+
+    // Initialize button models (will wire actions to component methods)
+    this.saveButtonModel = new ButtonModelBase({
+      action: () => this.onSubmit(),
+      style: 'filled',
+      buttonType: ButtonCommonComponent as any,
+      label: 'Guardar Ahorro',
+      iconName: 'add',
+      tooltipMessage: '',
+    } as any);
+
+    this.clearButtonModel = new ButtonModelBase({
+      action: () => this.resetForm(),
+      style: 'outlined',
+      buttonType: ButtonCommonComponent as any,
+      label: 'Limpiar',
+      iconName: 'clear',
+      tooltipMessage: 'Limpiar formulario',
+    } as any);
+
+    this.cancelEditModel = new ButtonModelBase({
+      action: () => this.resetForm(),
+      style: 'icon',
+      buttonType: ButtonCommonComponent as any,
+      label: '',
+      iconName: 'close',
+      tooltipMessage: 'Cancelar edición',
+    } as any);
+
+    this.addCtaModel = new ButtonModelBase({
+      action: () => this.scrollToForm(),
+      style: 'filled',
+      buttonType: ButtonCommonComponent as any,
+      label: 'Agregar Ahorro',
+      iconName: 'add',
+      tooltipMessage: 'Agregar Ahorro',
+    } as any);
+
+    // Models for table row actions; target object will be passed as targetId
+    this.editRowButtonModel = new ButtonModelBase({
+      action: (saving?: any) => this.editSaving(saving),
+      style: 'icon',
+      buttonType: ButtonCommonComponent as any,
+      label: '',
+      iconName: 'edit',
+      tooltipMessage: 'Editar ahorro',
+    } as any);
+
+    this.deleteRowButtonModel = new ButtonModelBase({
+      action: (saving?: any) =>
+        this.deleteSaving(saving?.id),
+      style: 'icon',
+      buttonType: ButtonCommonComponent as any,
+      label: '',
+      iconName: 'delete',
+      tooltipMessage: 'Eliminar ahorro',
+    } as any);
   }
 
   ngOnInit(): void {
     this.initForm();
     this.loadSavings();
+    // Keep button disabled state in sync with form validity and loading
+    this.savingsForm.statusChanges.subscribe(() => {
+      if (this.saveButtonModel)
+        this.saveButtonModel.optionDisabled =
+          this.savingsForm.invalid || this.isLoading;
+      if (this.clearButtonModel)
+        this.clearButtonModel.optionDisabled =
+          this.isLoading;
+    });
   }
 
   private initForm(): void {
@@ -252,6 +328,11 @@ export class SavingsComponent implements OnInit {
   onSubmit(): void {
     if (this.savingsForm.valid) {
       this.isLoading = true;
+      // disable save/clear buttons while loading
+      if (this.saveButtonModel)
+        this.saveButtonModel.optionDisabled = true;
+      if (this.clearButtonModel)
+        this.clearButtonModel.optionDisabled = true;
       const formValue = {
         ...this.savingsForm.value,
         date: this.savingsForm.value.date || new Date(),
@@ -280,6 +361,10 @@ export class SavingsComponent implements OnInit {
                 'Error al actualizar el ahorro'
               );
               this.isLoading = false;
+              if (this.saveButtonModel)
+                this.saveButtonModel.optionDisabled = false;
+              if (this.clearButtonModel)
+                this.clearButtonModel.optionDisabled = false;
             },
           });
       } else {
@@ -303,6 +388,10 @@ export class SavingsComponent implements OnInit {
                 'Error al agregar el ahorro'
               );
               this.isLoading = false;
+              if (this.saveButtonModel)
+                this.saveButtonModel.optionDisabled = false;
+              if (this.clearButtonModel)
+                this.clearButtonModel.optionDisabled = false;
             },
           });
       }
@@ -326,6 +415,11 @@ export class SavingsComponent implements OnInit {
         ? new Date(saving.targetDate)
         : '',
     });
+    // update save button label/icon
+    if (this.saveButtonModel) {
+      this.saveButtonModel.label = 'Actualizar Ahorro';
+      this.saveButtonModel.iconName = 'save';
+    }
   }
 
   deleteSaving(id: string): void {
@@ -361,6 +455,15 @@ export class SavingsComponent implements OnInit {
     });
     this.editingId = null;
     this.isLoading = false;
+
+    // restore save button model state
+    if (this.saveButtonModel) {
+      this.saveButtonModel.label = 'Guardar Ahorro';
+      this.saveButtonModel.iconName = 'add';
+      this.saveButtonModel.optionDisabled = false;
+    }
+    if (this.clearButtonModel)
+      this.clearButtonModel.optionDisabled = false;
 
     // Mark all fields as untouched to remove validation errors
     this.savingsForm.markAsUntouched();

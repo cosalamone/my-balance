@@ -38,9 +38,9 @@
             formControlName="password"
             placeholder="Contraseña"
             class="mb-input" />
-          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
-            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
+          <mb-common-button
+            [buttonModel]="passwordToggleModel"
+            class="mat-icon-button matSuffix"></mb-common-button>
           <mat-error>{{ getFieldError('password') }}</mat-error>
         </mat-form-field>
       </div>
@@ -53,16 +53,15 @@
         type="error"></mb-message>
 
       <!-- Submit Button -->
-      <button
-        type="submit"
+      <mb-common-button
+        [buttonModel]="loginButtonModel"
         class="mb-btn mb-btn--primary mb-btn--lg mb-btn--full"
-        [class.mb-btn--loading]="isLoading"
-        [disabled]="!loginForm.valid || isLoading">
-        <span *ngIf="!isLoading" class="mb-flex-center mb-space-x-2">
+        [ngClass]="{ 'mb-btn--loading': isLoading }">
+        <ng-container *ngIf="!isLoading">
           <mat-icon>login</mat-icon>
           <span>Iniciar Sesión</span>
-        </span>
-      </button>
+        </ng-container>
+      </mb-common-button>
     </form>
 
     <!-- Biometric Section -->
@@ -71,37 +70,20 @@
         <span class="mb-text--sm mb-text--muted">o continúa con</span>
       </div>
 
-      <button
+      <mb-common-button
+        [buttonModel]="biometricButtonModel"
         class="mb-btn mb-btn--secondary mb-btn--lg mb-btn--full"
-        [class.mb-btn--loading]="biometricLoading"
-        [disabled]="biometricLoading"
-        (click)="onBiometricLogin()">
-        <span *ngIf="!biometricLoading" class="mb-flex-center mb-space-x-2">
-          <mat-icon>fingerprint</mat-icon>
-          <span>Autenticación Biométrica</span>
-        </span>
-      </button>
+        [ngClass]="{ 'mb-btn--loading': biometricLoading }"></mb-common-button>
 
-      <button
+      <mb-common-button
         *ngIf="showRegisterBiometric"
-        class="mb-btn mb-btn--secondary mb-btn--md mb-btn--full"
-        [disabled]="biometricLoading || !loginForm.valid"
-        (click)="onRegisterBiometric()">
-        <span class="mb-flex-center mb-space-x-2">
-          <mat-icon>add_circle_outline</mat-icon>
-          <span>Configurar Huella Digital</span>
-        </span>
-      </button>
+        [buttonModel]="registerBiometricModel"
+        class="mb-btn mb-btn--secondary mb-btn--md mb-btn--full"></mb-common-button>
 
-      <button
+      <mb-common-button
         *ngIf="!showRegisterBiometric"
-        class="mb-btn mb-btn--danger mb-btn--sm mb-btn--full"
-        (click)="onClearBiometricCredentials()">
-        <span class="mb-flex-center mb-space-x-2">
-          <mat-icon>delete_outline</mat-icon>
-          <span>Eliminar Credenciales Biométricas</span>
-        </span>
-      </button>
+        [buttonModel]="clearBiometricModel"
+        class="mb-btn mb-btn--danger mb-btn--sm mb-btn--full"></mb-common-button>
     </div>
 
     <!-- Not Supported Message -->

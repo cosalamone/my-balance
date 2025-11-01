@@ -8,12 +8,14 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { ButtonModelBase } from '../../..//models/button-base.model';
 import {
   CardAction,
   CardBaseModel,
   CardSection,
 } from '../../../models/card-base.model';
+import { ButtonCommonComponent } from '../../buttons/common-button/common-button';
 
 @Component({
   selector: 'mb-card-base',
@@ -26,17 +28,23 @@ import {
     MatCardModule,
     MatButtonModule,
     MatIconModule,
+    ButtonCommonComponent,
   ],
 })
 export class CardBaseComponent {
+  constructor(private router: Router) {}
   public readonly cardModel = input<CardBaseModel>();
   // Backwards-compatible EventEmitters
   @Output() refreshClicked = new EventEmitter<void>();
   @Output() actionClicked = new EventEmitter<CardAction>();
 
   // Signal-based callbacks (preferred)
-  public readonly onRefreshCallback = input<(() => void) | undefined>();
-  public readonly onActionCallback = input<((action: CardAction) => void) | undefined>();
+  public readonly onRefreshCallback = input<
+    (() => void) | undefined
+  >();
+  public readonly onActionCallback = input<
+    ((action: CardAction) => void) | undefined
+  >();
 
   onRefresh(): void {
     const cm = this.cardModel();
@@ -57,6 +65,47 @@ export class CardBaseComponent {
     const acb = this.onActionCallback();
     if (acb) acb(action);
     this.actionClicked.emit(action);
+  }
+
+  // Cached refresh button model
+  private _refreshButtonModel?: ButtonModelBase;
+
+  getRefreshButtonModel(): ButtonModelBase {
+    if (this._refreshButtonModel)
+      return this._refreshButtonModel;
+    this._refreshButtonModel = new ButtonModelBase({
+      action: () => this.onRefresh(),
+      style: 'icon',
+      buttonType: ButtonCommonComponent as any,
+      iconName: 'refresh',
+      tooltipMessage: 'Actualizar',
+    } as any);
+    return this._refreshButtonModel;
+  }
+
+  // Build or return a cached ButtonModelBase for a CardAction
+  public getButtonModel(
+    action: CardAction
+  ): ButtonModelBase {
+    const anyA = action as any;
+    if (anyA._buttonModel) return anyA._buttonModel;
+
+    const bm = new ButtonModelBase({
+      label: action.label,
+      iconName: action.icon,
+      action: () => {
+        // Execute configured action
+        if (action.action) action.action();
+        // Navigate if routerLink present
+        if (action.routerLink)
+          this.router.navigate([action.routerLink]);
+      },
+      style: action.color === 'warn' ? 'filled' : 'filled',
+      buttonType: ButtonCommonComponent as any,
+    } as any);
+
+    anyA._buttonModel = bm;
+    return bm;
   }
 
   getSectionLayoutClasses(section: CardSection): string {

@@ -8,7 +8,6 @@ import {
   input,
   InputSignal,
   OnDestroy,
-  OnInit,
 } from '@angular/core';
 import { ButtonBaseInterface } from '../../interfaces/button-interface';
 
@@ -19,9 +18,8 @@ import { ButtonBaseInterface } from '../../interfaces/button-interface';
   standalone: true,
 })
 export class ButtonBaseComponent<
-    T extends ButtonBaseInterface,
-  >
-  implements OnInit, OnDestroy
+  T extends ButtonBaseInterface,
+> implements OnDestroy
 {
   //#region Injection
   private readonly _changeDetector: ChangeDetectorRef =
@@ -33,21 +31,16 @@ export class ButtonBaseComponent<
     input<any | undefined>();
   public readonly buttonModel: InputSignal<T | undefined> =
     input<T | undefined>();
-  private _stopOptionEffect: any = null;
+  private _stopOptionEffect: any = effect(() => {
+    const bm = this.buttonModel?.();
+    const optSig = bm?.$optionDisabled;
+    const val = optSig ? optSig() : undefined;
+    if (val !== undefined && bm) {
+      bm.optionDisabled = val;
+      this._changeDetector.detectChanges();
+    }
+  });
   public dataCy = computed(() => this.generateDataCY());
-
-  public ngOnInit(): void {
-    // Effect to react to changes in the model's $optionDisabled signal
-    this._stopOptionEffect = effect(() => {
-      const bm = this.buttonModel?.();
-      const optSig = bm?.$optionDisabled;
-      const val = optSig ? optSig() : undefined;
-      if (val !== undefined && bm) {
-        bm.optionDisabled = val;
-        this._changeDetector.detectChanges();
-      }
-    });
-  }
 
   public ngOnDestroy(): void {
     if (this._stopOptionEffect) {

@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  from,
+  of,
+} from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 export interface BiometricCredential {
   id: string;
@@ -13,34 +19,44 @@ export interface BiometricCredential {
   providedIn: 'root',
 })
 export class BiometricAuthService {
-  private readonly CREDENTIALS_KEY = 'biometric_credentials';
-  private biometricSupportSubject = new BehaviorSubject<boolean>(false);
-  public biometricSupport$ = this.biometricSupportSubject.asObservable();
+  private readonly CREDENTIALS_KEY =
+    'biometric_credentials';
+  private biometricSupportSubject =
+    new BehaviorSubject<boolean>(false);
+  public biometricSupport$ =
+    this.biometricSupportSubject.asObservable();
 
   constructor() {
-    this.checkBiometricSupport();
+    this.initBiometricSupport();
   }
 
   /**
-   * Verifica si el dispositivo soporta autenticación biométrica
+   * Inicializa la señal de soporte biométrico usando Observables
    */
-  private async checkBiometricSupport(): Promise<void> {
+  private initBiometricSupport(): void {
     try {
-      // Verificar si WebAuthn está disponible
       const isWebAuthnSupported = !!(
-        navigator.credentials && navigator.credentials.create
+        navigator.credentials &&
+        navigator.credentials.create
       );
 
-      if (isWebAuthnSupported) {
-        // Verificar si hay autenticadores disponibles
-        const isAvailable =
-          await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-        this.biometricSupportSubject.next(isAvailable);
-      } else {
+      if (!isWebAuthnSupported) {
         this.biometricSupportSubject.next(false);
+        return;
       }
+
+      from(
+        PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+      )
+        .pipe(catchError(() => of(false)))
+        .subscribe(isAvailable =>
+          this.biometricSupportSubject.next(isAvailable)
+        );
     } catch (error) {
-      console.warn('Error checking biometric support:', error);
+      console.warn(
+        'Error initializing biometric support:',
+        error
+      );
       this.biometricSupportSubject.next(false);
     }
   }
@@ -48,10 +64,10 @@ export class BiometricAuthService {
   /**
    * Registra una nueva credencial biométrica
    */
-  async registerBiometric(
+  registerBiometric(
     username: string,
     displayName: string
-  ): Promise<boolean> {
+  ): Observable<boolean> {
     try {
       const challenge = new Uint8Array(32);
       crypto.getRandomValues(challenge);
@@ -87,44 +103,53 @@ export class BiometricAuthService {
           attestation: 'direct',
         };
 
-      const credential = (await navigator.credentials.create({
-        publicKey: publicKeyCredentialCreationOptions,
-      })) as PublicKeyCredential;
-
-      if (credential && credential.response) {
-        const response =
-          credential.response as AuthenticatorAttestationResponse;
-        // Guardar credencial en localStorage (en producción usar backend seguro)
-        const biometricCred: BiometricCredential = {
-          id: credential.id,
-          publicKey: this.arrayBufferToBase64(
-            response.getPublicKey() || new ArrayBuffer(0)
-          ),
-          username: username,
-          displayName: displayName,
-          createdAt: new Date(),
-        };
-
-        this.saveCredential(biometricCred);
-        return true;
-      }
-
-      return false;
+      return from(
+        navigator.credentials.create({
+          publicKey: publicKeyCredentialCreationOptions,
+        }) as Promise<PublicKeyCredential>
+      ).pipe(
+        map(credential => {
+          if (credential && (credential as any).response) {
+            const response = (credential as any)
+              .response as AuthenticatorAttestationResponse;
+            const biometricCred: BiometricCredential = {
+              id: credential.id,
+              publicKey: this.arrayBufferToBase64(
+                response.getPublicKey() ||
+                  new ArrayBuffer(0)
+              ),
+              username: username,
+              displayName: displayName,
+              createdAt: new Date(),
+            };
+            this.saveCredential(biometricCred);
+            return true;
+          }
+          return false;
+        }),
+        catchError(err => {
+          console.error(
+            'Error registering biometric:',
+            err
+          );
+          return of(false);
+        })
+      );
     } catch (error) {
       console.error('Error registering biometric:', error);
-      return false;
+      return of(false);
     }
   }
 
   /**
    * Autentica usando biométrica
    */
-  async authenticateWithBiometric(): Promise<string | null> {
+  authenticateWithBiometric(): Observable<string | null> {
     try {
       const savedCredentials = this.getSavedCredentials();
 
       if (savedCredentials.length === 0) {
-        throw new Error('No hay credenciales biométricas registradas');
+        return of(null);
       }
 
       const challenge = new Uint8Array(32);
@@ -141,26 +166,36 @@ export class BiometricAuthService {
           timeout: 60000,
         };
 
-      const assertion = (await navigator.credentials.get({
-        publicKey: publicKeyCredentialRequestOptions,
-      })) as PublicKeyCredential;
-
-      if (assertion) {
-        // Buscar la credencial correspondiente
-        const matchingCred = savedCredentials.find(
-          cred => cred.id === assertion.id
-        );
-
-        if (matchingCred) {
-          // En una implementación real, aquí verificarías la firma con el backend
-          return matchingCred.username;
-        }
-      }
-
-      return null;
+      return from(
+        navigator.credentials.get({
+          publicKey: publicKeyCredentialRequestOptions,
+        }) as Promise<PublicKeyCredential>
+      ).pipe(
+        map(assertion => {
+          if (assertion) {
+            const matchingCred = savedCredentials.find(
+              cred => cred.id === assertion.id
+            );
+            if (matchingCred) {
+              return matchingCred.username;
+            }
+          }
+          return null;
+        }),
+        catchError(err => {
+          console.error(
+            'Error authenticating with biometric:',
+            err
+          );
+          return of(null);
+        })
+      );
     } catch (error) {
-      console.error('Error authenticating with biometric:', error);
-      return null;
+      console.error(
+        'Error authenticating with biometric:',
+        error
+      );
+      return of(null);
     }
   }
 
@@ -169,7 +204,9 @@ export class BiometricAuthService {
    */
   getSavedCredentials(): BiometricCredential[] {
     try {
-      const stored = localStorage.getItem(this.CREDENTIALS_KEY);
+      const stored = localStorage.getItem(
+        this.CREDENTIALS_KEY
+      );
       return stored ? JSON.parse(stored) : [];
     } catch {
       return [];
@@ -181,7 +218,9 @@ export class BiometricAuthService {
    */
   hasCredentialsForUser(username: string): boolean {
     const credentials = this.getSavedCredentials();
-    return credentials.some(cred => cred.username === username);
+    return credentials.some(
+      cred => cred.username === username
+    );
   }
 
   /**
@@ -196,19 +235,29 @@ export class BiometricAuthService {
    */
   removeUserCredentials(username: string): void {
     const credentials = this.getSavedCredentials();
-    const filtered = credentials.filter(cred => cred.username !== username);
-    localStorage.setItem(this.CREDENTIALS_KEY, JSON.stringify(filtered));
+    const filtered = credentials.filter(
+      cred => cred.username !== username
+    );
+    localStorage.setItem(
+      this.CREDENTIALS_KEY,
+      JSON.stringify(filtered)
+    );
   }
 
   // Métodos utilitarios privados
-  private saveCredential(credential: BiometricCredential): void {
+  private saveCredential(
+    credential: BiometricCredential
+  ): void {
     const existing = this.getSavedCredentials();
     // Remover credenciales existentes del mismo usuario
     const filtered = existing.filter(
       cred => cred.username !== credential.username
     );
     filtered.push(credential);
-    localStorage.setItem(this.CREDENTIALS_KEY, JSON.stringify(filtered));
+    localStorage.setItem(
+      this.CREDENTIALS_KEY,
+      JSON.stringify(filtered)
+    );
   }
 
   private generateChallenge(): Uint8Array {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ButtonConfig } from '../components/form/button/button.component';
+import { ButtonCommonComponent } from '../components/buttons/common-button/common-button';
 import { DatepickerConfig } from '../components/form/datepicker/datepicker.component';
 import {
   DropdownConfig,
@@ -7,6 +7,21 @@ import {
 } from '../components/form/dropdown/dropdown.component';
 import { TextInputConfig } from '../components/form/text-input/text-input.component';
 import { TextareaConfig } from '../components/form/textarea/textarea.component';
+import { ButtonModelBase } from '../models/button-base.model';
+
+// Local definition to avoid importing the legacy form/button component
+export interface ButtonConfig {
+  label?: string;
+  icon?: string;
+  type?: string;
+  size?: string;
+  disabled?: boolean;
+  loading?: boolean;
+  fullWidth?: boolean;
+  color?: 'primary' | 'accent' | 'warn';
+  buttonType?: 'button' | 'submit' | 'reset';
+  tooltip?: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -328,5 +343,81 @@ export class FormConfigService {
       type: 'primary',
       color: 'primary',
     };
+  }
+
+  // ---------------------------
+  // Model adapters (ButtonModelBase)
+  // ---------------------------
+  private createButtonModelFromConfig(
+    cfg: any,
+    action: (v?: any) => void
+  ): ButtonModelBase {
+    // Map simplistic config keys to ButtonModelBase shape
+    const styleMap: Record<
+      string,
+      'filled' | 'outlined' | 'icon'
+    > = {
+      primary: 'filled',
+      accent: 'filled',
+      warn: 'filled',
+      stroked: 'outlined',
+      flat: 'filled',
+      basic: 'filled',
+      icon: 'icon',
+    };
+
+    const bm = new ButtonModelBase({
+      action: action,
+      style:
+        styleMap[(cfg && cfg['type']) ?? ''] ?? 'filled',
+      buttonType: ButtonCommonComponent as any,
+      label: (cfg && cfg['label']) ?? '',
+      iconName: (cfg && cfg['icon']) ?? undefined,
+      tooltipMessage: (cfg && cfg['tooltip']) ?? undefined,
+      optionDisabled: (cfg && cfg['disabled']) ?? false,
+    } as any);
+
+    return bm;
+  }
+
+  getSaveButtonModel(
+    isEditing = false,
+    isLoading = false
+  ): ButtonModelBase {
+    const cfg = this.getSaveButtonConfig(
+      isEditing,
+      isLoading
+    );
+    return this.createButtonModelFromConfig(cfg, () => {});
+  }
+
+  getClearButtonModel(isLoading = false): ButtonModelBase {
+    const cfg = this.getClearButtonConfig(isLoading);
+    return this.createButtonModelFromConfig(cfg, () => {});
+  }
+
+  getDeleteButtonModel(isLoading = false): ButtonModelBase {
+    const cfg = this.getDeleteButtonConfig(isLoading);
+    return this.createButtonModelFromConfig(cfg, () => {});
+  }
+
+  getEditButtonModel(): ButtonModelBase {
+    const cfg = this.getEditButtonConfig();
+    return this.createButtonModelFromConfig(cfg, () => {});
+  }
+
+  getDeleteIconButtonModel(): ButtonModelBase {
+    const cfg = this.getDeleteIconButtonConfig();
+    return this.createButtonModelFromConfig(cfg, () => {});
+  }
+
+  getCancelButtonModel(): ButtonModelBase {
+    const cfg = this.getCancelButtonConfig();
+    return this.createButtonModelFromConfig(cfg, () => {});
+  }
+
+  getAddButtonModel(): ButtonModelBase {
+    const cfg = this.getAddButtonConfig();
+    return this.createButtonModelFromConfig(cfg, () => {});
   }
 }

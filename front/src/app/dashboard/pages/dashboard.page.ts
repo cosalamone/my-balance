@@ -4,15 +4,9 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {
-  MatSnackBar,
-  MatSnackBarModule,
-} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -22,7 +16,6 @@ import {
   SummaryCardsComponent,
 } from 'src/app/core/components/cards';
 import { DashboardSectionComponent } from 'src/app/core/components/dashboard-section/dashboard-section.component';
-import { MessageComponent } from 'src/app/core/components/message/message.component';
 import { PageHeaderComponent } from 'src/app/core/components/page-header/page-header.component';
 import { FinancialSummary } from '../../core/models/financial.models';
 import { SummaryCardModel } from '../../core/models/summary-card.model';
@@ -32,25 +25,20 @@ import { FinancialDataService } from '../../core/services/financial-data.service
 // Importar componentes compartido
 @Component({
   selector: 'mb-dashboard',
-  templateUrl: './dashboard.page.html',
-  styleUrls: ['./dashboard.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
     RouterModule,
-    MatCardModule,
-    MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatGridListModule,
-    MatSnackBarModule,
     SummaryCardsComponent,
     QuickActionsCardComponent,
     ActivitySummaryCardComponent,
     PageHeaderComponent,
     DashboardSectionComponent,
-    MessageComponent,
   ],
+  templateUrl: './dashboard.page.html',
+  styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardComponent
   implements OnInit, OnDestroy

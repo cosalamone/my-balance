@@ -11,10 +11,9 @@
         {{ config()?.message }}
       </span>
     </div>
-    <mb-button
+    <mb-common-button
       *ngIf="config()?.dismissible"
-      [config]="{ label: '', type: 'icon', icon: 'close', tooltip: 'Cerrar' }"
-      (buttonClick)="dismiss()"
-      class="ml-4"></mb-button>
+      [buttonModel]="_dismissModel()"
+      class="ml-4"></mb-common-button>
   </div>
 </div>

@@ -42,18 +42,9 @@ import { CoreModule } from './core/core.module';
 
 // Components
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { AppComponent } from './app.component';
-import { LoginComponent } from './auth/pages/login/login.page';
-import { DashboardComponent } from './dashboard/pages/dashboard.page';
-import { IncomeComponent } from './ingresos/pages/ingresos.page';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DashboardComponent,
-    IncomeComponent,
-    LoginComponent,
-  ],
+  declarations: [],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -89,6 +80,5 @@ import { IncomeComponent } from './ingresos/pages/ingresos.page';
     MatTooltipModule,
   ],
   providers: [provideAnimationsAsync()],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -17,8 +17,11 @@ import {
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { ButtonCommonComponent } from 'src/app/core/components/buttons/common-button/common-button';
 import { MessageComponent } from 'src/app/core/components/message/message.component';
 import { PageHeaderComponent } from 'src/app/core/components/page-header/page-header.component';
+import { ButtonModelBase } from 'src/app/core/models/button-base.model';
+import { FormConfigService } from 'src/app/core/services/form-config.service';
 import { ThemeToggleComponent } from '../../../components/theme-toggle/theme-toggle.component';
 import {
   AuthService,
@@ -43,6 +46,7 @@ import {
     ThemeToggleComponent,
     MessageComponent,
     PageHeaderComponent,
+    ButtonCommonComponent,
   ],
 })
 export class RegisterComponent implements OnInit {
@@ -51,12 +55,18 @@ export class RegisterComponent implements OnInit {
   errorMessage = '';
   hidePassword = true;
   hideConfirmPassword = true;
+  // Button models
+  registerButtonModel!: ButtonModelBase;
+  loginNavModel!: ButtonModelBase;
+  passwordToggleModel!: ButtonModelBase;
+  confirmPasswordToggleModel!: ButtonModelBase;
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private formConfig: FormConfigService
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +76,55 @@ export class RegisterComponent implements OnInit {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/dashboard']);
     }
+
+    // Initialize button models
+    this.registerButtonModel =
+      this.formConfig.getSaveButtonModel(false, false);
+    this.registerButtonModel.action = () => this.onSubmit();
+
+    this.loginNavModel =
+      this.formConfig.getCancelButtonModel();
+    this.loginNavModel.action = () =>
+      this.navigateToLogin();
+
+    this.registerForm.statusChanges?.subscribe(status => {
+      const disabled = status !== 'VALID' || this.isLoading;
+      this.registerButtonModel.optionDisabled = disabled;
+    });
+
+    // Password visibility toggle models
+    this.passwordToggleModel = new ButtonModelBase({
+      action: () => {
+        this.hidePassword = !this.hidePassword;
+        this.passwordToggleModel.iconName = this
+          .hidePassword
+          ? 'visibility_off'
+          : 'visibility';
+      },
+      style: 'icon',
+      buttonType: ButtonCommonComponent as any,
+      iconName: this.hidePassword
+        ? 'visibility_off'
+        : 'visibility',
+      tooltipMessage: 'Mostrar / ocultar contraseña',
+    } as any);
+
+    this.confirmPasswordToggleModel = new ButtonModelBase({
+      action: () => {
+        this.hideConfirmPassword =
+          !this.hideConfirmPassword;
+        this.confirmPasswordToggleModel.iconName = this
+          .hideConfirmPassword
+          ? 'visibility_off'
+          : 'visibility';
+      },
+      style: 'icon',
+      buttonType: ButtonCommonComponent as any,
+      iconName: this.hideConfirmPassword
+        ? 'visibility_off'
+        : 'visibility',
+      tooltipMessage: 'Mostrar / ocultar contraseña',
+    } as any);
   }
 
   initForm(): void {

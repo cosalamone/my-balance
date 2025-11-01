@@ -41,12 +41,15 @@ import {
 } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Observable } from 'rxjs';
+import { ButtonCommonComponent } from '../../core/components/buttons/common-button/common-button';
+import { ButtonModelBase } from '../../core/models/button-base.model';
 import {
   Expense,
   ExpenseCategory,
   ExpenseType,
 } from '../../core/models/financial.models';
 import { FinancialDataService } from '../../core/services/financial-data.service';
+import { FormConfigService } from '../../core/services/form-config.service';
 
 @Component({
   selector: 'mb-gastos',
@@ -70,6 +73,8 @@ import { FinancialDataService } from '../../core/services/financial-data.service
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatOptionModule,
+    // Custom components
+    ButtonCommonComponent,
   ],
   templateUrl: './gastos.page.html',
   styleUrls: ['./gastos.page.scss'],
@@ -155,16 +160,53 @@ export class ExpenseComponent implements OnInit {
   editingId: string | null = null;
   message = '';
   showMessageFlag = false;
+  // Button models
+  saveButtonModel!: ButtonModelBase;
+  clearButtonModel!: ButtonModelBase;
+  cancelEditModel!: ButtonModelBase;
+  editRowButtonModel!: ButtonModelBase;
+  deleteRowButtonModel!: ButtonModelBase;
 
   constructor(
     private fb: FormBuilder,
     private financialService: FinancialDataService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private formConfig: FormConfigService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.loadExpenses();
+
+    // Initialize button models
+    this.saveButtonModel =
+      this.formConfig.getSaveButtonModel(false, false);
+    this.saveButtonModel.action = () => this.onSubmit();
+
+    this.clearButtonModel =
+      this.formConfig.getClearButtonModel(false);
+    this.clearButtonModel.action = () => this.resetForm();
+
+    this.cancelEditModel =
+      this.formConfig.getCancelButtonModel();
+    this.cancelEditModel.action = () => this.resetForm();
+
+    this.editRowButtonModel =
+      this.formConfig.getEditButtonModel();
+    this.editRowButtonModel.action = (row: any) =>
+      this.editExpense(row as Expense);
+
+    this.deleteRowButtonModel =
+      this.formConfig.getDeleteIconButtonModel();
+    this.deleteRowButtonModel.action = (id: any) =>
+      this.deleteExpense(id as string);
+
+    // Wire form status to button disabled state
+    this.expenseForm.statusChanges.subscribe(status => {
+      const disabled = status !== 'VALID' || this.isLoading;
+      this.saveButtonModel.optionDisabled = disabled;
+      this.clearButtonModel.optionDisabled = this.isLoading;
+    });
   }
 
   private initForm(): void {

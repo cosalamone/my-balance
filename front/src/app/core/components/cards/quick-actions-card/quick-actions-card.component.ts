@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
+import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { QuickActionsCardModelClass } from '../../../classes/cards/quick-actions-card.model.class';
 import { CardBaseComponent } from '../card-base/card-base.component';
-import { QuickActionsCardModel } from '../../../models/quick-actions-card.model';
 
 @Component({
   selector: 'mb-quick-actions-card',
@@ -22,13 +22,7 @@ import { QuickActionsCardModel } from '../../../models/quick-actions-card.model'
   ],
 })
 export class QuickActionsCardComponent {
-  cardModel: QuickActionsCardModel = {
-    config: {
-      title: 'Acciones Rápidas',
-      containerClasses: 'p-2 dashboard-card flex-shrink-0 mx-2',
-      contentClasses: 'pt-1',
-      showDivider: false, // Oculta la raya/divider
-    },
+  cardModel = new QuickActionsCardModelClass({
     actions: [
       {
         label: 'Ingreso',
@@ -54,6 +48,5 @@ export class QuickActionsCardComponent {
         routerLink: '/reportes',
       },
     ],
-    order: ['Ingreso', 'Gasto', 'Ahorro', 'Reportes'],
-  };
+  });
 }

@@ -19,8 +19,10 @@ import {
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
+import { ButtonCommonComponent } from 'src/app/core/components/buttons/common-button/common-button';
 import { MessageComponent } from 'src/app/core/components/message/message.component';
-import { PageHeaderComponent } from 'src/app/core/components/page-header/page-header.component';
+import { ButtonModelBase } from 'src/app/core/models/button-base.model';
+import { FormConfigService } from 'src/app/core/services/form-config.service';
 import { ThemeToggleComponent } from '../../../components/theme-toggle/theme-toggle.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { BiometricAuthService } from '../../../core/services/biometric-auth.service';
@@ -28,8 +30,6 @@ import { BiometricAuthService } from '../../../core/services/biometric-auth.serv
 @Component({
   selector: 'mb-login',
   standalone: true,
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -45,8 +45,10 @@ import { BiometricAuthService } from '../../../core/services/biometric-auth.serv
     MatSnackBarModule,
     ThemeToggleComponent,
     MessageComponent,
-    PageHeaderComponent,
+    ButtonCommonComponent,
   ],
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
@@ -56,13 +58,20 @@ export class LoginComponent implements OnInit {
   biometricLoading = false;
   showRegisterBiometric = false;
   hidePassword = true;
+  // Button models
+  loginButtonModel!: ButtonModelBase;
+  biometricButtonModel!: ButtonModelBase;
+  registerBiometricModel!: ButtonModelBase;
+  clearBiometricModel!: ButtonModelBase;
+  passwordToggleModel!: ButtonModelBase;
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private biometricService: BiometricAuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private formConfig: FormConfigService
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +82,50 @@ export class LoginComponent implements OnInit {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/dashboard']);
     }
+
+    // Initialize button models
+    this.loginButtonModel =
+      this.formConfig.getSaveButtonModel(false, false);
+    this.loginButtonModel.action = () => this.onSubmit();
+    this.loginButtonModel.optionDisabled =
+      !this.loginForm?.valid || this.isLoading;
+
+    this.biometricButtonModel =
+      this.formConfig.getAddButtonModel();
+    this.biometricButtonModel.action = () =>
+      this.onBiometricLogin();
+
+    this.registerBiometricModel =
+      this.formConfig.getAddButtonModel();
+    this.registerBiometricModel.action = () =>
+      this.onRegisterBiometric();
+
+    this.clearBiometricModel =
+      this.formConfig.getDeleteButtonModel();
+    this.clearBiometricModel.action = () =>
+      this.onClearBiometricCredentials();
+
+    // Password visibility toggle model
+    this.passwordToggleModel = new ButtonModelBase({
+      action: () => {
+        this.hidePassword = !this.hidePassword;
+        this.passwordToggleModel.iconName = this
+          .hidePassword
+          ? 'visibility_off'
+          : 'visibility';
+      },
+      style: 'icon',
+      buttonType: ButtonCommonComponent as any,
+      iconName: this.hidePassword
+        ? 'visibility_off'
+        : 'visibility',
+      tooltipMessage: 'Mostrar / ocultar contraseña',
+    } as any);
+
+    this.loginForm.statusChanges?.subscribe(status => {
+      const disabled = status !== 'VALID' || this.isLoading;
+      this.loginButtonModel.optionDisabled = disabled;
+    });
   }
 
   initForm(): void {
@@ -161,7 +214,7 @@ export class LoginComponent implements OnInit {
   /**
    * Login con huella digital
    */
-  async onBiometricLogin(): Promise<void> {
+  onBiometricLogin(): void {
     if (!this.biometricSupported) {
       this.snackBar.open(
         'La autenticación biométrica no está disponible',
@@ -176,51 +229,65 @@ export class LoginComponent implements OnInit {
     this.biometricLoading = true;
     this.errorMessage = '';
 
-    try {
-      const username =
-        await this.biometricService.authenticateWithBiometric();
-
-      if (username) {
-        // Simular login exitoso con el usuario autenticado
-        await this.authService.login(
-          username,
-          'biometric-auth'
-        );
-        this.snackBar.open(
-          '¡Login biométrico exitoso!',
-          'Cerrar',
-          {
-            duration: 2000,
+    this.biometricService
+      .authenticateWithBiometric()
+      .subscribe(
+        username => {
+          if (username) {
+            // Simular login exitoso con el usuario autenticado
+            this.authService
+              .login(username, 'biometric-auth')
+              .subscribe({
+                next: () => {
+                  this.snackBar.open(
+                    '¡Login biométrico exitoso!',
+                    'Cerrar',
+                    {
+                      duration: 2000,
+                    }
+                  );
+                  this.router.navigate(['/dashboard']);
+                  this.biometricLoading = false;
+                },
+                error: err => {
+                  console.error(
+                    'Error en login después de biometría:',
+                    err
+                  );
+                  this.errorMessage =
+                    'Error al iniciar sesión';
+                  this.biometricLoading = false;
+                },
+              });
+          } else {
+            this.errorMessage =
+              'Autenticación biométrica fallida';
+            this.snackBar.open(
+              'Autenticación biométrica fallida',
+              'Cerrar',
+              {
+                duration: 3000,
+              }
+            );
+            this.biometricLoading = false;
           }
-        );
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.errorMessage =
-          'Autenticación biométrica fallida';
-        this.snackBar.open(
-          'Autenticación biométrica fallida',
-          'Cerrar',
-          {
+        },
+        error => {
+          this.errorMessage =
+            error?.message ||
+            'Error en autenticación biométrica';
+          this.snackBar.open(this.errorMessage, 'Cerrar', {
             duration: 3000,
-          }
-        );
-      }
-    } catch (error: any) {
-      this.errorMessage =
-        error.message ||
-        'Error en autenticación biométrica';
-      this.snackBar.open(this.errorMessage, 'Cerrar', {
-        duration: 3000,
-      });
-    } finally {
-      this.biometricLoading = false;
-    }
+          });
+          this.biometricLoading = false;
+        }
+      );
   }
 
   /**
    * Registrar huella digital
    */
-  async onRegisterBiometric(): Promise<void> {
+  onRegisterBiometric(): void {
     if (!this.biometricSupported) {
       this.snackBar.open(
         'La autenticación biométrica no está disponible',
@@ -246,43 +313,40 @@ export class LoginComponent implements OnInit {
     const email = this.loginForm.get('email')?.value;
     this.biometricLoading = true;
 
-    try {
-      const success =
-        await this.biometricService.registerBiometric(
-          email,
-          email.split('@')[0] // Usar la parte antes del @ como display name
-        );
-
-      if (success) {
-        this.showRegisterBiometric = false;
-        this.snackBar.open(
-          '¡Huella digital registrada exitosamente!',
-          'Cerrar',
-          {
-            duration: 3000,
+    this.biometricService
+      .registerBiometric(email, email.split('@')[0])
+      .subscribe(
+        success => {
+          if (success) {
+            this.showRegisterBiometric = false;
+            this.snackBar.open(
+              '¡Huella digital registrada exitosamente!',
+              'Cerrar',
+              {
+                duration: 3000,
+              }
+            );
+          } else {
+            this.snackBar.open(
+              'Error al registrar la huella digital',
+              'Cerrar',
+              {
+                duration: 3000,
+              }
+            );
           }
-        );
-      } else {
-        this.snackBar.open(
-          'Error al registrar la huella digital',
-          'Cerrar',
-          {
-            duration: 3000,
-          }
-        );
-      }
-    } catch (error: any) {
-      this.snackBar.open(
-        error.message ||
-          'Error al registrar huella digital',
-        'Cerrar',
-        {
-          duration: 3000,
+          this.biometricLoading = false;
+        },
+        err => {
+          this.snackBar.open(
+            err?.message ||
+              'Error al registrar huella digital',
+            'Cerrar',
+            { duration: 3000 }
+          );
+          this.biometricLoading = false;
         }
       );
-    } finally {
-      this.biometricLoading = false;
-    }
   }
 
   /**

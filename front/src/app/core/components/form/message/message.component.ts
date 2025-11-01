@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ButtonComponent } from '../../form/button/button.component';
+import { ButtonModelBase } from '../../../models/button-base.model';
+import { ButtonCommonComponent } from '../../buttons/common-button/common-button';
 
 export type MessageType =
   | 'success'
@@ -19,12 +20,30 @@ export interface MessageConfig {
 @Component({
   selector: 'mb-message',
   standalone: true,
-  imports: [CommonModule, MatIconModule, ButtonComponent],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    ButtonCommonComponent,
+  ],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss'],
 })
 export class MessageComponent {
   public readonly config = input<MessageConfig>();
+  public readonly _dismissModel = computed(() => {
+    const cfg = this.config();
+    if (!cfg || !cfg.dismissible) return undefined;
+    // Create a minimal ButtonModelBase for the dismiss action
+    const bm = new ButtonModelBase({
+      action: () => this.dismiss(),
+      style: 'filled',
+      buttonType: ButtonCommonComponent as any,
+      label: '',
+      iconName: 'close',
+      tooltipMessage: 'Cerrar',
+    } as any);
+    return bm;
+  });
 
   dismiss(): void {
     const cfg = this.config();

@@ -6,8 +6,7 @@
       fixedInViewport
       [attr.role]="'navigation'"
       [mode]="'over'"
-      [opened]="false"
-    >
+      [opened]="false">
       <mat-toolbar class="menu-header">Menú</mat-toolbar>
       <mat-nav-list class="navigation-list">
         <a
@@ -15,8 +14,7 @@
           routerLink="/dashboard"
           routerLinkActive="active-nav-item"
           (click)="drawer.close()"
-          class="nav-item"
-        >
+          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
           <mat-icon class="nav-icon">dashboard</mat-icon>
           <span class="nav-text">Dashboard</span>
         </a>
@@ -25,8 +23,7 @@
           routerLink="/ingresos"
           routerLinkActive="active-nav-item"
           (click)="drawer.close()"
-          class="nav-item"
-        >
+          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
           <mat-icon class="nav-icon">trending_up</mat-icon>
           <span class="nav-text">Ingresos</span>
         </a>
@@ -35,8 +32,7 @@
           routerLink="/gastos"
           routerLinkActive="active-nav-item"
           (click)="drawer.close()"
-          class="nav-item"
-        >
+          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
           <mat-icon class="nav-icon">trending_down</mat-icon>
           <span class="nav-text">Gastos</span>
         </a>
@@ -45,8 +41,7 @@
           routerLink="/ahorros"
           routerLinkActive="active-nav-item"
           (click)="drawer.close()"
-          class="nav-item"
-        >
+          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
           <mat-icon class="nav-icon">savings</mat-icon>
           <span class="nav-text">Ahorros</span>
         </a>
@@ -55,39 +50,32 @@
           routerLink="/reportes"
           routerLinkActive="active-nav-item"
           (click)="drawer.close()"
-          class="nav-item"
-        >
+          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
           <mat-icon class="nav-icon">analytics</mat-icon>
           <span class="nav-text">Reportes</span>
         </a>
         <mat-divider class="nav-divider"></mat-divider>
-        <a
-          mat-list-item
-          (click)="logout(); drawer.close()"
-          class="nav-item logout-item"
-        >
-          <mat-icon class="nav-icon">logout</mat-icon>
-          <span class="nav-text">Cerrar Sesión</span>
-        </a>
+        <div
+          class="nav-item logout-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
+          <mb-common-button
+            [buttonModel]="logoutSidenavModel"
+            [targetId]="drawer"
+            class="w-full"></mb-common-button>
+        </div>
       </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content>
       <mat-toolbar color="primary">
-        <button
-          type="button"
-          aria-label="Toggle sidenav"
-          mat-icon-button
-          (click)="drawer.toggle()"
-        >
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-        </button>
+        <mb-common-button
+          [buttonModel]="toggleDrawerModel"
+          [targetId]="drawer"
+          class="mat-icon-button"
+          [attr.aria-label]="'Toggle sidenav'"></mb-common-button>
         <span>{{ title }}</span>
         <span class="spacer"></span>
         <mb-theme-toggle></mb-theme-toggle>
-        <button mat-icon-button (click)="logout()">
-          <mat-icon>logout</mat-icon>
-        </button>
+        <mb-common-button [buttonModel]="logoutButtonModel" class="ml-2"></mb-common-button>
       </mat-toolbar>
 
       <main class="main-content">

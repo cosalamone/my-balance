@@ -62,12 +62,8 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  height: 52px;
+  height: auto;
   font-weight: 500;
-  display: flex !important;
-  align-items: center !important;
-  padding: 0 16px !important;
-  color: var(--text-secondary) !important;
   text-decoration: none;
   line-height: 1;
 }
@@ -119,13 +115,13 @@
 }
 
 .nav-icon {
-  margin-right: 16px !important;
+  /* Minimal icon styling — size and centering kept, other spacing via utilities */
   color: inherit !important;
   transition: all 0.3s ease;
   font-size: 20px !important;
   width: 20px !important;
   height: 20px !important;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0;
@@ -145,9 +141,7 @@
   font-size: 14px;
   font-weight: inherit;
   letter-spacing: 0.025em;
-  flex: 1;
-  display: flex;
-  align-items: center;
+  /* Layout handled via Tailwind utilities added to anchors; keep only text sizing here */
 }
 
 .nav-divider {
