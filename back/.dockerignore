@@ -1,0 +1,15 @@
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+design_time.db
+.vs/
+.vscode/
+*.user
+*.suo
+*.log
+node_modules/
+dist/
+.env
+appsettings.Development.json

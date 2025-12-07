@@ -14,4 +14,5 @@ public interface IFinancialService
 {
     Task<FinancialSummaryDto> GetFinancialSummaryAsync(int userId);
     Task<FinancialSummaryDto> GetFinancialSummaryByDateRangeAsync(int userId, DateTime startDate, DateTime endDate);
+    Task<DashboardAggregatedDto> GetDashboardAggregatedAsync(int userId, int itemsLimit = 20);
 }

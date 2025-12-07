@@ -64,4 +64,24 @@ public class DashboardController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpGet("summary-with-details")]
+    public async Task<ActionResult<DashboardAggregatedDto>> GetSummaryWithDetails([FromQuery] int items = 20)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
+
+            var aggregated = await _financialService.GetDashboardAggregatedAsync(userId, items);
+            return Ok(aggregated);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }

@@ -372,3 +372,9 @@ MigrationBackup/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+design_time.db

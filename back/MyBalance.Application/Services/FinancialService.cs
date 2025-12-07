@@ -80,4 +80,62 @@ public class FinancialService : IFinancialService
             PreviousMonth = previousMonthData
         };
     }
+
+    public async Task<DashboardAggregatedDto> GetDashboardAggregatedAsync(int userId, int itemsLimit = 20)
+    {
+        // Parallelize common reads to reduce latency
+        var incomesTask = _incomeRepository.GetByUserIdAsync(userId);
+        var expensesTask = _expenseRepository.GetByUserIdAsync(userId);
+        var savingsTask = _savingsRepository.GetByUserIdAsync(userId);
+        var summaryTask = GetFinancialSummaryAsync(userId);
+
+        await Task.WhenAll(incomesTask, expensesTask, savingsTask, summaryTask);
+
+        var incomes = incomesTask.Result.OrderByDescending(i => i.Date).Take(itemsLimit)
+            .Select(i => new IncomeDto {
+                Id = i.Id,
+                Amount = i.Amount,
+                Category = i.Category,
+                Description = i.Description,
+                Date = i.Date,
+                IsRecurring = i.IsRecurring,
+                RecurrencePattern = i.RecurrencePattern,
+                CreatedAt = i.CreatedAt,
+                UpdatedAt = i.UpdatedAt
+            }).ToList();
+
+        var expenses = expensesTask.Result.OrderByDescending(e => e.Date).Take(itemsLimit)
+            .Select(e => new ExpenseResponseDto {
+                Id = e.Id,
+                Amount = e.Amount,
+                Category = e.Category,
+                Description = e.Description,
+                Date = e.Date,
+                IsRecurring = e.IsRecurring,
+                RecurrencePattern = e.RecurrencePattern,
+                CreatedAt = e.CreatedAt,
+                UpdatedAt = e.UpdatedAt
+            }).ToList();
+
+        var savings = savingsTask.Result.OrderByDescending(s => s.Date).Take(itemsLimit)
+            .Select(s => new SavingsDto {
+                Id = s.Id,
+                Amount = s.Amount,
+                Category = s.Category,
+                Description = s.Description,
+                Date = s.Date,
+                GoalAmount = s.GoalAmount,
+                TargetDate = s.TargetDate,
+                CreatedAt = s.CreatedAt,
+                UpdatedAt = s.UpdatedAt
+            }).ToList();
+
+        return new DashboardAggregatedDto
+        {
+            Summary = summaryTask.Result,
+            Incomes = incomes,
+            Expenses = expenses,
+            Savings = savings
+        };
+    }
 }

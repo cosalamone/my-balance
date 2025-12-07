@@ -29,6 +29,14 @@ export interface DashboardSummaryResponse {
   };
 }
 
+export interface DashboardAggregatedResponse {
+  summary: DashboardSummaryResponse;
+  incomes: Income[];
+  expenses: Expense[];
+  savings: Savings[];
+  user?: any;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -70,6 +78,26 @@ export class FinancialDataService {
       `${this.API_URL}/dashboard/summary`,
       { headers: this.getAuthHeaders() }
     );
+  }
+
+  getDashboardAggregated(
+    limit = 20
+  ): Observable<DashboardAggregatedResponse> {
+    return this.http
+      .get<DashboardAggregatedResponse>(
+        `${this.API_URL}/dashboard/summary-with-details?items=${limit}`,
+        { headers: this.getAuthHeaders() }
+      )
+      .pipe(
+        tap(resp => {
+          if (resp) {
+            // update local subjects
+            this.incomesSubject.next(resp.incomes || []);
+            this.expensesSubject.next(resp.expenses || []);
+            this.savingsSubject.next(resp.savings || []);
+          }
+        })
+      );
   }
 
   // Income methods

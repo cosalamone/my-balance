@@ -110,40 +110,42 @@ export class DashboardComponent
   private loadDashboardData(): void {
     this.isLoading = true;
 
-    // Load dashboard summary from API
+    // Load aggregated dashboard data (summary + recent lists)
     this.financialService
-      .getDashboardSummary()
+      .getDashboardAggregated()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: summary => {
+        next: resp => {
+          if (!resp) {
+            this.isLoading = false;
+            return;
+          }
+
           this.currentSummary = {
-            totalIncome: summary.totalIncome,
-            totalExpenses: summary.totalExpenses,
-            totalSavings: summary.totalSavings,
-            balance: summary.balance,
-            currentMonth: summary.currentMonth,
-            previousMonth: summary.previousMonth,
+            totalIncome: resp.summary.totalIncome,
+            totalExpenses: resp.summary.totalExpenses,
+            totalSavings: resp.summary.totalSavings,
+            balance: resp.summary.balance,
+            currentMonth: resp.summary.currentMonth,
+            previousMonth: resp.summary.previousMonth,
           };
+
+          // The service already updated incomes/expenses/savings subjects via tap
           this.isLoading = false;
         },
         error: error => {
           console.error(
-            'Error loading dashboard data:',
+            'Error loading aggregated dashboard data:',
             error
           );
           this.snackBar.open(
             'Error al cargar los datos del dashboard',
             'Cerrar',
-            {
-              duration: 3000,
-            }
+            { duration: 3000 }
           );
           this.isLoading = false;
         },
       });
-
-    // Also load user data for detailed views
-    this.financialService.loadUserData();
   }
 
   refreshData(): void {

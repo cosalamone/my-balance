@@ -46,9 +46,25 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Database configuration - SQLite
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Database configuration - selectable provider (SQLite by default, MySql optional)
+var dbProvider = builder.Configuration["DatabaseProvider"] ?? "Sqlite";
+var defaultConn = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (dbProvider.Equals("MySql", StringComparison.OrdinalIgnoreCase))
+{
+    // Requires Pomelo.EntityFrameworkCore.MySql (or another MySQL provider)
+    // Install with: dotnet add package Pomelo.EntityFrameworkCore.MySql
+    // Use ServerVersion.Parse to specify MySQL version (avoids AutoDetect)
+    var serverVersion = ServerVersion.Parse("8.0.32-mysql");
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseMySql(defaultConn, serverVersion));
+}
+else
+{
+    // Fallback to SQLite
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite(defaultConn));
+}
 
 // JWT Configuration
 var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "MyBalanceSecretKey2024!@#$%^&*()";
@@ -76,11 +92,14 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFinancialService, FinancialService>();
 
 // CORS configuration
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
+    ?? new[] { "http://localhost:4200", "http://localhost:4201" };
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", builder =>
+    options.AddPolicy("AllowAngularApp", corsBuilder =>
     {
-        builder.WithOrigins("http://localhost:4200", "http://localhost:4201") // URLs de tu frontend Angular
+        corsBuilder.WithOrigins(allowedOrigins)
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials();
@@ -103,11 +122,21 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Ensure database is created
+// Database initialization - Apply migrations if available, otherwise continue
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
+    try
+    {
+        // Try to apply pending migrations
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        // If migration fails (e.g., table already exists), continue anyway
+        // This allows the app to run even if tables were created outside of migrations
+        Console.WriteLine($"Note: Migration application skipped: {ex.Message}");
+    }
 
     // Seed demo user if not exists
     if (!context.Users.Any(u => u.Email == "demo@example.com"))
@@ -144,7 +173,7 @@ using (var scope = app.Services.CreateScope())
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error creating demo user: {ex.Message}");
+            Console.WriteLine($"Note: Demo user already exists or error: {ex.Message}");
         }
     }
 }
