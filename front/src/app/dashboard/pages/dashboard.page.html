@@ -34,18 +34,6 @@
         [summary]="currentSummary"
         (refreshClicked)="refreshData()"></mb-activity-summary-card>
     </mb-dashboard-section>
-
-    <!-- Daily Tip Section -->
-    <mb-dashboard-section *ngIf="currentSummary" title="💡 Consejo del día">
-      <div class="financial-card dashboard-card stat-card">
-        <div class="flex items-center justify-between mb-3">
-          <mat-icon class="text-primary-accent">lightbulb</mat-icon>
-        </div>
-        <p class="text-sm text-gray-600 leading-relaxed">
-          {{ getDailyTip() }}
-        </p>
-      </div>
-    </mb-dashboard-section>
   </main>
 
   <!-- Footer -->

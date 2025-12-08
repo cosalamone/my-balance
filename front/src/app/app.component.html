@@ -9,51 +9,18 @@
       [opened]="false">
       <mat-toolbar class="menu-header">Menú</mat-toolbar>
       <mat-nav-list class="navigation-list">
-        <a
-          mat-list-item
-          routerLink="/dashboard"
-          routerLinkActive="active-nav-item"
-          (click)="drawer.close()"
-          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
-          <mat-icon class="nav-icon">dashboard</mat-icon>
-          <span class="nav-text">Dashboard</span>
-        </a>
-        <a
-          mat-list-item
-          routerLink="/ingresos"
-          routerLinkActive="active-nav-item"
-          (click)="drawer.close()"
-          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
-          <mat-icon class="nav-icon">trending_up</mat-icon>
-          <span class="nav-text">Ingresos</span>
-        </a>
-        <a
-          mat-list-item
-          routerLink="/gastos"
-          routerLinkActive="active-nav-item"
-          (click)="drawer.close()"
-          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
-          <mat-icon class="nav-icon">trending_down</mat-icon>
-          <span class="nav-text">Gastos</span>
-        </a>
-        <a
-          mat-list-item
-          routerLink="/ahorros"
-          routerLinkActive="active-nav-item"
-          (click)="drawer.close()"
-          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
-          <mat-icon class="nav-icon">savings</mat-icon>
-          <span class="nav-text">Ahorros</span>
-        </a>
-        <a
-          mat-list-item
-          routerLink="/reportes"
-          routerLinkActive="active-nav-item"
-          (click)="drawer.close()"
-          class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">
-          <mat-icon class="nav-icon">analytics</mat-icon>
-          <span class="nav-text">Reportes</span>
-        </a>
+        @for (item of navItems; track item) {
+          <a
+            mat-list-item
+            [routerLink]="item.route"
+            routerLinkActive="active-nav-item flex items-center"
+            (click)="drawer.close()"
+            class="nav-item rounded-lg text-gray-600 hover:text-gray-900">
+            <mat-icon class="nav-icon mr-3">{{ item.icon }}</mat-icon>
+            <span class="nav-text">{{ item.label }}</span>
+          </a>
+        }
+
         <mat-divider class="nav-divider"></mat-divider>
         <div
           class="nav-item logout-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:text-gray-900">

@@ -14,6 +14,7 @@ import {
 import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle.component';
 import { ButtonCommonComponent } from './core/components/buttons/common-button/common-button';
 import { ButtonModelBase } from './core/models/button-base.model';
+import { Routes } from './core/routes/routes.enum';
 import { AuthService } from './core/services/auth.service';
 import { ThemeService } from './core/services/theme.service';
 
@@ -43,6 +44,17 @@ export class AppComponent implements OnInit {
   logoutButtonModel!: ButtonModelBase;
   logoutSidenavModel!: ButtonModelBase;
   toggleDrawerModel!: ButtonModelBase;
+
+  public dashboard: Routes = Routes.dashboard;
+  public ingresos: Routes = Routes.incomes;
+  public gastos: Routes = Routes.expenses;
+  public ahorros: Routes = Routes.savings;
+  public reportes: Routes = Routes.reports;
+  public navItems: Array<{
+    label: string;
+    icon: string;
+    route: Routes;
+  }> = [];
 
   constructor(
     private router: Router,
@@ -82,6 +94,37 @@ export class AppComponent implements OnInit {
       iconName: 'menu',
       tooltipMessage: 'Abrir/Cerrar menú',
     } as any);
+
+    this.initNavItems();
+  }
+  private initNavItems(): void {
+    this.navItems = [
+      {
+        label: 'Dashboard',
+        icon: 'dashboard',
+        route: this.dashboard,
+      },
+      {
+        label: 'Ingresos',
+        icon: 'trending_up',
+        route: this.ingresos,
+      },
+      {
+        label: 'Gastos',
+        icon: 'trending_down',
+        route: this.gastos,
+      },
+      {
+        label: 'Ahorros',
+        icon: 'savings',
+        route: this.ahorros,
+      },
+      {
+        label: 'Reportes',
+        icon: 'analytics',
+        route: this.reportes,
+      },
+    ];
   }
 
   logout() {

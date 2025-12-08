@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import {
+  CanActivate,
+  Router,
+  UrlTree,
+} from '@angular/router';
+import { Observable, map, take } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
@@ -13,16 +16,22 @@ export class AuthGuard implements CanActivate {
     private router: Router
   ) {}
 
-  canActivate(): Observable<boolean> {
+  canActivate():
+    | boolean
+    | UrlTree
+    | Observable<boolean | UrlTree> {
+    // Fast path: if we already have a synced boolean state, return it immediately
+    if (this.authService.isLoggedIn()) {
+      return true;
+    }
+
+    // Otherwise, subscribe once to the observable auth state and decide
     return this.authService.isAuthenticated$.pipe(
       take(1),
       map((isAuthenticated: boolean) => {
-        if (isAuthenticated) {
-          return true;
-        } else {
-          this.router.navigate(['/login']);
-          return false;
-        }
+        return isAuthenticated
+          ? true
+          : this.router.parseUrl('/login');
       })
     );
   }
