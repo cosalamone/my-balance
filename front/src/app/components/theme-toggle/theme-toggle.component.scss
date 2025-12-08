@@ -1,8 +1,18 @@
-/* Enhanced Theme Toggle Button */
 .theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+
+.theme-toggle-btn button {
   padding: 0.75rem;
   border-radius: 50%;
-  border: none;
+  width: 100%;
+  height: 100%;
+  min-width: 48px;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--bg-elevated);
@@ -10,20 +20,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   border: 1.5px solid var(--border-primary);
   box-shadow: var(--shadow-sm);
-  width: 48px;
-  height: 48px;
+  position: relative;
+  overflow: hidden;
 }
 
-.theme-toggle-btn::before {
+.theme-toggle-btn button::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   border-radius: 50%;
   background: var(--hover-overlay);
   opacity: 0;
@@ -31,21 +37,22 @@
   pointer-events: none;
 }
 
-.theme-toggle-btn:hover {
-  transform: scale(1.1) rotate(15deg);
+.theme-toggle-btn button:hover {
+  transform: scale(1.06) rotate(10deg);
   box-shadow: var(--shadow-lg);
   border-color: var(--border-hover);
 }
 
-.theme-toggle-btn:hover::before {
+.theme-toggle-btn button:hover::before {
   opacity: 1;
 }
 
-.theme-toggle-btn:active {
-  transform: scale(0.95);
+.theme-toggle-btn button:active {
+  transform: scale(0.98);
 }
 
-.theme-icon {
+.theme-toggle-btn button mat-icon,
+.theme-toggle-btn button .theme-icon {
   font-size: 1.25rem;
   line-height: 1;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
@@ -53,40 +60,43 @@
   z-index: 1;
 }
 
-.theme-toggle-btn:hover .theme-icon {
-  transform: scale(1.1);
+.theme-toggle-btn button:hover mat-icon,
+.theme-toggle-btn button:hover .theme-icon {
+  transform: scale(1.08);
 }
 
 /* Dark theme enhancements */
-[data-theme='dark'] .theme-toggle-btn {
+[data-theme='dark'] .theme-toggle-btn button {
   background: rgba(139, 92, 246, 0.15);
   border-color: rgba(139, 92, 246, 0.3);
   box-shadow: var(--shadow-md);
 }
 
-[data-theme='dark'] .theme-toggle-btn:hover {
+[data-theme='dark'] .theme-toggle-btn button:hover {
   background: rgba(139, 92, 246, 0.25);
   border-color: rgba(139, 92, 246, 0.5);
   box-shadow: var(--shadow-xl);
 }
 
-[data-theme='dark'] .theme-icon {
+[data-theme='dark'] .theme-toggle-btn button mat-icon,
+[data-theme='dark'] .theme-toggle-btn button .theme-icon {
   filter: drop-shadow(0 2px 8px rgba(139, 92, 246, 0.3));
 }
 
 /* Light theme refinements */
-[data-theme='light'] .theme-toggle-btn {
+[data-theme='light'] .theme-toggle-btn button {
   background: rgba(255, 255, 255, 0.9);
   border-color: rgba(79, 70, 229, 0.2);
 }
 
-[data-theme='light'] .theme-toggle-btn:hover {
+[data-theme='light'] .theme-toggle-btn button:hover {
   background: rgba(255, 255, 255, 1);
   border-color: rgba(79, 70, 229, 0.4);
   box-shadow: var(--shadow-lg);
 }
 
-[data-theme='light'] .theme-icon {
+[data-theme='light'] .theme-toggle-btn button mat-icon,
+[data-theme='light'] .theme-toggle-btn button .theme-icon {
   filter: drop-shadow(0 2px 4px rgba(79, 70, 229, 0.2));
 }
 
@@ -109,12 +119,12 @@
   }
 }
 
-.theme-toggle-btn.switching {
+.theme-toggle-btn.switching button {
   animation: themeSwitch 0.6s ease-in-out;
 }
 
 /* Focus states for accessibility */
-.theme-toggle-btn:focus-visible {
+.theme-toggle-btn button:focus-visible {
   outline: 2px solid var(--input-border-focus);
   outline-offset: 2px;
 }
@@ -122,12 +132,13 @@
 /* Mobile optimizations */
 @media (max-width: 767px) {
   .theme-toggle-btn {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     padding: 0.625rem;
   }
 
-  .theme-icon {
+  .theme-toggle-btn button mat-icon,
+  .theme-toggle-btn button .theme-icon {
     font-size: 1.125rem;
   }
 }
@@ -139,41 +150,43 @@
     padding: 0.5rem;
   }
 
-  .theme-icon {
+  .theme-toggle-btn button mat-icon,
+  .theme-toggle-btn button .theme-icon {
     font-size: 1rem;
   }
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .theme-toggle-btn {
+  .theme-toggle-btn button {
     border-width: 2px;
   }
 
-  [data-theme='dark'] .theme-toggle-btn {
+  [data-theme='dark'] .theme-toggle-btn button {
     border-color: #ffffff;
   }
 
-  [data-theme='light'] .theme-toggle-btn {
+  [data-theme='light'] .theme-toggle-btn button {
     border-color: #000000;
   }
 }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .theme-toggle-btn {
+  .theme-toggle-btn button {
     transition: none;
   }
 
-  .theme-toggle-btn:hover {
+  .theme-toggle-btn button:hover {
     transform: none;
   }
 
-  .theme-icon {
+  .theme-toggle-btn button mat-icon,
+  .theme-toggle-btn button .theme-icon {
     transition: none;
   }
 
-  .theme-toggle-btn.switching {
+  .theme-toggle-btn.switching button {
     animation: none;
   }
 }

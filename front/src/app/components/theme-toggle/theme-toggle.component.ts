@@ -22,15 +22,15 @@ export class ThemeToggleComponent implements OnInit {
       map(theme => theme === 'dark')
     );
 
-    // Initialize toggle model and keep icon/tooltip in sync with theme
     this.toggleModel = new ButtonModelBase({
       action: () => this.toggleTheme(),
       style: 'icon',
-      buttonType: ButtonCommonComponent as any,
       iconName: 'light_mode',
       tooltipMessage: 'Cambiar tema',
     } as any);
+  }
 
+  ngOnInit(): void {
     this.isDarkMode$.subscribe(isDark => {
       this.toggleModel.iconName = isDark
         ? 'light_mode'
@@ -40,8 +40,6 @@ export class ThemeToggleComponent implements OnInit {
         : 'Cambiar a modo oscuro';
     });
   }
-
-  ngOnInit(): void {}
 
   toggleTheme(): void {
     this.isTransitioning = true;

@@ -345,14 +345,10 @@ export class FormConfigService {
     };
   }
 
-  // ---------------------------
-  // Model adapters (ButtonModelBase)
-  // ---------------------------
   private createButtonModelFromConfig(
     cfg: any,
     action: (v?: any) => void
   ): ButtonModelBase {
-    // Map simplistic config keys to ButtonModelBase shape
     const styleMap: Record<
       string,
       'filled' | 'outlined' | 'icon'

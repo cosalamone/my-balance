@@ -1,11 +1,16 @@
-import { signal, Signal, WritableSignal } from '@angular/core';
+import {
+  signal,
+  Signal,
+  Type,
+  WritableSignal,
+} from '@angular/core';
+import { ButtonBaseComponent } from '../components/buttons/button-base.component';
+import { ButtonCommonComponent } from '../components/buttons/common-button/common-button';
 import {
   ButtonBaseInterface,
   ButtonStyle,
   PermisoResponse,
 } from '../interfaces/button-interface';
-import { ButtonBaseComponent } from '../components/buttons/button-base.component';
-import { Type } from '@angular/core';
 
 export class ButtonModelBase
   implements ButtonBaseInterface
@@ -15,10 +20,10 @@ export class ButtonModelBase
   public tooltipMessage?: string;
   public optionDisabled?: boolean;
   public action: (value?: any) => void;
-  public buttonType: Type<
+  public buttonType?: Type<
     ButtonBaseComponent<ButtonBaseInterface>
   >;
-  public permission: Signal<PermisoResponse>;
+  public permission?: Signal<PermisoResponse>;
   public label?: string;
   public iconPosition?: 'left' | 'right';
   public id?: string;
@@ -29,13 +34,15 @@ export class ButtonModelBase
   constructor(button: ButtonModelBase) {
     this.action = button.action;
     this.style = button.style;
-    this.buttonType = button.buttonType;
+    this.buttonType =
+      button.buttonType ?? (ButtonCommonComponent as any);
     this.tooltipMessage = button.tooltipMessage ?? '';
     this.optionDisabled = button.optionDisabled ?? false;
     this.iconName = button.iconName;
     this.label = button.label ?? '';
     this.permission =
-      button.permission ?? signal<PermisoResponse>({ allowed: true });
+      button.permission ??
+      signal<PermisoResponse>({ allowed: true });
     this.iconPosition = button.iconPosition ?? 'left';
     this.id = button.id;
     this.tooltipMessageDisabled =

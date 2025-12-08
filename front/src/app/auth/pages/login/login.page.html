@@ -1,15 +1,9 @@
 <div class="mb-flex-center mb-min-h-screen p-4">
-  <!-- Theme Toggle -->
-  <div class="absolute top-6 right-6 z-50">
-    <mb-theme-toggle></mb-theme-toggle>
-  </div>
-
   <!-- Login Card -->
   <div class="mb-card mb-card--lg w-full max-w-md">
     <!-- Header -->
     <div class="text-center mb-space-y-4">
-      <h1 class="mb-text--2xl mb-text--bold mb-text--primary">💰 MyBalance</h1>
-      <h2 class="mb-text--lg mb-text--semibold mb-text--primary">Bienvenido de vuelta</h2>
+      <h1 class="mb-text--2xl mb-text--bold mb-text--primary">Bienvendido a MyBalance</h1>
       <p class="mb-text--base mb-text--secondary">Ingresa tus credenciales para continuar</p>
     </div>
 
@@ -32,15 +26,18 @@
       <!-- Password Field -->
       <div>
         <mat-form-field appearance="outline" class="mb-w-full">
-          <input
-            matInput
-            [type]="hidePassword ? 'password' : 'text'"
-            formControlName="password"
-            placeholder="Contraseña"
-            class="mb-input" />
-          <mb-common-button
-            [buttonModel]="passwordToggleModel"
-            class="mat-icon-button matSuffix"></mb-common-button>
+          <div class="flex flex-row">
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="Contraseña"
+              class="mb-input" />
+            <mb-common-button
+              [buttonModel]="passwordToggleModel"
+              class="mat-icon-button matSuffix"></mb-common-button>
+          </div>
+
           <mat-error>{{ getFieldError('password') }}</mat-error>
         </mat-form-field>
       </div>
@@ -63,36 +60,6 @@
         </ng-container>
       </mb-common-button>
     </form>
-
-    <!-- Biometric Section -->
-    <div *ngIf="biometricSupported" class="mb-space-y-4 mt-8">
-      <div class="text-center">
-        <span class="mb-text--sm mb-text--muted">o continúa con</span>
-      </div>
-
-      <mb-common-button
-        [buttonModel]="biometricButtonModel"
-        class="mb-btn mb-btn--secondary mb-btn--lg mb-btn--full"
-        [ngClass]="{ 'mb-btn--loading': biometricLoading }"></mb-common-button>
-
-      <mb-common-button
-        *ngIf="showRegisterBiometric"
-        [buttonModel]="registerBiometricModel"
-        class="mb-btn mb-btn--secondary mb-btn--md mb-btn--full"></mb-common-button>
-
-      <mb-common-button
-        *ngIf="!showRegisterBiometric"
-        [buttonModel]="clearBiometricModel"
-        class="mb-btn mb-btn--danger mb-btn--sm mb-btn--full"></mb-common-button>
-    </div>
-
-    <!-- Not Supported Message -->
-    <mb-message
-      *ngIf="!biometricSupported"
-      message="Tu dispositivo no soporta autenticación por huella digital o no está configurada correctamente."
-      title="Autenticación biométrica no disponible"
-      type="warning"
-      class="mt-8"></mb-message>
 
     <!-- Register Link -->
     <div class="text-center mt-8">

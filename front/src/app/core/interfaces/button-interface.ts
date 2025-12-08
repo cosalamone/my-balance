@@ -1,4 +1,8 @@
-import { Type, Signal, WritableSignal } from '@angular/core';
+import {
+  Signal,
+  Type,
+  WritableSignal,
+} from '@angular/core';
 import { ButtonBaseComponent } from '../components/buttons/button-base.component';
 export interface PermisoResponse {
   allowed: boolean;
@@ -13,7 +17,7 @@ export interface ButtonBaseInterface {
   // Use a signal for permission checks (simpler than Observable)
   permission?: Signal<PermisoResponse>;
   label?: string;
-  buttonType: Type<
+  buttonType?: Type<
     ButtonBaseComponent<ButtonBaseInterface>
   >;
   action: (value?: any) => void;
