@@ -21,6 +21,7 @@ import { ButtonCommonComponent } from 'src/app/core/components/buttons/common-bu
 import { MessageComponent } from 'src/app/core/components/message/message.component';
 import { PageHeaderComponent } from 'src/app/core/components/page-header/page-header.component';
 import { ButtonModelBase } from 'src/app/core/models/button-base.model';
+import { Routes } from 'src/app/core/routes/routes.enum';
 import { FormConfigService } from 'src/app/core/services/form-config.service';
 import { ThemeToggleComponent } from '../../../components/theme-toggle/theme-toggle.component';
 import {
@@ -69,18 +70,21 @@ export class RegisterComponent implements OnInit {
     private formConfig: FormConfigService
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.initForm();
 
     // Redirect if already logged in
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate([Routes.dashboard]);
     }
 
     // Initialize button models
-    this.registerButtonModel =
-      this.formConfig.getSaveButtonModel(false, false);
-    this.registerButtonModel.action = () => this.onSubmit();
+    this.registerButtonModel = new ButtonModelBase({
+      label: 'Crear cuenta',
+      action: () => this.onSubmit(),
+      optionDisabled:
+        !this.registerForm?.valid || this.isLoading,
+    } as any);
 
     this.loginNavModel =
       this.formConfig.getCancelButtonModel();
@@ -127,7 +131,7 @@ export class RegisterComponent implements OnInit {
     } as any);
   }
 
-  initForm(): void {
+  private initForm(): void {
     this.registerForm = this.formBuilder.group(
       {
         firstName: [
@@ -162,7 +166,9 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  passwordMatchValidator(form: FormGroup) {
+  private passwordMatchValidator(
+    form: FormGroup
+  ): { [key: string]: boolean } | null {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
 
@@ -187,7 +193,7 @@ export class RegisterComponent implements OnInit {
     return null;
   }
 
-  async onSubmit(): Promise<void> {
+  public async onSubmit(): Promise<void> {
     if (this.registerForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
@@ -229,7 +235,7 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  getFieldError(fieldName: string): string {
+  public getFieldError(fieldName: string): string {
     const field = this.registerForm.get(fieldName);
     if (field?.errors && field.touched) {
       if (field.errors['required']) {
@@ -266,7 +272,7 @@ export class RegisterComponent implements OnInit {
     return displayNames[fieldName] || fieldName;
   }
 
-  navigateToLogin(): void {
-    this.router.navigate(['/login']);
+  private navigateToLogin(): void {
+    this.router.navigate([Routes.login]);
   }
 }

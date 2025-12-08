@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
     private formConfig: FormConfigService
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.initForm();
 
     // Redirect if already logged in
@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  initForm(): void {
+  private initForm(): void {
     this.loginForm = this.formBuilder.group({
       email: [
         'test@example.com',
@@ -120,7 +120,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  async onSubmit(): Promise<void> {
+  public async onSubmit(): Promise<void> {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
@@ -156,7 +156,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  getFieldError(fieldName: string): string {
+  public getFieldError(fieldName: string): string {
     const field = this.loginForm.get(fieldName);
     if (field?.errors && field.touched) {
       if (field.errors['required']) {
