@@ -1,0 +1,350 @@
+<div
+  [attr.class]="
+    'min-h-screen bg-gradient-to-br from-' +
+    config().colorTheme +
+    '-600 to-' +
+    config().colorTheme +
+    '-800 p-4'
+  ">
+  <div class="max-w-7xl mx-auto mb-6">
+    <div class="text-center mb-6">
+      <div class="mx-auto flex flex-col items-center justify-center mb-3">
+        <div class="mb-3">
+          <mat-icon [attr.class]="'text-5xl text-white'">{{ config().headerIcon }}</mat-icon>
+        </div>
+        <h2 class="text-2xl font-extrabold mb-1 text-white">{{ config().title }}</h2>
+        <p [attr.class]="'text-' + config().colorTheme + '-200 text-sm'">{{ config().subtitle }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Form Panel -->
+      <div class="bg-gray-800 bg-opacity-90 rounded-2xl shadow-2xl p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-semibold text-white flex items-center space-x-2">
+            <mat-icon [attr.class]="'text-' + config().colorTheme + '-400'">
+              {{ editingId() ? 'edit' : 'add_circle' }}
+            </mat-icon>
+            <span>{{ editingId() ? config().formTitleEdit : config().formTitle }}</span>
+          </h3>
+          <mb-common-button
+            *ngIf="editingId()"
+            [buttonModel]="cancelEditModel"
+            class="text-gray-300 hover:text-white"></mb-common-button>
+        </div>
+
+        <!-- Message Alert -->
+        <div
+          *ngIf="message()"
+          class="mb-4 p-3 rounded-lg flex items-center space-x-3 border backdrop-blur-sm"
+          [attr.class]="
+            message().includes('exitosamente')
+              ? 'mb-4 p-3 rounded-lg flex items-center space-x-3 border backdrop-blur-sm bg-' +
+                config().colorTheme +
+                '-900 bg-opacity-50 border-' +
+                config().colorTheme +
+                '-500'
+              : 'mb-4 p-3 rounded-lg flex items-center space-x-3 border backdrop-blur-sm bg-red-900 bg-opacity-50 border-red-500'
+          ">
+          <mat-icon
+            [attr.class]="
+              message().includes('exitosamente')
+                ? 'text-' + config().colorTheme + '-400'
+                : 'text-red-400'
+            ">
+            {{ message().includes('exitosamente') ? 'check_circle' : 'error_outline' }}
+          </mat-icon>
+          <span
+            [attr.class]="
+              message().includes('exitosamente')
+                ? 'text-' + config().colorTheme + '-100'
+                : 'text-red-100'
+            "
+            class="text-sm">
+            {{ message() }}
+          </span>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+          <ng-container *ngFor="let field of config().formFields">
+            <!-- Checkbox Field -->
+            <ng-container *ngIf="field.type === 'checkbox'">
+              <div class="flex items-center space-x-3 p-3 rounded-lg bg-gray-700 bg-opacity-50">
+                <mat-checkbox [formControlName]="field.name" class="mt-0"></mat-checkbox>
+                <div class="flex-1">
+                  <label class="text-sm font-medium text-gray-200">{{ field.placeholder }}</label>
+                  <p *ngIf="field.hint" class="text-xs text-gray-400 mt-0.5">{{ field.hint }}</p>
+                </div>
+                <mat-icon class="text-gray-400">{{ field.icon }}</mat-icon>
+              </div>
+            </ng-container>
+
+            <!-- Input Field (text, number, date) -->
+            <ng-container *ngIf="field.type !== 'select' && field.type !== 'checkbox'">
+              <mat-form-field appearance="fill" class="w-full dark-field">
+                <input
+                  matInput
+                  [type]="field.type"
+                  [formControlName]="field.name"
+                  [placeholder]="field.placeholder"
+                  class="text-base text-white" />
+                <mat-icon matSuffix class="text-gray-400">{{ field.icon }}</mat-icon>
+                <mat-hint *ngIf="field.hint" class="text-gray-400">{{ field.hint }}</mat-hint>
+                <mat-error>{{ getFieldError(field.name) }}</mat-error>
+                <mat-datepicker-toggle
+                  *ngIf="field.type === 'date'"
+                  matIconSuffix
+                  [for]="datepicker"></mat-datepicker-toggle>
+                <mat-datepicker #datepicker></mat-datepicker>
+              </mat-form-field>
+            </ng-container>
+
+            <!-- Select Field -->
+            <ng-container *ngIf="field.type === 'select'">
+              <mat-form-field appearance="fill" class="w-full dark-field">
+                <mat-select
+                  [formControlName]="field.name"
+                  [placeholder]="field.placeholder"
+                  class="text-base text-white">
+                  <mat-option
+                    *ngFor="let option of getSelectOptions(field.name)"
+                    [value]="option.value">
+                    <div class="flex items-center space-x-2">
+                      <mat-icon [attr.class]="'text-' + config().colorTheme + '-400'">
+                        {{ option.icon }}
+                      </mat-icon>
+                      <span>{{ option.label }}</span>
+                    </div>
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix class="text-gray-400">{{ field.icon }}</mat-icon>
+                <mat-error>{{ getFieldError(field.name) }}</mat-error>
+              </mat-form-field>
+            </ng-container>
+          </ng-container>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-between space-x-3 pt-4 border-t border-gray-700">
+            <mb-common-button [buttonModel]="clearButtonModel" class="flex-1"></mb-common-button>
+            <mb-common-button [buttonModel]="saveButtonModel" class="flex-1"></mb-common-button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Table Panel -->
+      <div class="bg-gray-800 bg-opacity-90 rounded-2xl shadow-2xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold text-white flex items-center space-x-2">
+            <mat-icon [attr.class]="'text-' + config().colorTheme + '-400'">list</mat-icon>
+            <span>{{ config().historyTitle }}</span>
+          </h3>
+
+          <div class="flex items-center space-x-2">
+            <mat-icon [attr.class]="'text-' + config().colorTheme + '-400'">
+              {{ config().headerIcon }}
+            </mat-icon>
+            <span class="text-sm text-gray-300">Total:</span>
+            <span [attr.class]="'text-xl font-bold text-' + config().colorTheme + '-400'">
+              {{ getTotalAmount() | currency: 'USD' : 'symbol' : '1.2-2' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <mat-form-field appearance="fill" class="w-full dark-field">
+            <input
+              matInput
+              (keyup)="applyFilter($event)"
+              [placeholder]="config().searchPlaceholder"
+              class="text-white"
+              #input />
+            <mat-icon matSuffix class="text-gray-400">search</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Data Table -->
+        <div class="overflow-x-auto max-h-96 rounded-lg">
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            class="w-full text-sm bg-gray-700 bg-opacity-40">
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="font-semibold text-gray-300 bg-gray-800 bg-opacity-50">
+                Fecha
+              </th>
+              <td mat-cell *matCellDef="let element" class="text-gray-200">
+                {{ element.date | date: 'dd/MM/yyyy' }}
+              </td>
+            </ng-container>
+
+            <!-- Description Column -->
+            <ng-container matColumnDef="description">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="font-semibold text-gray-300 bg-gray-800 bg-opacity-50">
+                Descripción
+              </th>
+              <td mat-cell *matCellDef="let element" class="max-w-xs text-gray-200">
+                <div class="truncate" [title]="element.description">
+                  {{ element.description }}
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Category Column -->
+            <ng-container matColumnDef="category">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="font-semibold text-gray-300 bg-gray-800 bg-opacity-50">
+                Categoría
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="flex items-center space-x-2">
+                  <mat-icon [attr.class]="'text-' + config().colorTheme + '-400 text-sm'">
+                    {{ getCategoryIcon(element.category) }}
+                  </mat-icon>
+                  <span class="text-sm text-gray-200">
+                    {{ getCategoryLabel(element.category) }}
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Type Column -->
+            <ng-container matColumnDef="type">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="font-semibold text-gray-300 bg-gray-800 bg-opacity-50">
+                Tipo
+              </th>
+              <td mat-cell *matCellDef="let element" class="text-sm">
+                <span
+                  [attr.class]="
+                    'px-2 py-1 rounded-full text-xs font-medium bg-' +
+                    config().colorTheme +
+                    '-900 bg-opacity-50 text-' +
+                    config().colorTheme +
+                    '-300 border border-' +
+                    config().colorTheme +
+                    '-500'
+                  ">
+                  {{ element.type }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Amount Column -->
+            <ng-container matColumnDef="amount">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="font-semibold text-gray-300 bg-gray-800 bg-opacity-50">
+                Cantidad
+              </th>
+              <td mat-cell *matCellDef="let element" class="font-medium">
+                <span [attr.class]="'text-' + config().colorTheme + '-400'">
+                  {{ element.amount | currency: 'USD' : 'symbol' : '1.2-2' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Goal Amount Column -->
+            <ng-container matColumnDef="goalAmount">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="font-semibold text-gray-300 bg-gray-800 bg-opacity-50">
+                Meta
+              </th>
+              <td mat-cell *matCellDef="let element" class="text-gray-200">
+                {{ element.goalAmount | currency: 'USD' : 'symbol' : '1.2-2' }}
+              </td>
+            </ng-container>
+
+            <!-- Progress Column -->
+            <ng-container matColumnDef="progress">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="font-semibold text-gray-300 bg-gray-800 bg-opacity-50">
+                Progreso
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="flex items-center space-x-2">
+                  <div class="flex-1 bg-gray-600 rounded-full h-2">
+                    <div
+                      [style.width.%]="getProgressPercentage(element)"
+                      [attr.class]="'h-2 rounded-full bg-' + config().colorTheme + '-400'"></div>
+                  </div>
+                  <span class="text-xs text-gray-300">{{ getProgressPercentage(element) }}%</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="font-semibold text-center text-gray-300 bg-gray-800 bg-opacity-50">
+                Acciones
+              </th>
+              <td mat-cell *matCellDef="let element" class="text-center">
+                <div class="flex items-center justify-center space-x-1">
+                  <mb-common-button
+                    [buttonModel]="editRowButtonModel"
+                    (click)="onEditRow(element)"
+                    class="text-sm"></mb-common-button>
+                  <mb-common-button
+                    [buttonModel]="deleteRowButtonModel"
+                    (click)="onDeleteRow(element.id)"
+                    class="text-sm"></mb-common-button>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Header and Data Rows -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              class="hover:bg-gray-600 hover:bg-opacity-30 transition-colors duration-200"></tr>
+          </table>
+
+          <!-- No Data State -->
+          <div
+            *ngIf="dataSource.data.length === 0"
+            class="text-center py-12 bg-gray-700 bg-opacity-40 rounded-lg">
+            <div class="flex flex-col items-center space-y-4">
+              <mat-icon class="text-6xl text-gray-500">{{ config().noDataIcon }}</mat-icon>
+              <div>
+                <h3 class="text-lg font-medium text-gray-200 mb-2">{{ config().noDataTitle }}</h3>
+                <p class="text-gray-400 text-sm">{{ config().noDataMessage }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paginator -->
+        <mat-paginator
+          #paginator
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

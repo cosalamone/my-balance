@@ -1,55 +1,22 @@
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, signal } from '@angular/core';
 import {
-  Component,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import {
-  FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import {
-  MatNativeDateModule,
-  MatOptionModule,
-} from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import {
-  MatPaginator,
-  MatPaginatorModule,
-} from '@angular/material/paginator';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
 import {
   MatSnackBar,
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
-import {
-  MatSort,
-  MatSortModule,
-} from '@angular/material/sort';
-import {
-  MatTableDataSource,
-  MatTableModule,
-} from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { Observable } from 'rxjs';
-import { ButtonCommonComponent } from '../../core/components/buttons/common-button/common-button';
-import { ButtonModelBase } from '../../core/models/button-base.model';
+
+import { FinancialFormTableComponent } from '../../core/components/financial-form-table/financial-form-table.component';
+import { FinancialFormTableConfig } from '../../core/models/financial-form.model';
 import {
   Expense,
   ExpenseCategory,
   ExpenseType,
 } from '../../core/models/financial.models';
 import { FinancialDataService } from '../../core/services/financial-data.service';
-import { FormConfigService } from '../../core/services/form-config.service';
 
 @Component({
   selector: 'mb-gastos',
@@ -57,444 +24,290 @@ import { FormConfigService } from '../../core/services/form-config.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
     MatSnackBarModule,
-    MatTooltipModule,
-    MatProgressSpinnerModule,
-    MatOptionModule,
-    // Custom components
-    ButtonCommonComponent,
+    FinancialFormTableComponent,
   ],
   templateUrl: './gastos.page.html',
   styleUrls: ['./gastos.page.scss'],
 })
 export class ExpenseComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  expenseForm!: FormGroup;
-  expenses$!: Observable<Expense[]>;
-  dataSource = new MatTableDataSource<Expense>();
-  displayedColumns: string[] = [
-    'date',
-    'description',
-    'category',
-    'type',
-    'amount',
-    'actions',
-  ];
-
-  expenseCategories = [
-    {
-      value: ExpenseCategory.HOUSING,
-      label: 'Vivienda',
-      icon: 'home',
-    },
-    {
-      value: ExpenseCategory.FOOD,
-      label: 'Alimentación',
-      icon: 'restaurant',
-    },
-    {
-      value: ExpenseCategory.TRANSPORTATION,
-      label: 'Transporte',
-      icon: 'directions_car',
-    },
-    {
-      value: ExpenseCategory.ENTERTAINMENT,
-      label: 'Entretenimiento',
-      icon: 'movie',
-    },
-    {
-      value: ExpenseCategory.HEALTHCARE,
-      label: 'Salud',
-      icon: 'local_hospital',
-    },
-    {
-      value: ExpenseCategory.EDUCATION,
-      label: 'Educación',
-      icon: 'school',
-    },
-    {
-      value: ExpenseCategory.SHOPPING,
-      label: 'Compras',
-      icon: 'shopping_bag',
-    },
-    {
-      value: ExpenseCategory.UTILITIES,
-      label: 'Servicios',
-      icon: 'flash_on',
-    },
-    {
-      value: ExpenseCategory.OTHER,
-      label: 'Otros',
-      icon: 'category',
-    },
-  ];
-
-  expenseTypes = [
-    {
-      value: ExpenseType.FIXED,
-      label: 'Fijo',
-      icon: 'push_pin',
-    },
-    {
-      value: ExpenseType.VARIABLE,
-      label: 'Variable',
-      icon: 'tune',
-    },
-  ];
-
-  isLoading = false;
-  editingId: string | null = null;
-  message = '';
-  showMessageFlag = false;
-  // Button models
-  saveButtonModel!: ButtonModelBase;
-  clearButtonModel!: ButtonModelBase;
-  cancelEditModel!: ButtonModelBase;
-  editRowButtonModel!: ButtonModelBase;
-  deleteRowButtonModel!: ButtonModelBase;
+  config = signal<FinancialFormTableConfig>(
+    this.getConfig()
+  );
+  expenses = signal<Expense[]>([]);
+  isLoading = signal<boolean>(false);
+  editingId = signal<string | null>(null);
+  message = signal<string>('');
 
   constructor(
-    private fb: FormBuilder,
     private financialService: FinancialDataService,
-    private snackBar: MatSnackBar,
-    private formConfig: FormConfigService
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.initForm();
     this.loadExpenses();
-
-    // Initialize button models
-    this.saveButtonModel =
-      this.formConfig.getSaveButtonModel(false, false);
-    this.saveButtonModel.action = () => this.onSubmit();
-
-    this.clearButtonModel =
-      this.formConfig.getClearButtonModel(false);
-    this.clearButtonModel.action = () => this.resetForm();
-
-    this.cancelEditModel =
-      this.formConfig.getCancelButtonModel();
-    this.cancelEditModel.action = () => this.resetForm();
-
-    this.editRowButtonModel =
-      this.formConfig.getEditButtonModel();
-    this.editRowButtonModel.action = (row: any) =>
-      this.editExpense(row as Expense);
-
-    this.deleteRowButtonModel =
-      this.formConfig.getDeleteIconButtonModel();
-    this.deleteRowButtonModel.action = (id: any) =>
-      this.deleteExpense(id as string);
-
-    // Wire form status to button disabled state
-    this.expenseForm.statusChanges.subscribe(status => {
-      const disabled = status !== 'VALID' || this.isLoading;
-      this.saveButtonModel.optionDisabled = disabled;
-      this.clearButtonModel.optionDisabled = this.isLoading;
-    });
   }
 
-  private initForm(): void {
-    this.expenseForm = this.fb.group({
-      amount: [
-        '',
-        [Validators.required, Validators.min(0.01)],
+  private getConfig(): FinancialFormTableConfig {
+    return {
+      moduleType: 'expense',
+      title: 'Gestión de Gastos',
+      subtitle:
+        'Registra y administra tus gastos y egresos',
+      headerIcon: 'remove_circle_outline',
+      noDataIcon: 'shopping_bag',
+      noDataTitle: 'Sin gastos registrados',
+      noDataMessage:
+        'Comienza agregando tu primer gasto usando el formulario.',
+      colorTheme: 'expense',
+      formFields: [
+        {
+          name: 'amount',
+          type: 'number',
+          placeholder: 'Cantidad*',
+          icon: 'payments',
+          required: true,
+        },
+        {
+          name: 'description',
+          type: 'text',
+          placeholder: 'Describe tu gasto...',
+          icon: 'description',
+          required: true,
+        },
+        {
+          name: 'date',
+          type: 'date',
+          placeholder: 'Fecha*',
+          icon: '',
+          required: true,
+          hint: 'Selecciona la fecha del gasto',
+        },
+        {
+          name: 'category',
+          type: 'select',
+          placeholder: 'Categoría*',
+          icon: 'category',
+          required: true,
+        },
+        {
+          name: 'type',
+          type: 'select',
+          placeholder: 'Tipo de Gasto*',
+          icon: 'tune',
+          required: true,
+        },
       ],
-      description: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(500),
+      categoryOptions: [
+        {
+          value: ExpenseCategory.HOUSING,
+          label: 'Vivienda',
+          icon: 'home',
+        },
+        {
+          value: ExpenseCategory.FOOD,
+          label: 'Alimentación',
+          icon: 'restaurant',
+        },
+        {
+          value: ExpenseCategory.TRANSPORTATION,
+          label: 'Transporte',
+          icon: 'directions_car',
+        },
+        {
+          value: ExpenseCategory.ENTERTAINMENT,
+          label: 'Entretenimiento',
+          icon: 'movie',
+        },
+        {
+          value: ExpenseCategory.HEALTHCARE,
+          label: 'Salud',
+          icon: 'local_hospital',
+        },
+        {
+          value: ExpenseCategory.EDUCATION,
+          label: 'Educación',
+          icon: 'school',
+        },
+        {
+          value: ExpenseCategory.SHOPPING,
+          label: 'Compras',
+          icon: 'shopping_bag',
+        },
+        {
+          value: ExpenseCategory.UTILITIES,
+          label: 'Servicios',
+          icon: 'flash_on',
+        },
+        {
+          value: ExpenseCategory.OTHER,
+          label: 'Otros',
+          icon: 'category',
+        },
+      ],
+      additionalSelectOptions: {
+        type: [
+          {
+            value: ExpenseType.FIXED,
+            label: 'Fijo',
+            icon: 'push_pin',
+          },
+          {
+            value: ExpenseType.VARIABLE,
+            label: 'Variable',
+            icon: 'tune',
+          },
         ],
+      },
+      displayedColumns: [
+        'date',
+        'description',
+        'category',
+        'type',
+        'amount',
+        'actions',
       ],
-      category: [
-        ExpenseCategory.OTHER,
-        Validators.required,
+      tableColumns: [
+        {
+          key: 'amount',
+          label: 'Cantidad',
+          type: 'currency',
+        },
+        {
+          key: 'description',
+          label: 'Descripción',
+          type: 'text',
+        },
+        {
+          key: 'category',
+          label: 'Categoría',
+          type: 'category',
+        },
+        { key: 'type', label: 'Tipo', type: 'badge' },
+        { key: 'date', label: 'Fecha', type: 'date' },
+        { key: 'actions', label: 'Acciones', type: 'text' },
       ],
-      type: [ExpenseType.VARIABLE, Validators.required],
-      date: [new Date(), Validators.required],
-      isFixed: [false],
-      isRecurring: [false],
-    });
+      formTitle: 'Nuevo Gasto',
+      formTitleEdit: 'Editar Gasto',
+      saveButtonLabel: 'Guardar',
+      clearButtonLabel: 'Limpiar',
+      cancelButtonLabel: 'Cancelar',
+      editButtonLabel: 'Editar',
+      deleteButtonLabel: 'Eliminar',
+      tips: [
+        'Registra todos tus gastos para un mejor control',
+        'Categoriza correctamente para análisis precisos',
+        'Usa descripciones claras y específicas',
+      ],
+      searchPlaceholder: 'Buscar por descripción...',
+      historyTitle: 'Mis Gastos',
+    };
   }
 
   private loadExpenses(): void {
-    // Load expenses from server first
-    this.financialService.getExpenses().subscribe({
-      next: expenses => {
-        console.log(
-          'Expenses loaded from server:',
-          expenses
-        );
-      },
-      error: error => {
-        console.error('Error loading expenses:', error);
-        this.displayMessage('Error al cargar los gastos');
-      },
-    });
-
-    // Subscribe to the observable for reactive updates
-    this.expenses$ = this.financialService.expenses$;
     this.financialService.expenses$.subscribe(
       (expenses: Expense[]) => {
-        this.dataSource.data = expenses.sort(
-          (a, b) =>
-            new Date(b.date).getTime() -
-            new Date(a.date).getTime()
+        this.expenses.set(
+          expenses.sort(
+            (a, b) =>
+              new Date(b.date).getTime() -
+              new Date(a.date).getTime()
+          )
         );
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
       }
     );
+
+    this.financialService.getExpenses().subscribe({
+      error: error => {
+        console.error('Error loading expenses:', error);
+        this.showMessage('Error al cargar los gastos');
+      },
+    });
   }
 
-  onSubmit(): void {
-    if (this.expenseForm.valid) {
-      this.isLoading = true;
-      const formValue = {
-        ...this.expenseForm.value,
-        date: this.expenseForm.value.date || new Date(),
-        isFixed:
-          this.expenseForm.value.type ===
-            ExpenseType.FIXED ||
-          this.expenseForm.value.isFixed,
-      };
+  onSave(event: {
+    form: FormGroup;
+    isEdit: boolean;
+  }): void {
+    this.isLoading.set(true);
+    const formValue = {
+      ...event.form.value,
+      date: event.form.value.date || new Date(),
+      isFixed: event.form.value.type === ExpenseType.FIXED,
+    };
 
-      if (this.editingId !== null) {
-        this.financialService
-          .updateExpense(this.editingId, formValue)
-          .subscribe({
-            next: updatedExpense => {
-              this.displayMessage(
-                'Gasto actualizado exitosamente'
-              );
-              this.editingId = null;
-              this.resetForm();
-              this.isLoading = false;
-            },
-            error: error => {
-              console.error(
-                'Error updating expense:',
-                error
-              );
-              this.displayMessage(
-                'Error al actualizar el gasto'
-              );
-              this.isLoading = false;
-            },
-          });
-      } else {
-        this.financialService
-          .addExpense(formValue)
-          .subscribe({
-            next: newExpense => {
-              this.displayMessage(
-                'Gasto agregado exitosamente'
-              );
-              this.resetForm();
-              this.isLoading = false;
-              // Scroll to top to show the success message
-              window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              });
-            },
-            error: error => {
-              console.error('Error adding expense:', error);
-              this.displayMessage(
-                'Error al agregar el gasto'
-              );
-              this.isLoading = false;
-            },
-          });
-      }
+    if (event.isEdit && this.editingId()) {
+      this.financialService
+        .updateExpense(this.editingId()!, formValue)
+        .subscribe({
+          next: () => {
+            this.showMessage(
+              'Gasto actualizado exitosamente'
+            );
+            this.editingId.set(null);
+            this.isLoading.set(false);
+          },
+          error: error => {
+            console.error('Error updating expense:', error);
+            this.showMessage(
+              'Error al actualizar el gasto'
+            );
+            this.isLoading.set(false);
+          },
+        });
     } else {
-      this.markFormGroupTouched();
-      this.displayMessage(
-        'Por favor, complete todos los campos requeridos'
-      );
+      this.financialService
+        .addExpense(formValue)
+        .subscribe({
+          next: () => {
+            this.showMessage('Gasto agregado exitosamente');
+            this.isLoading.set(false);
+          },
+          error: error => {
+            console.error('Error adding expense:', error);
+            this.showMessage('Error al agregar el gasto');
+            this.isLoading.set(false);
+          },
+        });
     }
   }
 
-  editExpense(expense: Expense): void {
-    this.editingId = expense.id;
-    this.expenseForm.patchValue({
-      amount: expense.amount,
-      description: expense.description,
-      category: expense.category,
-      type: expense.type || ExpenseType.VARIABLE,
-      date: new Date(expense.date),
-      isFixed: expense.isFixed || false,
-      isRecurring: expense.isRecurring || false,
-    });
-  }
-
-  deleteExpense(id: string): void {
-    if (
-      confirm(
-        '¿Está seguro de que desea eliminar este gasto?'
-      )
-    ) {
-      this.financialService.deleteExpense(id).subscribe({
+  onDelete(id: string | number): void {
+    this.financialService
+      .deleteExpense(id as string)
+      .subscribe({
         next: () => {
-          this.displayMessage(
-            'Gasto eliminado exitosamente'
-          );
+          this.showMessage('Gasto eliminado exitosamente');
         },
         error: error => {
           console.error('Error deleting expense:', error);
-          this.displayMessage('Error al eliminar el gasto');
+          this.showMessage('Error al eliminar el gasto');
         },
       });
-    }
   }
 
-  resetForm(): void {
-    this.expenseForm.reset({
-      amount: '',
-      description: '',
-      category: ExpenseCategory.OTHER,
-      type: ExpenseType.VARIABLE,
-      date: new Date(),
-      isFixed: false,
-      isRecurring: false,
-    });
-    this.editingId = null;
+  onEdit(expense: Expense): void {
+    this.editingId.set(expense.id);
   }
 
-  private markFormGroupTouched(): void {
-    Object.keys(this.expenseForm.controls).forEach(key => {
-      const control = this.expenseForm.get(key);
-      control?.markAsTouched();
-    });
+  onCancel(): void {
+    this.editingId.set(null);
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement)
-      .value;
-    this.dataSource.filter = filterValue
-      .trim()
-      .toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  onClear(): void {
+    this.editingId.set(null);
   }
 
-  private displayMessage(message: string): void {
-    this.message = message;
-    this.showMessageFlag = true;
-
-    // Auto-hide message after 5 seconds
+  private showMessage(message: string): void {
+    this.message.set(message);
     setTimeout(() => {
-      this.showMessageFlag = false;
+      this.message.set('');
     }, 5000);
 
     this.snackBar.open(message, 'Cerrar', {
       duration: 3000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
     });
-  }
-
-  getFieldError(fieldName: string): string {
-    const control = this.expenseForm.get(fieldName);
-    if (control && control.errors && control.touched) {
-      if (control.errors['required']) {
-        return `${this.getFieldLabel(fieldName)} es requerido`;
-      }
-      if (control.errors['min']) {
-        return `${this.getFieldLabel(fieldName)} debe ser mayor a ${control.errors['min'].min}`;
-      }
-      if (control.errors['minlength']) {
-        return `${this.getFieldLabel(fieldName)} debe tener al menos ${control.errors['minlength'].requiredLength} caracteres`;
-      }
-      if (control.errors['maxlength']) {
-        return `${this.getFieldLabel(fieldName)} no puede exceder ${control.errors['maxlength'].requiredLength} caracteres`;
-      }
-    }
-    return '';
-  }
-
-  private getFieldLabel(fieldName: string): string {
-    const labels: Record<string, string> = {
-      amount: 'La cantidad',
-      description: 'La descripción',
-      category: 'La categoría',
-      type: 'El tipo',
-      date: 'La fecha',
-    };
-    return labels[fieldName] || fieldName;
-  }
-
-  getCategoryLabel(category: ExpenseCategory): string {
-    const cat = this.expenseCategories.find(
-      c => c.value === category
-    );
-    return cat ? cat.label : 'Otros';
-  }
-
-  getTypeLabel(type: ExpenseType): string {
-    const typeObj = this.expenseTypes.find(
-      t => t.value === type
-    );
-    return typeObj ? typeObj.label : 'Variable';
-  }
-
-  getTotalExpenses(): number {
-    return this.dataSource.data.reduce(
-      (total: number, expense: Expense) =>
-        total + expense.amount,
-      0
-    );
-  }
-
-  getCategoryIcon(category: ExpenseCategory): string {
-    const iconMap: Record<ExpenseCategory, string> = {
-      [ExpenseCategory.HOUSING]: 'home',
-      [ExpenseCategory.FOOD]: 'restaurant',
-      [ExpenseCategory.TRANSPORTATION]: 'directions_car',
-      [ExpenseCategory.ENTERTAINMENT]: 'movie',
-      [ExpenseCategory.HEALTHCARE]: 'local_hospital',
-      [ExpenseCategory.EDUCATION]: 'school',
-      [ExpenseCategory.SHOPPING]: 'shopping_bag',
-      [ExpenseCategory.UTILITIES]: 'flash_on',
-      [ExpenseCategory.OTHER]: 'more_horiz',
-    };
-    return iconMap[category] || 'more_horiz';
-  }
-
-  getTypeIcon(type: ExpenseType): string {
-    const iconMap: Record<ExpenseType, string> = {
-      [ExpenseType.FIXED]: 'push_pin',
-      [ExpenseType.VARIABLE]: 'tune',
-    };
-    return iconMap[type] || 'tune';
-  }
-
-  scrollToForm(): void {
-    const formElement = document.querySelector(
-      '.expense-form-card'
-    );
-    if (formElement) {
-      formElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
   }
 }

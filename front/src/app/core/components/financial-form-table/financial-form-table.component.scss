@@ -1,0 +1,13 @@
+// Estilos específicos para el componente financial-form-table
+// La mayoría de los estilos están en Tailwind y styles.scss global
+
+:host {
+  display: block;
+}
+
+// Asegurar que los campos de fecha tengan el ícono correcto
+::ng-deep .dark-field {
+  .mat-datepicker-toggle-default-icon {
+    color: rgba(156, 163, 175, 0.8);
+  }
+}
